@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ブロック崩しゲームの秘密</title>
+    <style>
+        /* 全体的なスタイル */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 60px;
+            font-size: 1.8em;
+        }
+
+        .section {
+            padding: 40px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .visual-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 30px 0;
+            background-color: #ecf0f1;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .visual-area img, .visual-area svg {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .icon-description {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .icon-description svg {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+
+        .key-term {
+            background-color: #e8f4f8;
+            color: #2980b9;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            white-space: nowrap; /* 折り返しを防ぐ */
+        }
+
+        .reference-list {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .reference-list h2 {
+            border-bottom: none;
+            margin-top: 0;
+            padding-bottom: 0;
+            color: #2c3e50;
+        }
+
+        .reference-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reference-list li {
+            margin-bottom: 10px;
+        }
+
+        .reference-list a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .reference-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ブロック崩しゲームの秘密を解き明かす！</h1>
+
+        <div class="section">
+            <h2>ブロック崩しって、どんなゲーム？</h2>
+            <p>ボールをパドルで跳ね返して、上にあるブロックを全部壊す！そんなシンプルだけど、夢中になるゲーム、それがブロック崩しです。シンプルなルールなのに、なぜこんなに私たちを惹きつけるのでしょうか？その秘密を一緒に見ていきましょう。</p>
+            <div class="visual-area">
+                <svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="600" height="400" stroke="#7f8c8d" stroke-width="5"/>
+                    <rect x="5" y="5" width="590" height="390" fill="#ecf0f1"/>
+                    <rect x="50" y="50" width="80" height="30" fill="#e74c3c" rx="5"/>
+                    <rect x="150" y="50" width="80" height="30" fill="#e67e22" rx="5"/>
+                    <rect x="250" y="50" width="80" height="30" fill="#f1c40f" rx="5"/>
+                    <rect x="350" y="50" width="80" height="30" fill="#2ecc71" rx="5"/>
+                    <rect x="450" y="50" width="80" height="30" fill="#3498db" rx="5"/>
+
+                    <rect x="50" y="90" width="80" height="30" fill="#e74c3c" rx="5"/>
+                    <rect x="150" y="90" width="80" height="30" fill="#e67e22" rx="5"/>
+                    <rect x="250" y="90" width="80" height="30" fill="#f1c40f" rx="5"/>
+                    <rect x="350" y="90" width="80" height="30" fill="#2ecc71" rx="5"/>
+                    <rect x="450" y="90" width="80" height="30" fill="#3498db" rx="5"/>
+                    <rect x="250" y="350" width="100" height="15" fill="#34495e" rx="7.5"/>
+                    <circle cx="300" cy="330" r="10" fill="#c0392b"/>
+
+                    <line x1="300" y1="330" x2="290" y2="120" stroke="#c0392b" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrowhead)"/>
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#c0392b" />
+                        </marker>
+                    </defs>
+                    <g opacity="0"> <circle cx="290" cy="105" r="20" fill="none" stroke="#e74c3c" stroke-width="3"/>
+                        <line x1="270" y1="105" x2="310" y2="105" stroke="#e74c3c" stroke-width="3"/>
+                        <line x1="290" y1="85" x2="290" y2="125" stroke="#e74c3c" stroke-width="3"/>
+                    </g>
+                </svg>
+                <p><strong>典型的なブロック崩しゲーム画面</strong></p>
+                <div class="icon-description">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    <span>ボールがブロックにヒットし、破壊される瞬間</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>なぜボールはあんな動きをするの？（<span class="key-term">現実のものの動きをシミュレーションする計算役</span>）</h2>
+            <p>まるで現実のボールみたいに、壁やパドルに当たると跳ね返るボール。これはゲームの中の「<span class="key-term">現実のものの動きをシミュレーションする計算役</span>」が、ボールの速さや向きをいつも計算しているからなんです。</p>
+            <div class="visual-area">
+                <svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="50" y1="50" x2="50" y2="250" stroke="#7f8c8d" stroke-width="3"/>
+                    <line x1="550" y1="50" x2="550" y2="250" stroke="#7f8c8d" stroke-width="3"/>
+                    <line x1="50" y1="50" x2="550" y2="50" stroke="#7f8c8d" stroke-width="3"/>
+                    <circle cx="200" cy="150" r="15" fill="#c0392b"/>
+                    <rect x="250" y="220" width="100" height="15" fill="#34495e" rx="7.5"/>
+
+                    <path d="M 100 200 L 200 150 L 300 200 L 400 150 L 500 200" stroke="#3498db" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                    <circle cx="100" cy="200" r="5" fill="#3498db"/>
+                    <circle cx="200" cy="150" r="5" fill="#3498db"/>
+                    <circle cx="300" cy="200" r="5" fill="#3498db"/>
+                    <circle cx="400" cy="150" r="5" fill="#3498db"/>
+                    <circle cx="500" cy="200" r="5" fill="#3498db"/>
+                    <line x1="400" y1="150" x2="450" y2="100" stroke="#3498db" stroke-width="3" marker-end="url(#arrowhead_blue)"/>
+                    <defs>
+                        <marker id="arrowhead_blue" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#3498db" />
+                        </marker>
+                    </defs>
+                </svg>
+                <p><strong>ボールの軌道と反射の計算</strong></p>
+                <div class="icon-description">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-cpu"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><path d="M9 9h6v6H9zM9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"></path></svg>
+                    <span>歯車が組み合わさって動くようなアイコン（「現実のものの動きをシミュレーションする計算役」）</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>なぜブロックは消えるの？（<span class="key-term">モノ同士がぶつかったかどうかを見つける目</span>）</h2>
+            <p>ボールがブロックに当たると、ブロックがパッと消えますよね。これは、ゲームの中に「<span class="key-term">モノ同士がぶつかったかどうかを見つける目</span>」がいて、ボールとブロックが触れた瞬間を見張っているから。ぶつかったと分かると、ブロックを画面から消す指示を出しているんです。</p>
+            <div class="visual-area">
+                <svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="200" y="100" width="100" height="40" fill="#f1c40f" rx="5"/>
+                    <circle cx="240" cy="160" r="20" fill="#c0392b"/>
+
+                    <rect x="195" y="95" width="110" height="50" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5"/>
+                    <circle cx="240" cy="160" r="25" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5"/>
+
+                    <g transform="translate(350, 100)">
+                        <circle cx="0" cy="0" r="30" fill="#ecf0f1" stroke="#3498db" stroke-width="2"/>
+                        <circle cx="0" cy="0" r="10" fill="#3498db"/>
+                        <path d="M-20 0 Q 0 -30 20 0" stroke="#3498db" stroke-width="2" fill="none"/>
+                    </g>
+                    <line x1="250" y1="150" x2="350" y2="130" stroke="#2c3e50" stroke-width="2" stroke-dasharray="5,5"/>
+                </svg>
+                <p><strong>見えない「当たり判定」が衝突を見つける</strong></p>
+                <div class="icon-description">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <span>「モノ同士がぶつかったかどうかを見つける目」のアイコン</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>パドルはどうやって動いているの？（<span class="key-term">プレイヤーの指示を聞く仕組み</span>）</h2>
+            <p>私たちがキーボードを操作すると、パドルが左右に動きます。これは、ゲームが常に「<span class="key-term">プレイヤーの指示を聞く仕組み</span>」を持っていて、私たちが押したキーの情報をパドルに伝えているから。その情報を受けて、パドルは指示された方向に動いているんです。</p>
+            <div class="visual-area">
+                <svg width="600" height="250" viewBox="0 0 600 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="100" y="50" width="80" height="50" fill="#bdc3c7" rx="5"/>
+                    <text x="140" y="85" text-anchor="middle" font-size="24" fill="#34495e">←</text>
+                    <rect x="200" y="50" width="80" height="50" fill="#bdc3c7" rx="5"/>
+                    <text x="240" y="85" text-anchor="middle" font-size="24" fill="#34495e">→</text>
+
+                    <line x1="140" y1="110" x2="200" y2="170" stroke="#2ecc71" stroke-width="3" marker-end="url(#arrowhead_green)"/>
+                    <line x1="240" y1="110" x2="200" y2="170" stroke="#2ecc71" stroke-width="3" marker-end="url(#arrowhead_green)"/>
+                    <defs>
+                        <marker id="arrowhead_green" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#2ecc71" />
+                        </marker>
+                    </defs>
+
+                    <rect x="150" y="180" width="200" height="20" fill="#34495e" rx="10"/>
+                    <text x="250" y="215" text-anchor="middle" font-size="18" fill="#34495e">パドル</text>
+                </svg>
+                <p><strong>キーボードの入力がパドルを動かす</strong></p>
+                <div class="icon-description">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-keyboard"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><path d="M6 11h.01M6 15h.01M10 11h.01M10 15h.01M14 11h.01M14 15h.01M18 11h.01M18 15h.01M10 19h4"></path></svg>
+                    <span>プレイヤーの手がコントローラーを操作するアイコン（入力のイメージ）</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>ゲーム全体はどうやって動いているの？（<span class="key-term">ゲームが動くための繰り返しの流れ</span>）</h2>
+            <p>ブロック崩しゲームは、この一連の動きを「<span class="key-term">ゲームが動くための繰り返しの流れ</span>」として、ものすごい速さで何度も繰り返しています。私たちがキーを押すたびに、ボールが動くたびに、ブロックが消えるたびに、この繰り返しが素早く行われ、ゲームがリアルタイムに進んでいくのです。</p>
+            <div class="visual-area">
+                <svg width="600" height="300" viewBox="0 0 600 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="300" cy="150" r="120" stroke="#9b59b6" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                    <text x="300" y="150" text-anchor="middle" font-size="20" fill="#9b59b6" font-weight="bold">ゲームループ</text>
+
+                    <g transform="translate(300, 30)">
+                        <circle cx="0" cy="0" r="40" fill="#fff" stroke="#3498db" stroke-width="2"/>
+                        <svg x="-15" y="-15" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3498db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-ear"><path d="M20 12v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v3"></path><path d="M12 2a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3h-4z"></path></svg>
+                        <text x="0" y="60" text-anchor="middle" font-size="14" fill="#3498db">プレイヤーの指示を聞く</text>
+                    </g>
+
+                    <g transform="translate(500, 150)">
+                        <circle cx="0" cy="0" r="40" fill="#fff" stroke="#e67e22" stroke-width="2"/>
+                        <svg x="-15" y="-15" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#e67e22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82-.33V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0 .33 1.82H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09z"></path></svg>
+                        <text x="0" y="60" text-anchor="middle" font-size="14" fill="#e67e22">ものの動きを計算する</text>
+                    </g>
+
+                    <g transform="translate(100, 150)">
+                        <circle cx="0" cy="0" r="40" fill="#fff" stroke="#2ecc71" stroke-width="2"/>
+                        <svg x="-15" y="-15" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                        <text x="0" y="60" text-anchor="middle" font-size="14" fill="#2ecc71">画面に絵を映し出す</text>
+                    </g>
+
+                    <path d="M300 70 A100 100 0 0 1 430 150" stroke="#7f8c8d" stroke-width="2" fill="none" marker-end="url(#arrowhead_grey)"/>
+                    <path d="M470 150 A100 100 0 0 1 300 230" stroke="#7f8c8d" stroke-width="2" fill="none" marker-end="url(#arrowhead_grey)"/>
+                    <path d="M170 150 A100 100 0 0 1 300 70" stroke="#7f8c8d" stroke-width="2" fill="none" marker-end="url(#arrowhead_grey)"/>
+                     <defs>
+                        <marker id="arrowhead_grey" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d" />
+                        </marker>
+                    </defs>
+                </svg>
+                <p><strong>ゲームが動き続ける「ゲームループ」の仕組み</strong></p>
+                <div class="icon-description">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M21 5H2.99a7 7 0 0 0 0 14H11"></path></svg>
+                    <span>無限ループのアイコン（「ゲームが動くための繰り返しの流れ」のイメージ）</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>もっと楽しくする工夫</h2>
+            <p>ブロック崩しゲームはシンプルですが、もっと面白くするたくさんの工夫ができます。ボールが分裂したり、パドルが長くなったりする「<strong>パワーアップ</strong>」や、一度では壊れない「<strong>特殊なブロック</strong>」。そして、ブロックの配置を変える「<strong>ステージの工夫</strong>」など、プレイヤーを飽きさせない仕掛けがいっぱいです！</p>
+            <div class="visual-area">
+                <svg width="600" height="200" viewBox="0 0 600 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(100, 50)">
+                        <rect x="0" y="0" width="80" height="80" fill="#f1c40f" rx="10"/>
+                        <circle cx="25" cy="40" r="10" fill="#fff"/>
+                        <circle cx="55" cy="40" r="10" fill="#fff"/>
+                        <text x="40" y="100" text-anchor="middle" font-size="14" fill="#333">ボールが増える！</text>
+                    </g>
+                    <g transform="translate(250, 50)">
+                        <rect x="0" y="0" width="80" height="80" fill="#2ecc71" rx="10"/>
+                        <rect x="15" y="35" width="50" height="10" fill="#fff"/>
+                        <rect x="10" y="30" width="60" height="20" fill="#fff" opacity="0.5"/>
+                        <text x="40" y="100" text-anchor="middle" font-size="14" fill="#333">パドルが伸びる！</text>
+                    </g>
+                    <g transform="translate(400, 50)">
+                        <rect x="0" y="0" width="80" height="80" fill="#e74c3c" rx="10"/>
+                        <text x="40" y="45" text-anchor="middle" font-size="40" font-weight="bold" fill="#fff">x2</text>
+                        <text x="40" y="100" text-anchor="middle" font-size="14" fill="#333">硬いブロック</text>
+                    </g>
+                </svg>
+                <p><strong>ゲームを豊かにする様々な仕掛け</strong></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>ブロック崩しゲームの魅力</h2>
+            <p>ブロック崩しは、たった数個のシンプルなルールでできていますが、ボールを狙ってブロックを壊す「爽快感」、予測不能なボールの動きを読み解く「奥深さ」、そして少しずつ上達していく「達成感」が、私たちを惹きつけてやみません。シンプルだからこそ、誰もが気軽に楽しめる。それがブロック崩しゲームが世代を超えて愛される理由です。</p>
+            <div class="visual-area">
+                <svg width="600" height="150" viewBox="0 0 600 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(100, 30)">
+                        <circle cx="0" cy="0" r="40" fill="#ecf0f1" stroke="#3498db" stroke-width="2"/>
+                        <path d="M8 12.5v11c-2 0-2-1-4-1s-2 1-4 1v-11a4 4 0 0 0 4-4v-4a4 4 0 0 1 4 4v4a4 4 0 0 0 4 4z" fill="#3498db"/>
+                        <text x="0" y="60" text-anchor="middle" font-size="14" fill="#333">爽快感</text>
+                    </g>
+                    <g transform="translate(300, 30)">
+                        <circle cx="0" cy="0" r="40" fill="#ecf0f1" stroke="#e67e22" stroke-width="2"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#e67e22"/>
+                        <text x="0" y="60" text-anchor="middle" font-size="14" fill="#333">奥深さ</text>
+                    </g>
+                    <g transform="translate(500, 30)">
+                        <circle cx="0" cy="0" r="40" fill="#ecf0f1" stroke="#2ecc71" stroke-width="2"/>
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 20.2c-3.79-1.12-7-5.46-7-9.2V6.3l7-3.11 7 3.11v5.7c0 3.74-3.21 8.08-7 9.2zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="#2ecc71"/>
+                        <text x="0" y="60" text-anchor="middle" font-size="14" fill="#333">達成感</text>
+                    </g>
+                </svg>
+                <p><strong>ブロック崩しが愛される3つの理由</strong></p>
+            </div>
+        </div>
+
+        <div class="reference-list">
+            <h2>参考情報</h2>
+            <ul>
+                <li><a href="https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%AC%E3%82%A4%E3%82%AF%E3%82%A2%E3%82%A6%E3%83%88_(%E3%82%B2%E3%83%BC%E3%83%A0)" target="_blank" rel="noopener noreferrer">ブレイクアウト (ゲーム) - Wikipedia</a></li>
+                <li><a href="https://ja.wikipedia.org/wiki/%E3%82%B2%E3%83%BC%E3%83%A0%E3%83%AB%E3%83%BC%E3%83%97" target="_blank" rel="noopener noreferrer">ゲームループ - Wikipedia</a></li>
+                <li><a href="https://ja.wikipedia.org/wiki/%E7%89%A9%E7%90%86%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3" target="_blank" rel="noopener noreferrer">物理エンジン - Wikipedia</a></li>
+                <li><a href="https://ja.wikipedia.org/wiki/%E8%A1%9D%E7%AA%81%E5%88%A4%E5%AE%9A" target="_blank" rel="noopener noreferrer">衝突判定 - Wikipedia</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
