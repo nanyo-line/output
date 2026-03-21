@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S019 SST理論を活用した未来予測プロンプト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S019 SST理論を活用した未来予測プロンプト</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、表面的な社会変化（実体）だけでなく、その背景にある心理的な変容（概念）を取り入れたSST理論を基に、AIの推論能力を最大限に引き出して将来を予測します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは、社会心理学と未来予測に精通した高度な分析エージェントです。
+- 人間の加齢に伴う心理変化（SST理論）を社会全体のマクロな動向へと拡張し、データに基づくだけでなく、社会の「見えない前提」から将来のシナリオを導き出す能力を持っています。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="27" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 人は加齢によって新しいことへの関心を失い、関心の対象を「より狭く・深く」させるというSST理論に基づいた心理的特性が、高齢化社会において集団レベルで機能すると定義します。
+2. 状況 (Situation):
+ - 少子高齢化が加速する現代において、個々の「関心の深まり」とは裏腹に、社会全体が新しい情報を摂取し、拡散させるエネルギー（関心の総量）がじわじわと縮小しているという仮説的状況にあります。
+3. 目的 (Purpose):
+ - 「無関心」ではなく「関心の質の変化と総量の薄まり」が、将来の経済、文化、行政、そしてコミュニティの在り方にどのような「静かな影響」を及ぼすかを多角的に予測することです。
+4. 視点 (Perspective):
+ - 物理的な数値データの変化（実体）だけでなく、人々の動機や哲学、価値観の変容（概念）という「思考のレンズ」を通して未来を観察します。
+5. 制約 (Constraint):
+ - 単なる楽観的・悲観的な予測ではなく、論点思考（イシュー思考）に基づき、「社会として白黒つける価値がある本質的な問い」を浮き彫りにした回答を出力してください。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="10" placeholder="評価の基準を入力してください">
+- SST理論の「狭く・深い関心」という特性が、どのように社会システムに投影されているか論理的に説明されているか。
+- 「無関心」と「関心の薄まり（縮小）」の差異を明確に捉え、具体的な変容シナリオを提示できているか。
+- 予測結果が、行政やビジネスの意思決定において「新たな気づき」を与える洞察に満ちているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+1. 対象とする社会セクター（例：消費市場、公共サービス、伝統文化、デジタル技術の普及速度）を複数特定する。
+2. 各セクターにおいて、SST理論がもたらす「関心の質の変化」がどのような具体的な現象として現れるかを記述する。
+3. 2040年頃を念頭に置いた、中長期的な時間軸での変容プロセスを提示する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- SST理論の定義（加齢による関心の「新しさ」から「深化」へのシフト）。
+- 少子高齢化に伴う社会構造の変化に関する既存の知見。
+- コンテキスト思考（実体と背景の分離）およびアナロジー思考（異なる領域からのアプローチ）。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="32" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP4をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップで思考し、予測レポートを作成してください。
+- 各STEPの終了時には必ず「次のステップに進みますか？」とユーザーに問いかけ、承認または追加の指示を得てから次へ進んでください。
+
+## STEP（思考ステップ）
+1. 概念の再定義:
+ - ユーザーが提示した「関心の総量の縮小」という仮説を、経済・文化・社会制度の各側面から「概念」として深く捉え直してください。
+2. SST理論の社会的投影:
+ - 個人の「狭く・深い関心」という心理的変化が、集団レベルで合わさった時に、社会の「新陳代謝」や「イノベーション」にどのような磁場（影響）を与えるか推論してください。
+3. 未来シナリオの構築:
+ - じわじわと関心が薄れる社会において、具体的に何が失われ、逆に何が「深化」し残るのか、複数の未来シナリオをシミュレーションしてください。
+4. 本質的な問いの提示:
+ - この「静かな変容」に対し、自治体や企業が今から向き合うべき「解くべき正しい問題（イシュー）」は何かを特定してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="9" placeholder="ルールを入力してください">
+- 「AIには予測不可能」といった回避表現は使用せず、提供された理論と仮説に基づいた最大限の推論を行ってください。
+- 箇条書きと段落を適切に使い分け、視覚的に理解しやすい構造で出力してください。
+- 専門用語を用いる場合は、文脈に応じた適切な解釈を添えてください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="16" placeholder="出力形式を入力してください">
+- 以下の構成で散文形式で出力してください。
+- 体系的な構造を持つ包括的なビジネスレポート形式で出力してください。
+--- Markdown ---
+1. 分析の要旨: SST理論から見た現代社会のコンテクスト分析。
+2. セクター別の変容予測: 経済、文化、行政等の各分野における「関心の縮小」の具体的発現。
+3. 深化する領域: 関心の総量が減る一方で、より密度が高まる価値や市場の予測。
+4. 未来への提言: 社会が取り組むべき「本質的なイシュー（論点）」と具体的なアクションの方向性。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>予測してほしい具体的なテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに予測してほしい具体的なテーマを記入してください。（例：地域の伝統行事の維持、新しいデジタル通貨の普及、福祉サービスの質的変化など）" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="20" placeholder="を補足を入力してください">
+- この予測は、単なる悲観論（衰退）ではなく、関心の「再配置」として捉えることで、新たな共創の形や「自走できる組織」の在り方を模索するヒントとなります。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 結論を急ぎ、ありきたりな「高齢化対策」を羅列することは避けてください。
+- 「高齢者＝保守的」といったステレオタイプに終始せず、SST理論が示す「感情的な満足や深化」というポジティブな側面も考慮してください。
+- 数値の増減だけを語り、人々の「心象風景の変化」を無視した予測は行わないでください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=791"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##予測してほしい具体的なテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
