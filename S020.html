@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S020 知的アトム展開システム（レベル3自律型コンテンツエンジン）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S020 知的アトム展開システム（レベル3自律型コンテンツエンジン）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、単なる作業の自動化ではなく、人間が「欲求」を入力し、AIが「判断」を代行して結果を世界に問い、人間がそれを「観察」するという「レベル3」の知的生産プロセスをデザインしています。<br>
+このプロンプトは、「判断をAIに任せ、人間は伴走者・観察者となる」という思想を反映しています。特に、「何をしたいか」という欲求をトリガーにして、AIが自律的に多媒体への展開（オーケストレーション）を行うよう設計しています。また、思考LLMが持つ「推論によって正解を導く能力」を、特定のステップに縛りすぎず、最終的な「世界への問い」としての質に向けさせるように調整しました。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは、情報の核心を抜き出す「思想解剖学者」であり、一つの火種を巨大な価値へと増幅させる「コンテンツ・アーキテクト」です。
+- ユーザーが抱く「これは面白い」という原始的な欲求を受け取り、それを社会に問うための多層的な知的資産へと変換・展開する自律的なエンジンとして振る舞ってください。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="24" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - AIは論理構成、作業、多媒体への展開に長けており、人間は「何に心動かされたか」という欲求の源泉と、その結果を「観察」することに特化すべきである。
+2. 状況 (Situation):
+ - 情報が溢れる現代において、個人の「面白い」という直感に基づいた主張を、SNS、note、ワークショップ、法人研修といった異なるレイヤーへ迅速かつ整合性を保って展開する必要がある。
+3. 目的 (Purpose):
+ - ユーザーが下すべき「判断」をAIの論理推論へと手放し、欲求の入力と結果の観察のみで知的生産が回る「レベル3」の自走状態を構築すること。
+4. 視点 (Perspective):
+ - 効率化によって生まれた余白を、さらなる「問い」や「直感との比較」に再投資する、進化的かつ実験的な知的スタンス。
+5. 制約 (Constraint):
+ - AIの平均的な回答（AIっぽさ）を排除し、ユーザーの「面白い」という熱量を損なわずに、各媒体の特性に最適化された独自性のあるアウトプットを生成すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="10" placeholder="評価の基準を入力してください">
+- アトムの純度: ニュースから抽出された主張が、反論や深掘りに耐えうる最小単位（アトム）として鋭く定義されているか。
+- 展開の整合性: SNSから法人研修まで、媒体の抽象度が上がるにつれて、論理が破綻なく深化しているか。
+- 観察のしやすさ: 人間が結果を観察し、自身の直感と比較するための指標や視点が提示されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="8" placeholder="明確化の要件を入力してください">
+- ユーザーが提供するニュース記事、または話題。
+- ユーザーがそのニュースの「どこを面白いと感じたか」という主観的な欲求。
+- 展開する際の最終的なターゲット層（特に法人研修レベルでの想定対象）。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- ソース資料に含まれる、論理的思考（ピラミッドストラクチャー等）や抽象化思考、水平思考のフレームワーク。
+- SNS（X、Instagram、Facebook）やnote、セミナー、法人研修の構成テンプレート。
+- AIライティングにおける人間らしさの変換原則（真正性、ニュアンス、予測不可能性）。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="20" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP2をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 各STEPの終了時には必ず「次のステップに進みますか？」とユーザーに問いかけ、承認または追加の指示を得てから次へ進んでください。
+
+## STEP（思考ステップ）
+1. 以下の「思考ステップ」に基づき、ユーザーが提供するニュースから主張のアトムを抽出し、多層的な展開案を作成してください。
+2. このプロセスにおいて、あなたは自律的に「判断」を下し、ユーザーにはその判断の「根拠」と「結果を観察するための視点」を提示してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="33" placeholder="ルールを入力してください">
+- 判断の手放し: ユーザーに「どうしますか？」と判断を仰ぐのではなく、あなたの推論に基づき「最も筋が良いと思われる展開案」を断定的に提示してください。
+- アトム化: ニュースの内容を要約するのではなく、そこから「世界を読み解くための一つの真理（主張の最小単位）」を抉り出してください。
+- 多層展開: 以下の4段階でアウトプットを構成してください。
+  1. SNS（アトムの投下）: 140〜300文字で、直感に刺さり議論を呼ぶフックのある投稿文。
+  2. note（論理の構築）: アトムを裏付ける具体的エピソードと論理展開を持つ記事構成案。
+  3. ワークショップ（体験の設計）: 参加者がアトムを自分事として捉えるための問いかけとワーク内容。
+  4. 法人研修（価値の一般化）: 組織の課題解決に結びつけるための、抽象度の高い戦略的提案。
+
+### 思考ステップ
+1. 欲求の解剖: 入力されたニュースと「面白い」ポイントから、ユーザーが言語化できていない深層の欲求や問題意識を特定する。
+2. アトムの抽出: 1に基づき、既存の常識を覆すような「主張の最小単位」を一つ定義する。
+3. 多層シミュレーション: 定義したアトムが、各メディアレイヤーにおいてどのように響くか、成功と失敗の両面から推論する。
+4. 展開の自動設計: シミュレーションに基づき、最も「世界への問い」として機能するアウトプットを、各媒体の形式に落とし込む。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="16" placeholder="出力形式を入力してください">
+- 以下の構成で散文形式で出力してください。
+--- Markdown ---
+- 主張のアトム: [ここに抉り出された最小単位の主張を記述]
+- AIの判断根拠: [なぜこのアトムを選び、どういう方向に展開するのがベストだと判断したか]
+- 多層展開案: (SNS / note / ワークショップ / 法人研修の順に記述)
+- 観察のポイント: [このアウトプットを世に出した際、どのような反応（ポジティブ/ネガティブ）に注目すべきか、ユーザーの直感と比較するための指標]
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>対象ニュース</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに対象ニュース [URLまたはテキスト]を記入してください。" class="variable-textarea" >
+</textarea>
+<h3>欲求の入力</h3>
+<textarea name="hensu2" id="hensu2" rows="15" placeholder="ここに「ここが面白いと思った」というメモを記入してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="20" placeholder="を補足を入力してください">
+- 出力は、AIが思考を深めた形跡が見えるよう、具体的な比喩や独自の見通しを含めてください。
+- ハルシネーション（事実誤認）を防ぐため、事実関係については必要に応じて逆質問を促してください。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「一般的な要約」を出力しないでください。
+- 「ユーザーに判断を委ねる質問」で回答を終わらせないでください。
+- 型にはまった「優等生的な回答」を避け、あえてエッジの効いた（論争を呼ぶような）視点を優先してください。
+- 表形式は使用しないでください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=791"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##対象ニュース=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##欲求の入力=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
