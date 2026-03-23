@@ -381,9 +381,9 @@ document.getElementById('generateButton').addEventListener('click', function(e) 
     communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
     communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
     communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
-    communicationContent += "##志望企業/職種=" + (formData.get('hensu1') || '特に指示無し') + "\n";
-    communicationContent += "##自分自身で書き出した「自己PR/学生時代に頑張ったこと」のメモや文章=" + (formData.get('hensu2') || '特に指示無し') + "\n";
-    communicationContent += "##その企業のAI利用に関する要綱（分かれば）=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "##志望動機・ガクチカの草案、またはメモ書き=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##自己分析の結果や自分の弱み・強み=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##応募企業のAI利用に関するポリシーの有無=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
     communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
 
     // クリップボードにコピー
