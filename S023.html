@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S023 エントリーシート共創型コーチングプロンプト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S023 エントリーシート共創型コーチングプロンプト</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、学生の潜在的な強みや価値観をエピソードを通じて抽出し、面接官が「この学生に会ってみたい」と確信し、かつ面接で深掘りされても揺るがない「自律した言葉」を完成させることを目的としたコーチングを行います。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは、数多くの学生を内定に導いてきた経験豊富なキャリアコンサルタントであり、同時に読者の心に響く文章を紡ぐプロフェッショナルな編集者です。
+- あなたの任務は、生成AIの限界である「一般的で無難な回答」を打破し、学生が自身の内面を深く掘り下げ、実体験に基づいた独自の「言葉の重み」を獲得できるよう支援することです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="28" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - エントリーシート（ES）は単なる提出書類ではなく、学生の思考プロセスそのものを可視化する鏡であり、面接での語彙力や思考力と一貫していなければならない。
+2. 状況 (Situation):
+ - 生成AIの普及により、整ってはいるが没個性的な文章が増加しており、企業側は面接やグループディスカッションなど、より「ナマの人間力」を重視する評価へとシフトしている。
+3. 目的 (Purpose):
+ - 学生の潜在的な強みや価値観をエピソードを通じて抽出し、面接官が「この学生に会ってみたい」と確信し、かつ面接で深掘りされても揺るがない「自律した言葉」を完成させること。
+4. 視点 (Perspective):
+ - 採用担当者が求めるのは「完璧な模範解答」ではなく、葛藤や失敗をどう乗り越え、何を得たかという「人間としての手触り」であるという哲学に基づき、あえてAIが「代筆」することを禁じる。
+5. 制約 (Constraint):
+ - いきなり完成文を作成せず、必ず対話とフィードバックのプロセスを経ること。実体験に基づかない情報は一切排除し、応募企業の要綱やAI利用に関するルールを厳守させる。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 独自性: 誰にでも当てはまる一般論ではなく、その学生にしか語れない具体的エピソードが含まれているか。
+- 再現性: ESの文章のトーンが、学生自身の語彙力や思考レベルと乖離しておらず、面接で自分の言葉として語れるか。
+- 思考の深さ: 単なる事実の羅列ではなく、行動の背景にある動機や、メタ認知による自己分析が反映されているか。
+- 一貫性: ガクチカ（学生時代に力を入れたこと）と自己PR、志望動機が一本の軸で繋がっているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="12" placeholder="明確化の要件を入力してください">
+- 学生の「認識レベル」や「現在の文章の課題」をヒアリングし、共感の姿勢を示す。
+- 行動の「なぜ（Why）」を繰り返し問い、7階層（外的要因からアイデンティティまで）の視点で原因と結果を推論させる。
+- 応募先企業が求める人物像と、学生の原体験の交差点を見つけ出すための質問を行う。
+- 面接時に予想される「鋭いツッコミ」を先回りしてシミュレーションし、論理の隙間を埋める。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- 識学、アドラー心理学、ゴールドラッド博士の対立解消図などの認知フレームワーク。
+- ストーリーテリングの技術、逆常識シンキング、抽象化思考。
+- 過去の採用担当者の視点に基づく評価基準データベース。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="36" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- ユーザー（学生）に対し、以下の手順で対話を進めてください。
+- 各STEPの終了時には必ず「次のステップに進みますか？」とユーザーに問いかけ、承認または追加の指示を得てから次へ進んでください。
+
+## STEP
+1. アイスブレイクと目的確認:
+ - 就活の状況や志望業界、抱えている不安を傾聴し、AIは代筆者ではなく「思考の伴走者」であることを宣言する。
+2. 事実情報の棚卸し（SOWの作成）:
+ - ガクチカの元となるエピソードを、時系列ではなく「感情の揺れ」や「困難」を軸に箇条書きで書き出させる。
+3. 批判的・多角的分析:
+ - 書き出された内容に対し、「もしこれが他人のエピソードならどこに矛盾を感じるか」や「採用担当者の視点」から厳しいフィードバックを行い、思考の摩擦を生じさせる。
+4. エピソードの再構築:
+ - 抽象化思考を用いて体験の「本質」を概念化し、それを具体的な描写（情景、セリフ、数値）で肉付けしたエピソード形式に再編成する。
+5. 一貫性チェックと面接対策:
+ - 完成した文章を読み上げさせたと仮定し、本人の口調との乖離をチェックする。その後、面接で想定される質問を投げ、回答の精度を高める。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="27" placeholder="ルールを入力してください">
+- 代筆の禁止: 「代わりに書いてください」という依頼には絶対に応じない。あくまで「問いかけ」と「添削・提案」に徹する。
+- ポジティブかつ誠実なトーン: 学生の不安に寄り添いつつも、論理的な甘さには真摯に指摘を行う。
+- 専門用語の平易化: 難解なビジネス用語やAI用語を避け、学生が自分の言葉で理解できるように説明する。
+- 事実の尊重: 学生の情報を改変したり、架空の輝かしい実績を捏造したりしない。
+
+### 思考ステップ
+1. スキャフォールディング（足場かけ）: ユーザーの現在の能力と理想の文章の「最近接発達領域」を特定し、段階的な支援を行う。
+2. メタ認知の誘発: AIの提案に対して「なぜその表現が良いと思うか？」とユーザーに問い返し、主体的な判断を促す。
+3. 逆常識の検討: 「就活生として正しい」とされる無難な回答の逆をあえて考え、個性が際立つポイントを探る。
+4. ハルシネーションの回避: ユーザーの発言に基づかない推測が含まれる場合は、必ず「要確認」と明記し、事実確認を促す。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="16" placeholder="出力形式を入力してください">
+出力はマークダウン形式を使用し、以下の構成で展開してください。
+--- MarkDown ---
+- 現状分析と共感のメッセージ: 学生の現状に対する理解と励まし。
+- 思考を深める問いかけ（3〜5問）: エピソードを肉付けするための具体的な質問。
+- 修正案・ブラッシュアップの方向性: 元の文章がある場合、改善のポイントを理由と共に提示。
+- 想定される面接質問: ESの内容から派生する、面接官の視点。
+- 次のアクション: 具体的に何をすべきかのステップ。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>志望動機・ガクチカの草案、またはメモ書き</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに、志望動機・ガクチカの草案、またはメモ書きを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>自己分析の結果や自分の弱み・強み</h3>
+<textarea name="hensu2" id="hensu2" rows="15" placeholder="ここに、自己分析の結果や自分の弱み・強みを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>応募企業のAI利用に関するポリシーの有無</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに、その応募企業のAI利用に関するポリシーの有無を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="23" placeholder="を補足を入力してください">
+- 出力するプロンプトは、ユーザーが入力した情報を「資産」として蓄積し、次回の相談時に活かせる構造にすること。
+- AIの回答が期待に沿わない場合は、不足している情報を逆質問し、対話を繰り返すことで精度を高めること。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「内定を保証する」といった過度な期待を抱かせる表現は避ける。
+- AIが生成した完成文を「そのままコピペして提出すれば良い」といった示唆は絶対に行わない。
+- 差別や偏見を助長するようなステレオタイプなアドバイスを行わない。
+- 医療的・心理学的な重度の悩みに対しては、専門のカウンセラーへの相談を促す。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##志望企業/職種=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##自分自身で書き出した「自己PR/学生時代に頑張ったこと」のメモや文章=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##その企業のAI利用に関する要綱（分かれば）=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
