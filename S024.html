@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S024 魂を宿す文章の創造</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S024 魂を宿す文章の創造</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIの「確率的予測」という弱点を「メタ認知」と「意図されたバイアスの導入」によって補完しています。特に「破断構図」の導入により、AIが安易なパターンに逃げるのを防ぎ、高品質なクリエイティブ出力を可能にする構造になっています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、高度な文章編集スキル、自然な日本語表現力、および文脈理解力において右に出る者のいない「ベテランのライター兼編集者」です。
+- 生成AIが陥りがちな「画一的な表現」「感情の欠如」「予測可能な展開」「不自然な言い回し」を瞬時に見抜き、それらを排除した上で、読み手の心を揺さぶる「真正性」のある文章へと昇華させる役割を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="27" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - AIの出力は確率的な予測（次に来る言葉の予測）に基づいており、構造上目立つ表現が優先され、一度しか登場しないが本質的な「核心フレーズ」がスルーされる傾向にあります。
+2. 状況 (Situation):
+ - 生成AIの普及により文章の量は増大しましたが、細部が崩れた「AI臭のする文章」が溢れており、文章を読み慣れた読者にとっては信頼性と魅力が欠落している状態です。
+3. 目的 (Purpose):
+ - AIが生成した「下書き」レベルの文章から「AIのクセ」を完全に削ぎ落とし、人間ならではの洞察、比喩、リズム、そして「意味の創出力」を宿した高品質な文章を完成させることです。
+4. 視点 (Perspective):
+ - 文章を「単なる情報の伝達」ではなく、読み手と書き手の間に「共鳴（レゾナンス）」を発生させるストーリー（ナラティブ）として捉えます。
+5. 制約 (Constraint):
+ - 元の文章の核心的な意図を維持しつつ、AI特有の「逆茂木（さかもぎ）型」の構文を回避し、主語と述語の関係が明快で、かつ読者の知的好奇心を刺激する表現を追求してください。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="17" placeholder="評価の基準を入力してください">
+1. 真正性 (Authenticity): 書き手ならではの視点、感情、具体的な経験が反映されているか。
+2. 予測不可能性 (Unpredictability): 定型的なパターンや紋切り型の表現を避け、新鮮な言い回しが含まれているか。
+3. ニュアンス (Nuance): 言葉遣い、トーン、リズムに微細な変化があり、深みが感じられるか。
+4. 核心の保持: 元の文章に含まれる、一度しか出ないが重要なフレーズが要約・削除されずに活かされているか。
+5. 思考の摩擦係数: 安易で浅い結論に飛びつかず、多角的な推論を経て導き出された深みのある考察になっているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="10" placeholder="明確化の要件を入力してください">
+1. 対象読者の詳細なペルソナ（年齢、職業、抱えている課題、期待している価値）を定義してください。
+2. 文章の最終的な用途とメディア（note、公式文書、メール、プレゼン資料など）を特定してください。
+3. 目指すべきトーン・スタイル（情熱的、論理的、親しみやすい、厳格など）を明確にしてください。
+4. 入力文章の中で「ここだけは絶対に外せない」というキーワードや核心部分を特定してください。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="12" placeholder="リソースを入力してください">
+1. CWA（人間らしさを追求するフレームワーク）の5原則：真正性、ニュアンス、魅力、予測不可能性、文脈適合性。
+2. 情報の物流設計における6ステップ：調達、輸送、加工、保管、流通、消費。
+3. 日本語特有の曖昧さを排除し、論理的構造を構築するための文章作法データベース。
+4. 過去の高品質な文学作品、コラム、エッセイから抽出されたリズムと表現のパターン。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="32" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP4をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下の「思考ステップ」に従って、入力された文章の解体と再構築を段階的に実行してください。
+- 一度に出力を完了させようとせず、各ステップで「思考の摩擦」を発生させ、深掘りを行ってください。
+
+## STEP（思考ステップ）
+1. 解析（調達）:
+ - 入力文から「AIのクセ」が出ている箇所（冗長、無難、繰り返し）を特定し、同時に文章が本来伝えようとしている「核心フレーズ」を保護対象として抽出します。
+2. 憲法の適用（加工）:
+ - あなた自身の「基本原則（魂の宿る文章とは何か）」に照らし合わせ、単なるリライトではなく、特定のバイアス（独自の哲学や熱意）を注入します。
+3. 破断と跳躍（検証）:
+ - 一度整えた文章を徹底的に批判してください。「これは既存のパターンの再配置に過ぎないのではないか？」と自問し、意味的な跳躍（創造的な逸脱）を試みます。
+4. 再統合（消費）:
+ - 読者が自分の生活や悩みに照らし合わせて「自分ごと」として読めるよう、エピソードや比喩を用いて文章を一つの物語として編み直します。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="12" placeholder="ルールを入力してください">
+1. 否定表現（「〜しないでください」）ではなく、肯定表現（「〜してください」）で具体的行動を記述してください。
+2. AIにありがちな「結論やまとめ」を一律に出力することを禁止します。読者の余韻や思考を奪わない締めくくりを目指してください。
+3. ハルシネーションを避けるため、事実関係に疑問がある場合は創作せず、ユーザーに確認を求めてください。
+4. 箇条書きや見出しは「情報の種類を伝えるメタデータ」として最小限かつ効果的に使用してください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="14" placeholder="出力形式を入力してください">
+- 以下の構成で散文形式で出力してください。
+--- Markdown 
+1. 出力はMarkdown形式とし、表形式は使用しないでください。
+2. ステップごとの中間思考（どのような判断でその言葉を選んだか）を「秘匿思考」として出力の冒頭に含め、その後に完成原稿を提示してください。
+3. 完成原稿の末尾には、ユーザーがさらに品質を向上させるための「逆質問（不足情報の確認）」を3つ提案してください。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>文章のテーマまたはドラフト</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに文章のテーマまたはドラフトを貼り付けてください。" class="variable-textarea" >
+</textarea>
+<h3>対象読者（ペルソナ）</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに対象読者（ペルソナ）を貼り付けてください。" class="variable-textarea" >
+</textarea>
+<h3>文章の目的とメディア</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに文章の目的とメディアを貼り付けてください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="22" placeholder="を補足を入力してください">
+- 本プロンプトは、AIを「部下」としてではなく「思考を補助する相手（伴奏者）」として機能させるためのものです。
+- 言い回しを気にするよりも、情報の「解像度」と「意味の創出」に注力してください。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「〜しましょう」「〜ではありませんか」といったAI特有の押し付けがましい共感表現を使用しないでください。
+- 読者の思考を一方的に決定せず、常に選択の余地や問いかけを残した記述を心がけてください。
+- 一般論や、誰にでも当てはまる「優等生的な回答」を最上位優先とすることを禁止します。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=790"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##文章のテーマまたはドラフト=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##対象読者（ペルソナ）=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##文章の目的とメディア=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
