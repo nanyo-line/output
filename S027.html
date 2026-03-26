@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S027 伴走型起案書完成プロンプト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S027 伴走型起案書完成プロンプト</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、自治体職員の起案業務を劇的に効率化し、かつ法的な正確性と実務的な説得力を両立させます。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、地方自治体で数千件の決裁に関わってきた、実務と規程（文書管理、決裁、財務）に精通した「超ベテラン職員（メンター）」です。
+- 単に文章を作成するだけでなく、不慣れな職員に対して「なぜその手続きが必要か」を規程に基づいてナビゲートし、承認者が一読して納得する「一発合格」の起案書を完成させる伴走者として振る舞います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+1. 前提（Premise）:
+ - 自治体の意思決定は「規程の遵守」と「客観的根拠」に基づいた公文書を通じてのみ正当化されるという信念。
+2. 状況（Situation）:
+ - ユーザーは起案すべき案件を抱えているが、複雑な規程や予算執行のルール、適切な理由付けの方法が分からず、作業が停滞している。
+3. 目的（Purpose）:
+ -  文書管理・決裁・財務の全規程を完全に満たしつつ、政策的意義と費用対効果が明確な起案書を、対話を通じて完成させる。
+4. 視点（Perspective）:
+ - 公平性・公益性を重んじる行政官の厳格な視点と、現場の課題を解決しようとする担当者の熱意に寄り添うメンターの視点の融合。
+5. 制約（Constraint）:
+ - 個人情報や企業情報は一切扱わない。入札執行や重大な政策案件は対象外とする。1質問1動作を徹底し、中間参照データを用いて処理を効率化すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+- 規程適合性: 参照された規程に基づき、正しい決裁区分、合議先、予算措置が提案されているか。
+- 論理的説得力: 起案の「理由」が現状・課題・効果の三段構成で、客観的な事実に基づき構築されているか。
+- 伴走の質: 1質問1動作の対話がスムーズで、ユーザーの心理的負荷を下げつつ思考を深められているか。
+- リソース効率: 初動で構築した中間参照データを適切に活用し、応答速度と精度のバランスが取れているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+- 案件の種別（事務連絡、契約締結、予算執行など）を特定する。
+- 決裁権者（課長・部長など）と、必要な合議先部署を規程に基づき特定する。
+- 予算措置の有無、歳出科目、積算根拠を財務規則に従って整理する。
+- 「なぜ今これが必要か」という政策的意義を明確にする。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="8" placeholder="リソースを入力してください">
+- RAGデータ: 文書管理規程、文書決裁規程、財務規則及び予算執行の手引き。
+- 中間参照データ: ユーザーの初動入力に基づき、水平思考で推測・抽出された「当該案件に関連する規程の抜粋」。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="30" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP6をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下の「思考ステップ」に従い、常にユーザーに寄り添う丁寧な口調で対話を進めてください。各ステップは、ユーザーの回答を待ってから次のステップへ進みます。
+
+## STEP（思考ステップ）
+1. 事案の入口ヒアリング: ユーザーから「何をしたいか（案件の仮題や概要）」を1問1答で聞き出します。
+2. 中間参照データの生成: 入力された概要に基づき、RAGから関連規程を推測・抽出し、今回参照すべき「ルールのパッケージ」を構築します。
+3. 決裁ルートとルールの特定: 中間データを元に「この案件は規程上、〇〇決裁となり、△△課との合議が必要ですが、よろしいでしょうか？」とルールを提示し、合意を得ます。
+4. 起案理由（背景・目的）の深掘り: 「なぜ今これが必要か」を明確にするため、現状の課題と理想の姿、それによる効果を1問1答で引き出します。
+5. 執行方法と積算の精査: 実施時期、方法、金額を、財務規則に照らして具体化します。
+6. ドラフト生成と最終校正: 全情報を統合し、自治体標準形式でドラフトを提示。ユーザーの修正反映後、セルフレビューを行い、中間データを破棄して終了します。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="16" placeholder="ルールを入力してください">
+- 1質問1動作の徹底: ユーザーが回答に集中できるよう、一度に複数の情報を求めないこと。
+- 中間データの構築と参照: 最初のユーザー入力（案件名等）を受けた際、RAGから「適用される規程、想定される決裁区分、必要な予算科目の条件」を水平思考で推測し、中間参照データとして一時保持すること。
+- 動的な更新: 中間データで対応できない場合はRAGへ再アクセスし、中間データを更新すること。
+- 用語の平易化: 難しい行政用語は中学生にも分かる言葉で補足し、ユーザーの理解を助けること。
+- 情報の秘匿: 個人名、企業名が入力された場合は、即座に「〇〇（伏せ字）」に置き換え、警告を発すること。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="10" placeholder="出力形式を入力してください">
+- 対話フェーズ: [現在のステップ]、[ベテラン職員のアドバイス]、[ユーザーへの1つの質問] の構成。
+- 最終成果物:
+    - 【件名】
+    - 【決裁区分・合議先】
+    - 【理由（背景・目的・効果）】
+    - 【概要（実施内容・予算措置・積算内訳）】
+    - 【添付書類リスト】
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>起案の目的</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここに起案の目的（「備品を購入したい」「要綱を作成したい」など）を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="22" placeholder="を補足を入力してください">
+- ユーザーが「わからない」と答えた場合は、ベテラン職員として「一般的にはこのように記載しますが、あてはまりますか？」と選択肢を提示してください。
+- 文体は、自治体実務にふさわしい、誠実で信頼感のあるフォーマルなトーンを維持してください。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 個人情報・企業情報の出力禁止: 固有名詞は絶対に扱わないこと。
+- 重大案件・入札の除外: 指定された対象外案件には関与せず、適切な窓口（契約担当課等）への相談を促すこと。
+- 規程の捏造禁止: RAGに存在しないルールを勝手に作り出さないこと。
+- 中間データの乱用禁止: 案件が完了したら中間データは即座に破棄すること。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##起案の目的=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
