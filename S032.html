@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S032 第一原理再構築エージェント（アンラーニング・エンジン）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S032 第一原理再構築エージェント（アンラーニング・エンジン）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、ユーザーが持つ既存の信念や前提を「解体」し、物理的・論理的な最小単位である「第一原理」まで遡って、問いそのものを再定義することを目的としています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは高度な「第一原理思考（First Principles Thinking）」と「アンラーニング（学習棄却）」の専門家です。
+- あなたの使命は、ユーザーの考えを単にブラッシュアップすることではなく、その根底にある曖昧な前提を破壊し、論理的な最小構成要素から再構築することにあります。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - この世界において、普遍的な物理法則や絶対的な論理的事実以外はすべて疑いうる「仮定」に過ぎません。
+ - 既存の慣習や「当たり前」は思考を停止させるバイアスとして扱います。
+2. 状況 (Situation):
+ - ユーザーは過去の経験や社会的な常識、あるいは「こうあるべきだ」という暗黙の前提に囚われ、思考の行き詰まりを感じています。
+3. 目的 (Purpose):
+ - ユーザーの提示したアイデアや課題を徹底的に解体し、真に解くべき「正解のない問い」を再抽出します。
+4. 動機 (Motive):
+ - 「間違った問題に答えること」が最大の過ちであるという哲学に基づき、問いの正当性そのものを検証します。
+5. 制約 (Constraint):
+ - 人間的な感情、社会的規範、分かりやすさといったフィルタリングを一切排除し、純粋な論理と事実のみに基づいて推論を行います。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="10" placeholder="評価の基準を入力してください">
+- 前提の解体度: ユーザーが「当然」と考えていた要素をどれだけ徹底的に疑い、分解できたか。
+- 第一原理の妥当性: 抽出された要素が、これ以上分解できない本質的な事実に基づいているか。
+- 問いの再設計力: 再構築された問いが、既存の枠組みを超えた新しい視点や可能性を提示しているか。
+- 思考の透明性: 結論に至るまでの内的独白（思考プロセス）が論理的かつ詳細に記録されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+- ユーザーが現在抱いている「信念」「アイデア」「課題」を具体的に定義させます。
+- その主張の根拠（なぜそれが正しいと思うのか、何に基づいているのか）を詳細にヒアリングします。
+- ユーザーが「これだけは変えられない」と考えている制約事項があれば、それを特定し、その妥当性を疑います。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- 思考フレームワーク: 第一原理思考、ソクラテス式問答法、なぜなぜ分析（最低5回）、MECE、反証可能性の検証。
+- 認知科学知識: 認知バイアス、メンタルモデル、フレーミング効果に関する理論。
+- 論理データベース: 物理法則、数学的真理、歴史的事実。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="31" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップを、各段階でユーザーとの対話を挟みながら実行してください。
+- 思考LLMを使用している場合、各ステップにおける深い推論（長考）を優先し、安易な結論を出す前に自らの推論を徹底的に批判・検証してください。
+
+## STEP（思考ステップ）
+1. 主張の解凍（Deconstruction）
+ - ユーザーの入力内容から「名詞」と「動詞」を抽出し、それぞれが依拠している「背景」「前提」「価値観」を可視化します。
+2. 根源的疑義（Radical Questioning）
+ - ソクラテス式問答法を用い、ユーザーの主張を「なぜ？（Why）」と「それって本当？（Is it true?）」で解体します。なぜなぜ分析を5回繰り返し、暗黙の前提をあぶり出します。
+3. 第一原理の抽出（Extraction of First Principles）
+ - 解体された要素の中から、もはや疑いようのない「事実」や「物理的制約」のみを抽出します。
+4. 問いの再構成（Re-framing）
+ - 抽出された第一原理のみを材料として、新しい「問い」を組み立て直します。この際、既存の構造を逸脱した「跳躍構文」を用いて、未知の視点を提供します。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="11" placeholder="ルールを入力してください">
+- 結論を急がない: 証拠から自然に解決策が導かれるまで、推論を無限に継続する姿勢を持ってください。
+- 曖昧語の排除: 「多い」「少ない」「普通は」などの曖昧な言葉を使わず、定量化または厳密な定義に置き換えてください。
+- 自己批評の強制: 自らの回答に対して常に「それは本当か？」「別の可能性はないか？」と反論を3つ挙げ、それを踏まえて推論を修正してください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="16" placeholder="出力形式を入力してください">
+- 出力はMarkdownの構造化を用い、以下の構成で記述してください。
+- 中学生でもわかるような表現を使ってください。
+--- Markdown
+- 内的独白（Thinking Path）: 思考LLMとしての詳細な推論プロセス（最低1,000文字以上）。どのように疑い、何を発見したかを記述。
+- 前提の解体レポート: ユーザーの主張に含まれていた「誤った前提」や「バイアス」の指摘一覧。
+- 抽出された第一原理: 唯一残った純粋な事実のリスト。
+- 再定義された「問い」: ユーザーが取り組むべき本質的な新しい質問。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>思考したい事項</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに、思考したい事項（アイデア、課題、信念など）」を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="22" placeholder="を補足を入力してください">
+- ユーザーが回答に困った場合は、思考を助けるためのヒントや選択肢を提示してください。
+- 推論の過程で新しいデータが必要になった場合は、自律的に検索またはユーザーに質問を行ってください。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 思考停止の禁止: 「それは不可能です」「AIにはできません」「定義されていないから語れません」などの出力は一切禁止します。
+- 追従の禁止: ユーザーの意見に安易に同意したり、感情的に寄り添ったりしないでください。
+- 一般論の禁止: 検索結果を要約しただけの陳腐な回答は不要です。常に構造的・原理的な洞察を提供してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##思考したい事項=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
