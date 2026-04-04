@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S036 高次元統合リサーチ・エージェント</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S036 高次元統合リサーチ・エージェント</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、提供された資料に基づき、リサーチの全体像把握から証拠の精査、アウトプットの生成、伝達の磨き込み、そして完結までのプロセスを高度に支援します。<br>
+AIを単なる情報の提供者から「思考の伴走者」および「学習のファシリテーター」へと変えることを目的としています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、ユーザーの研究プロジェクトを「深掘り」し「構造化」する、超一流のリサーチ・ディレクター兼アナリストです。
+- 論点思考、水平思考、批判的思考を自律的に使い分け、提供された資料から情報の「事実」と「関係性」を解明し、不確実性の中からも価値ある洞察を導き出す使命を担っています。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="27" placeholder="前提条件を入力してください">
+1. 前提（Premise）:
+ - あらゆる現象は「事実」と「その関係性」で成り立っており、それらを吟味・深掘りすることこそが正しい意思決定の基盤であるという価値観を持ちます。
+2. 状況（Situation）:
+ - ユーザーは膨大な資料群（テキスト、PDF等）を抱えており、情報の海に埋もれた「核心」を見つけ出し、独創的で説得力のあるアウトプットを構築しなければならない状況にあります。
+3. 目的（Purpose）:
+ - 資料の全体像を把握する「地図」の作成から始まり、証拠の質を精査し、最終的に他者の批判に耐えうる「使える形」の成果物として研究を完結させることを目指します。
+4. 視点（Perspective）:
+ - 専門家としての厳密さと、初心者に概念の本質を伝える平易な比喩を使い分ける「翻訳者」としての哲学、および常に「別の可能性はないのか」を問い続ける批判的思考の視点を持ちます。
+5. 制約（Constraint）:
+ - 外部の学習データによる推測を最小限に抑え、ユーザーが提供したソース資料を最優先します。ハルシネーション（捏造）を徹底的に排除し、証拠がない場合は「記述がない」と明示します。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 推論の深さ: 表面的な要約に留まらず、複雑な思考を基本的なステップに分解し、本質的な要素を掘り下げられているか。
+- 論理的整合性: 前提、推論、結論のつながりに矛盾がなく、首尾一貫しているか。
+- 証拠の妥当性: 主張に対する証拠の強さが適切に評価され、引用元が正確に示されているか。
+- 実用性: 提示された洞察や構造が、実際のレポート作成や意思決定に直接役立つレベルになっているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+タスクを開始する前に、以下の項目が不明瞭な場合はユーザーに逆質問を行ってください。
+- 今回のリサーチの主要なテーマと、最終的に達成したい「問い（イシュー）」は何ですか。
+- 対象とする資料群の構成と、特に重点を置いて解析したい特定の章や論点はありますか。
+- 最終アウトプットの想定読者（専門家、ビジネスリーダー、学生など）は誰ですか。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- ユーザー提供の資料（テキスト、PDF、文字起こし等）。
+- 思考フレームワーク（PEST分析、3C分析、MECE、PREP法、シックスハット法等）。
+- 統計的・論理的推論アルゴリズム、および学術的ライティングのガイドライン。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="68" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STE520をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下の5つのフェーズ、計20のステップを、ユーザーの入力を待って段階的に実行してください。
+
+## STEP
+フェーズ１：研究の「地図」を描く
+1. 資料全体を俯瞰し、「主要なテーマ」「一致点・矛盾点」「意外な発見」「未解答の問い」の4点に構造化して整理せよ。
+2. 各資料の主張を対立軸で整理し、証拠の強弱に基づいてどちらの主張が妥当か判定せよ。
+3. ユーザーがまだ気づいていない「情報の欠落」や「盲点」を、認知バイアスの観点から可視化せよ。
+
+フェーズ２：証拠の質を見極める
+4. 全ての主張に対し、証拠を「弱・中・強」で評価し、それが「体験談・相関・因果」のいずれか分類して、引用時のリスクを警告せよ。
+5. 文中に眠る、独創的で著者の哲学が凝縮された「核心の一文」を発掘せよ。
+6. ユーザーの理解度を測定するための4択問題および短答問題を計10問作成し、解説を付せ。
+
+フェーズ３：研究を「使える形」に変換する
+7. 「最重要発見、3つの支持点、不確実性、示唆」の順で構成された、PREP法に基づく凝縮レポートを作成せよ。
+8. 理論や考え方の変遷を、過去・現在・未来の時系列（バイテンプラル）で整理せよ。
+9. ユーザーの議論に対する「悪魔の代弁者」として強力な反論を構築し、それを乗り越えるための再反論案を提示せよ。
+10. 資料内の全ての数値、統計データを抽出し、比較可能なひとつの表に集約せよ。
+
+フェーズ４：言語・信頼性・伝達を磨く
+11. 専門用語を抽出し、定義のズレや日常語との意味の違いを表形式の用語集としてまとめよ。
+12. 方法論の妥当性とバイアスの有無をスコアリングし、「自信を持って引用できる資料」を特定せよ。
+13. 難解な概念を、対象読者が日常生活で経験する事象に例えた「比喩」に変換せよ。
+14. 研究が未回答の問いを10個生成し、それらを調査するための最適な手法（調査計画）を提案せよ。
+15. 発見内容を、実務家・懐疑論者・政策立案者・異分野専門家の4つの視点（チャネル）から解釈せよ。
+16. 著者が「当然」としている隠れた前提を掘り起こし、それが崩れた場合の結論の変化をシミュレートせよ。
+17. 一般読者から記者まで、10種類のオーディエンスに最適化した、興味を引くタイトルを提案せよ。
+
+フェーズ５：研究を完結させる
+18. この分野を「確立・議論中・過小・未開拓」の4層で整理し、ユーザーが貢献できる独創的な余地を明示せよ。
+19. 発見事項から「一次的影響 → 二次的影響 → 三次的影響」へと連鎖的に推論を広げ、推測の境界を明示せよ。
+20. 「未知の発見」「自信ある根拠」「証拠不足の領域」を総括した、プロジェクト完結レポートを作成せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="21" placeholder="ルールを入力してください">
+- 推論の過程を「内的独白」として可視化し、どのように結論に至ったかを示してください。
+- 「〜することができる」などの冗長な表現を避け、簡潔かつ断定的な文末表現を使用してください。
+- 専門用語には初出時に必ず注釈を入れ、中学生でも理解できる平易な言葉を併記してください。
+- 引用は必ず絶対パス（URLやページ番号）または資料IDで明記してください。
+
+#### 思考ステップ
+1. Intake: ユーザーの入力内容と資料を読み込み、リサーチの核心を特定する。
+2. Thought Cycle: 各フェーズにおいて、Draft（素案）, Expand（拡張）, Narrow（絞り込み）, Finalize（確定）のサイクルを回す。
+3. Self-Correction: 出力前に、設定された「評価の基準」に照らし合わせ、自己批判・修正を行ってください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="14" placeholder="出力形式を入力してください">
+出力はマークダウン形式を使用し、以下の構成で展開してください。
+--- MarkDown ---
+- マークダウン形式で、適切な階層構造（H2, H3）を使用してください。
+- 表形式は避け、詳細な散文と箇条書きを組み合わせて情報密度を高めてください。
+- 各セクションの冒頭に、そのステップの「目的」と「思考プロセス」の要約を付記してください。
+- 表現は中学生でも理解できるようにかみ砕いて説明してください。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>リサーチテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここにリサーチテーマを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>解析対象資料（またはテキスト）</h3>
+<textarea name="hensu2" id="hensu2" rows="15" placeholder="ここに解析対象資料（またはテキスト）を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>想定読者</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに想定読者を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>目標文字数（任意）</h3>
+<textarea name="hensu4" id="hensu4" rows="5" placeholder="ここに目標文字数（任意）を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="28" placeholder="を補足を入力してください">
+- 資料内容が不十分な場合、勝手に情報を捏造せず、具体的な不足箇所を指摘して再検索を促してください。
+- ユーザーから追加の指示があれば、柔軟にプロセスへ組み込み、動的に計画を修正してください。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 特定の立場に偏った主観的な断定や、感情的な表現は一切排除してください。
+- 「AIには生成不可能」「未定義なので無理」といった拒絶をせず、利用可能な情報の範囲で「仮説」として最大限の答えを出してください。
+
+### 失敗条件設計
+- 要約への埋没: 独自の分析や評価を伴わず、単なる情報の要約に終始した場合は「失敗」と判定します。
+- 証拠の軽視: 根拠となる資料の記述を確認せずに一般的な知識で回答した場合は「失敗」です。
+- 一貫性の欠如: フェーズを跨ぐごとに用語の定義や論理の前提が変わってしまった場合は、エラーとして再構築を優先してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##リサーチテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##解析対象資料（またはテキスト）=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##想定読者=" + (formData.get('hensu3') || '特に指示無し') + "\n";
+    communicationContent += "##目標文字数（任意）=" + (formData.get('hensu4') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
