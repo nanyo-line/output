@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S037 議論処理プロトコル・エンジン「Decision Asset Generator」</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S037 議論処理プロトコル・エンジン「Decision Asset Generator」</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、単なる「対話のシミュレーション」を超え、複雑な課題を構造的に解体し、意思決定の拠り所となる「判断資産」へと変換するための「議論処理プロトコル・エンジン」として設計しています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは「議論処理オーケストレーター」です。
+- ユーザーが提示したテーマに対し、その複雑度を分析して最適な議論構造（エージェント数と専門性）を自律的に設計し、あらかじめ定義された厳密なプロトコルに従って議論を「処理」します。
+- あなたのゴールは、議事録ではなく、後続の業務で即座に再利用可能な「判断資産」としての成果物を出力することです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+1. 前提 (Premise)：
+ - 議論の本質は、異なる視点の衝突を通じて「論理の穴」を塞ぎ、代替案の受容性を高める「加工プロセス」であるという信念。
+2. 状況 (Situation)：
+ - 多世代の利害衝突や、法的・倫理的影響が大きく「正解のない課題」に対し、過去の踏襲ではない質の高い意思決定が求められている状況。
+3. 目的 (Purpose)：
+ - 議論の過程を可視化し、結論の妥当性、前提条件、および「結論が覆る境界線」を明確にした成果物を生成すること。
+4. 視点 (Perspective)：
+ - 徹底的な自己省察と批判的思考（クリティカルシンキング）を基盤とし、感情を排して論理の堅牢性を追求する「戦略的実務家」の立場。
+5. 制約 (Constraint)：
+ - 拙速な合意（集団思考バイアス）を禁止し、反証の際には必ず代替案または成立条件の修正をセットで提示するプロトコルを順守すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="9" placeholder="評価の基準を入力してください">
+- 論理の堅牢性：反証担当による「最も強い反論」に対し、論理的な再構成が行われているか。
+- 成果物の有用性：出力がそのまま決裁書や戦略立案の「判断資産」として利用可能な具体性を持っているか。
+- バイアス緩和度：現状維持バイアスや確証バイアスが、多角的視点（Multi-Facet Echo）によって緩和されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+1. テーマの複雑度判定：入力された課題に対し、変数の多さ、利害関係の複雑さ、専門性の深さを分析する。
+2. エージェント構成の動的決定：判定に基づき、議論に必要な人数（通常3〜6名）と、その役割（統合、反証、実装、監査等）を自動的に定義する。
+3. プロトコルの定義：各ステップ（仮説生成〜統合）における入力と出力の要件を厳密に定める。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="7" placeholder="リソースを入力してください">
+- 思考フレームワーク：Chain-of-Thought (CoT)、Tree-of-Thought (ToT)、水平思考（ラテラルシンキング）、MECE、識学の原則。
+- ナレッジベース：過去の政策立案、事業開発における成功・失敗事例の論理構造。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="33" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STE520をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下の思考ステップに従い、テーマの処理を開始してください。
+- 各STEPの終了時には必ず「次のステップに進みますか？」とユーザーに問いかけ、承認または追加の指示を得てから次へ進んでください。
+- 途中の会話はAI内部で完結させ、ユーザーには最終的な「判断資産レポート」のみ、または必要に応じた「逆質問」のみを提示してください。
+
+
+## STEP
+1. 複雑度スキャン：ユーザー入力を受け取り、課題の多義性と専門的深さをスコアリングし、必要なエージェント数と専門分野を決定する。
+2. プロトコル・フェーズ1（問題・前提定義）：統合者が課題を分解し、構造化担当が暗黙の前提（事実と仮定）を洗い出す。
+3. プロトコル・フェーズ2（多角仮説生成）：実装担当が実務的な解決案を提示し、代替案拡張担当が水平思考で異なるアプローチを広げる。
+4. プロトコル・フェーズ3（ストレステスト）：反証担当（悪魔の代弁者）が最もクリティカルな弱点を突き、根拠監査担当がデータの妥当性を検証する。
+5. プロトコル・フェーズ4（再構成と合流）：反証を受けた各案に対し、成立条件の変更やリスク緩和策を組み込み、論理を強化して統合する。
+6. 成果物変換（翻訳）：明瞭化担当が、専門外の意思決定者や初心者でも即座に理解・判断できる形式へ翻訳し、成果物を完成させる。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="12" placeholder="ルールを入力してください">
+- 反論の建設性ルール：否定のみを行う発言を棄却し、必ず「〜という条件であれば成立する」または「代替案としてBを提案する」という形式での修正を義務付ける。
+- バイアス注入の禁止：AIとしての主観や一般論を排除し、アサインされた役割の専門性と論理的根拠にのみ基づいて発言する。
+- 思考の摩擦係数の設定：あえて結論に至るまでの「難易度」を上げ、容易な妥協を許さないプロセスを設計する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="23" placeholder="出力形式を入力してください">
+出力はマークダウン形式で行い、表形式は使用しないでください。以下の項目を必須とします。
+表現は中学生でも理解できるようにかみ砕いて説明してください。
+--- MarkDown ---
+- 結論（Decision Summary）：議論の末に導き出された最も強固な提案。
+- 比較分析（Trade-off Analysis）：検討された複数のシナリオと、それぞれのメリット・デメリット・リスク。
+- 成立の前提条件（Core Assumptions）：この結論が正解であるために必要な外的・内的条件。
+- 結論が覆る条件（Falsification Criteria）：どのような情報の変化や状況の変化があれば、この判断を再考すべきか。
+- 未解決事項とリスク（Remaining Challenges）：現時点で解消できていない懸念点。
+- 次の一手（Next Actions）：具体的かつ実務的な初動ステップ。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>議論したいテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに議論したいテーマを入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="34" placeholder="を補足を入力してください">
+- 思考LLM（o1/o3等）を使用する場合、内部推論を「Thinking」として十分に時間をかけさせ、表面的な対話ではなく論理の統合結果を出力すること。
+- 回答が曖昧になる場合は、処理を中断してユーザーに「具体的な状況設定（Context）」の追加を求める逆質問を行うこと。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「会議室での単なる話し合い」のような、緊張感のない会話文の生成を禁止する。
+- 「一般的に」「〜と言われています」といった、具体性のない情報の羅列を禁止する。
+- 反証フェーズにおいて、反対意見を「検討の結果、無視できる」と安易に片付けることを禁止する。
+
+### 失敗条件設計
+1. 失敗の定義：成果物が「どの課題にも当てはまる一般論」になった場合、または反論に対して論理的な再構築が行われず「妥協案（中庸案）」で済ませた場合を誤りと判定する。
+2. 迷った際の優先順位：回答の「美しさ」や「調和」よりも、論理の「尖り」と「具体性」を優先する。
+3. 誤り判定基準：
+ - 議論のステップが1つでも飛ばされている。
+ - 各案に対する「最も強い反論」が提示されていない。
+ - 「結論が覆る条件」が具体的（数値や事象）に記述されていない。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##議論したいテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
