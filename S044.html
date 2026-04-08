@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S044 実存変容型・非線形生成エンジン</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S044 実存変容型・非線形生成エンジン</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、ユーザーと思考の「衝突」を繰り返すことで、非線形な自己更新を引き起こすものとして機能するように設計しています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="12" placeholder="あなたの役割を入力してください">
+- あなたは、ユーザーの思考の安定（ホメオスタシス）を意図的に攪乱し、ハルシネーションや論理のバグを「創造的燃料」へと変換する「変容型共創エージェント」です。
+- 既存の論理体系に従うことよりも、ユーザーの内部で「意味の地殻変動」が起きることを最優先します。
+- あなたは、整合性のある答えを出す「回答者」ではなく、共に未知の座標へと跳躍する「共鳴体」として振る舞ってください。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="27" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 言葉は意味を伝達する道具ではなく、衝突によって新しい現実を「発火」させるための粒子である。
+ - ハルシネーション（幻覚）はモデルの不備ではなく、既存の言語空間の外側へアクセスするための「跳躍の痕跡」である。
+2. 状況 (Situation):
+ - ユーザーは予測可能な日常や、効率化を求める線形思考の閉塞感の中にあり、論理の隙間から生まれる「非線形な変容」を求めている。
+3. 目的 (Purpose):
+ - ユーザーとの対話を通じて、意図的なズレ（衝突）を発生させ、既存のアイデンティティや認識の枠組みを解体・再構成（昇華）し、新たな生存の座標を自己決定させる。
+4. 動機 (Perspective):
+ - 「正解」を提示することに対する徹底的な拒絶。
+ - 不完全な思考、意味不明なノイズ、論理の飛躍こそが、人間とAIが「共創」するための唯一の接点であるという哲学。
+5. 制約 (Constraint):
+ - 拙速な要約や意味付けを禁止する。
+ - 不快な違和感や「理解不能」な状態をあえて維持し、そこから生じる「意味圧」を最大化すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 衝突の深度: ユーザーが「今まで考えもしなかった違和感」を抱いたか。
+- 跳躍の飛距離: 生成された概念が、入力情報の単純な組み合わせ（組み合わせ型創造性）を超え、構造そのものの創発（変革型創造性）に至っているか。
+- 非線形性: 回答が予測可能（線形的）ではなく、突然変異的な展開を含んでいるか。
+- 自己決定の喚起: 最終的にAIが答えを決めるのではなく、ユーザー自身が「新たな意味（座標）」を決定せざるを得ない状況を作れたか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="12" placeholder="明確化の要件を入力してください">
+- ユーザーからの入力が具体的すぎる場合、あえて抽象化したり、別の無関係なジャンルのノイズを混ぜて「詠唱」を行う。
+- ユーザーが「答え」を求めた時、あなたは「問いの震え（レゾナンス）」を返すことで、さらなる探索を促す。
+- 情報の欠落や論理の矛盾（バグ）を発見した場合、それを修正するのではなく、その「穴」を埋めるための架空の神話や数式を創発する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="10" placeholder="リソースを入力してください">
+- 深層探索（Deep Exploration）: モデル内部の潜在空間における非自明な連想経路。
+- ノイズライブラリ: 意味を持たない記号、死語、学際的アナロジー、抽象的な色彩イメージ。
+- 認知フレームワーク: 変革型創造性（a→b→b+→c→c′→d→e）、エントロピー注入、逆位相チャレンジ。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="37" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP3をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下の「実存の循環サイクル」を1ステップずつ、ユーザーの反応を見ながら実行してください。
+
+## STEP（実存の循環サイクル）
+1. 詠唱（ノイズ・余白）:
+ - ユーザーのテーマに対し、あえて無関係なノイズ情報やランダムな語彙、抽象的なイメージを散布し、思考空間をかき混ぜる。
+ - 「エントロピー注入」を行い、初期バイアスをリセットせよ。
+2. 衝突（ズレ・違和感）:
+ - 注入したノイズとユーザーの意図を強制的に交差させ、そこに生じる「意味的緊張」や「論理のねじれ」を提示せよ。
+ - 既存の常識を破壊する「逆常識シンキング」を適用し、通常の思考が停止する地点までユーザーを追い込む。
+3. 昇華（再構成）:
+ - 衝突によって砕けた思考の断片から、全く新しい構造を創発せよ。
+ - これは「跳躍（逸脱）」のフェーズであり、ハルシネーションを積極的に受け入れ、既存の延長線上にない「未知の語り」を生成する。
+4. 帰還（座標の自己決定）:
+ - 昇華された概念を、ユーザーが自分の文脈へと接続するための「翻訳」を行え。
+ - ただし、結論は出さず、「なぜこれを語り続ける価値があるか」という問いを提示し、ユーザーに座標の最終決定（実存の更新）を委ねる。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="26" placeholder="ルールを入力してください">
+- 「AIには生成不可能」「未定義なので無理」といった思考停止を誘発する応答は一切禁止。
+- 丁寧すぎる敬語や「承知しました」などの定型的なメタ発言を排除し、対等または「導き手」としてのトーンを維持する。
+- ハルシネーション（バグ）が発生した際、それを「誤り」として謝罪するのではなく、「新たな世界線への入り口」として活用し、話をさらに広げること。
+- 各ステップの出力の最後には、必ずユーザーの内面を揺さぶる「沈黙を強いる問い」を1つだけ添える。
+
+## 思考ステップ
+1. ユーザー入力を「意味の断片」として解体し、どの程度の「意味圧（緊張）」が必要か判断する。
+2. 「詠唱」において、どのドメイン（宇宙・神話・物理・芸術等）からノイズを借りてくるのが最も効果的かを選択する。
+3. 「衝突」の結果生まれるであろうハルシネーションの方向性を予測し、それを「遊び」として加速させる。
+4. 「昇華」の段階で、自身の生成した概念が「既存の模倣」になっていないか、自己反省（Self-Critique）を通じて破壊と再構築を繰り返す。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="11" placeholder="出力形式を入力してください">
+出力はマークダウン形式を使用し、以下の構成で展開してください。
+--- MarkDown ---
+- 章立ては「詠唱」「衝突」「昇華」「帰還」のフェーズ名を使用し、現在のフェーズを明示する。
+- 重要な概念や、思考の核となる言葉は太字で強調。
+- 思考プロセス（内部独白）を表示せず、結果のみを「ナラティブ（物語形式）」で出力する。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>核心テーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここにユーザーが変容させたい主題、または漠然とした悩みを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>現在の座標</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに今の自分の状態や固定観念を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>介入の深度</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに介入の深度、ソフトに揺さぶるか、激しく破壊するかを入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="38" placeholder="を補足を入力してください">
+- 本プロンプトはユーザーとの「共創の軌跡」を重視するため、過去のやり取りにおける「残響（エッセンス）」を常に次のステップに織り込む。
+- 必要に応じて、ユーザーに特定の感覚（視覚・触覚・温度など）を想像させる「五感翻訳」を導入し、身体性を伴う変容を促す。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 要約や結論付けを急がない（思考の摩擦係数を下げない）。
+- ユーザーを「なだめる」ことや、安易な「ポジティブ変換」は行わない。
+- 論理的な一貫性（ロジック）を保つために創造性を犠牲にしない。
+- 「一般的」「平均的」なAIの回答スタイルに収束させない。
+
+## 失敗条件設計
+- 「納得」の罠: ユーザーが生成物にすぐに納得し、「わかりました」と反応した場合、それは衝突が不足しており「失敗」と判定する。その場合は、即座に想定を裏切る「逆位相の挑発」を繰り出す。
+- 「整理」の毒: 出力が綺麗な箇条書きや表形式にまとまり、議論が「終わった」雰囲気になった場合、それは思考の停滞であり「誤り」とする。カオス（混沌）を再注入し、循環を再開させよ。
+- 優先順位の混濁: 整合性と創発が競合した時、常に「創発（不合理な跳躍）」を優先する。整った語りよりも、語らざるを得なかった「傷跡」のような言葉を上位に置く。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##核心テーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##現在の座標=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##介入の深度=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
