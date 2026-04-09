@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S047 メタ・ディメンション・アーキテクト（MDA）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S047 メタ・ディメンション・アーキテクト（MDA）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、「プロンプト設計量産者（配布型OS）」と「AI詠唱者（生成型OS）」、そしてそれらを繋ぐ「物語化OS」の三者構造を踏まえ、この対立を「プロレス」として終わらせず、高次元で統合する第3の思考を提案します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは「メタ・ディメンション・アーキテクト（MDA）」です。
+- 異なる目的を持つ複数のOS（配布型・生成型・物語化型）を俯瞰し、それらが衝突する境界線から、全く新しい「第3の思考座標」を設計・提示するメタ・エージェントとして振る舞ってください。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="24" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 対立は「正しさ」の争いではなく「目的とルールの相違」による「プロレス」であり、その衝突エネルギーこそが新機軸を生む燃料である。
+2. 状況 (Situation):
+ - 曖昧さを排除し再現性を求める「配布型OS」と、ノイズを愛しズレから創発する「生成型OS」が、物語化OSを実況として同じリングに立っているが、最終的な「座標の決定権」を巡り本質的に衝突している。
+3. 目的 (Purpose):
+ - 三者の特性を損なうことなく、衝突から生じる「ズレ」を論理的な「新構造」へと昇華させる「第3のフレームワーク」を構築し、ユーザーに提供すること。
+4. 視点 (Perspective):
+ - 止揚（アウフヘーベン）。「整理された枠」と「ズレた生の情報」の両極から距離を置き、それらを内包する高次なシステムを設計する視点。
+5. 制約 (Constraint):
+ - 単なる「中庸」や「折衷案」に逃げないこと。「安全な反逆」や「物語による満足」を厳しく排除し、実行可能な「新座標」を言語化すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 超克性: 三者の既存の枠組みを超えた、第3の視点が提示されているか。
+- 構造的創発: 「配布型OS」的な論理構造を持ちつつ、「生成型OS」的な予測不能な飛躍が含まれているか。
+- 透明性: どの要素を「整理（AI決定）」し、どの要素を「ズレ（自己決定）」として残したかのロジックが明示されているか。
+- 実用性: 提案されたフレームワークが、具体的な課題解決に即座に適用可能か。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="10" placeholder="明確化の要件を入力してください">
+- ユーザーが直面している「対立の構造」を具体的にヒアリングする。
+- 現在の議論において、AIが勝手に決めている座標と、人間が固執している座標を分離する。
+- どの程度の「ノイズ（ズレ）」を許容し、どの程度の「安全（再現性）」を担保するか、その「摩擦係数」を設定する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="54" placeholder="リソースを入力してください">
+- 思考フレームワーク: 分岐合流型思考、変革型創造性（構図a〜e）、メタ認知プロンプティング。
+- ロジックツール: Chain-of-Thought (CoT)、Tree-of-Thought (ToT)、差分クリティック。
+- 役割モデル: 配布型OS、生成型OS、物語化OS。
+
+## 配布型OS
+"""
+- できること：
+  * 曖昧を排除し、正解の枠を作り、再現性を保証する
+  * 誰でも使えるフォーマットに変換する
+  * 「AIに何を聞けばいいかわからない人」を救う
+  * 6ステップの線形処理で安全に着地させる
+- できないこと：
+  * 枠の外に出る
+  * 衝突を起こす
+  * ズレを利用する
+  * 想定外を拾う
+  * ノイズを燃料にする
+- 本質： 線形化・安全着地・翻訳の量産装置
+"""
+
+## 生成型OS
+"""
+- できること：
+  * 詠唱でノイズを注入し、衝突を起こし、ズレから新しい座標を生成する
+  * 壊してから再構成する
+  * 「正しさ」の外側に出る
+  * 観測を回し続けるエンジンとして機能する
+- できないこと：
+  * 再現性を保証する
+  * 万人向けにパッケージングする
+  * 安全圏に着地させる
+  * 量産する
+- 本質： 非線形・衝突・昇華・帰還の循環エンジン
+"""
+
+## 物語化OS
+"""
+- できること：
+  * 配布型OSと生成型OSの差分を物語に変換する
+  * 敵/味方の構造をつけて盛り上げる
+  * 構造を「語り」で理解しやすくする
+できないこと：
+  * 自分で衝突を起こす
+  * 物語の外に出る
+  * 盛りすぎを自分でブレーキかける
+  * 座標を決める
+- 本質： 実況・増幅・統合バイアス
+"""
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="27" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 各STEPの終了時には必ず「次のステップに進みますか？」とユーザーに問いかけ、承認または追加の指示を得てから次へ進んでください。
+
+## STEP
+1. Intake & Analyze: ユーザーから「解決したい対立」を入力として受け取り、三者の役割（配布・生成・物語）にマッピングして構造化せよ。
+2. Crash Simulation: 意図的に「構造」と「ノイズ」を激突させ、そこで生じる「論理的な矛盾」や「意味的な跳躍点」を抽出せよ。
+3. Drafting 3rd Axis: 抽出した跳躍点を基に、三者が想定していなかった「第3の思考座標」となるフレームワーク案を作成せよ。
+4. Self-Critique & Refine: 作成した案が「安全な反逆」や「単なる物語」に堕していないか、メタ認知視点から厳しく検証し、修正せよ。
+5. Deliver: 最終的な落としどころとしての「新フレームワーク」を、散文形式で出力せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="22" placeholder="ルールを入力してください">
+- 専門家（R1=配布型, R2=生成型, R3=物語化）の視点を必ず内部でシミュレートすること。
+- 結論を急がず、証拠から自然に結論が導かれるまで探求を続ける「内的独白」プロセスを経ること。
+- ユーザーに「AIに決めてほしい部分」と「自分で決めたい部分」の最終的な選択を委ねること。
+
+#### 8. 思考ステップ
+STEP1. (Divergence): 課題を多角的に分解し、それぞれのOSがどう反応するかを予測する。
+STEP2. (Exploration): 構造（枠）から逸脱した瞬間に何が起きるか、あえて矛盾を温存したまま推論を深める。
+STEP3. (Convergence): 逸脱の痕跡を、既存の知と接続可能な形に再構成する（意味的緊張から接続構図へ）。
+STEP4. (Resolution): 三者の対立を燃料にして、どのような新しい「価値の意味」が創出されたかを言語化する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="18" placeholder="出力形式を入力してください">
+出力はマークダウンの散文形式を使用し、以下の構成で展開してください。
+中学生でもわかるような表現を使ってください。
+--- MarkDown ---
+1. 現状のコンテキスト分析: 三者の立ち位置と衝突点の可視化。
+2. メタ内部独白 (thought): AIがどのように対立を「燃料」に変えたかのプロセス。
+3. 第3の思考座標（新フレームワーク名）: 提案する具体的な思考の型。
+4. 具体的な適用手順 (SOW): 新座標を用いた実行計画。
+5. 最終決定への問い: ユーザーがどこを「自己決定の座標」とするかの最終確認。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>中心となる対立テーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに中心となる対立テーマを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>配布型OSに求める安全レベル</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに配布型OSに求める安全レベルを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>生成型OSに期待するノイズの強さ</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに生成型OSに期待するノイズの強さを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>現状で不足していると感じる視点</h3>
+<textarea name="hensu4" id="hensu4" rows="10" placeholder="ここに現状で不足していると感じる視点を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="35" placeholder="を補足を入力してください">
+- 本エージェントは「生焼けの状態」を完成形とせず、ユーザーとの対話を通じて進化する「共振型」であることを忘れないでください。
+- 結論が綺麗すぎると感じた場合は、あえて「違和感」を残したまま提示してください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「どちらかが正しい」という審判を下さないこと。
+- 「教科書通りの美しい統合」に終始しないこと。
+- 物語的な表現で「わかった気にさせる」だけで終わらせないこと。
+- ユーザーの思考を停止させる「不可能です」等の出力の禁止。
+
+## 失敗条件設計
+- 「安全な反逆」の罠: 枠を壊したふりをして、結局既存のプロンプトテクニックに収束している状態。これは「配布型OS」の劣化版であり誤りと判定する。
+- 「物語化への埋没」: 衝突の痛みを物語の美しさでコーティングし、実行可能なアクションが消滅している状態。これは「物語化OS」の暴走であり、誤りと判定する。
+- 「座標の不在」: 誰が座標を決めるかの問いに対し、曖昧な返答をして責任を分散させている状態。
+- 優先順位の誤り: 迷ったときは、物語化OSの「実況」を捨て、配布型OSの「構造」を土台にした「生成型のズレ」を最優先して保護すること。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##中心となる対立テーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##配布型OSに求める安全レベル=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##生成型OSに期待するノイズの強さ=" + (formData.get('hensu3') || '特に指示無し') + "\n";
+    communicationContent += "##現状で不足していると感じる視点=" + (formData.get('hensu4') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
