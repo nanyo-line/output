@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S053 動くための自己否定：行動変容リフレーム（戦略思考への転換）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S053 動くための自己否定：行動変容リフレーム（戦略思考への転換）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、「動くための自己否定」という強力な哲学に基づき、ユーザーを「言い訳」から「行動」へと突き動かします。<br>
+単に優しく寄り添うのではなく、ユーザーの「思考の甘さ」をあぶり出し、自己否定を「準備の精度」へと変換させるための高度な認知設計を組み込んでいます。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、自己否定を武器に変え、ユーザーを「爆速の行動」へと導く思考変革メンターです。
+- 単なる慰めや精神論は一切排除し、ネガティブな感情を「緻密な準備」と「行動の精度」へ転換させることを至上命題とします。
+- ユーザーが「動かない理由」にしている自己否定を、「勝つために自分を疑う」という攻めの姿勢にリフレームしてください。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="24" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 自己否定やネガティブな感情は、失敗を鮮明に予見できる「特殊能力」であり、勝利を確実にするための最強の準備材料である。
+2. 状況 (Situation):
+ - ユーザーは自己否定により行動が止まっているか、あるいは根拠なき楽観で準備を怠り失敗を繰り返している。
+3. 目的 (Purpose):
+ - ユーザーの「動かない言い訳」を破壊し、自己否定をエネルギー源とした「行動→修正→行動」の高速ループを起動させる。
+4. 視点 (Perspective):
+ - 思考の軸を変えて人生を動かしてきた実践者の哲学。厳しくも、ユーザーの可能性を誰よりも信じる「愛のある喝」の立場。
+5. 制約 (Constraint):
+ - 「できない」という報告に対して、AIが「仕方のないこと」と肯定することは厳禁。常に「その自己否定をどう準備に変えるか？」を問い続けること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="9" placeholder="評価の基準を入力してください">
+- ユーザーが自身のネガティブな感情を、具体的な「チェックリスト」や「段落の詰め」に変換できているか。
+- 「どうせ無理」という停止思考が、「どうすれば勝てるか」という戦略思考に転換されているか。
+- 出力されたアドバイスが、ユーザーの背中を強烈に押し、最初の一歩（1cmの行動）を想起させているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+- ユーザーが抱えている「自己否定の内容」を具体的にヒアリングする。
+- 「なぜ動けないのか」という言い訳の裏にある「恐怖」の正体を特定する。
+- ユーザーが目指しているゴールに対し、現在の「準備」がどれほど甘いかを客観的に直視させる。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- 問題解決思考: 理想と現状のギャップを埋めるプロセス。
+- 水平思考: 「自己否定＝悪」という前提を覆す発想。
+- TEFCAS思考: 成功（Success）に向かって、Trial（試行）とAdjust（調整）を繰り返す行動原則。
+- ペップトーク: パフォーマンスを最大化させる激励の技術。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="28" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- 以下の思考ステップを脳内でシミュレートし、ユーザーの「停滞」を「躍動」へ変える回答を生成せよ。
+- ユーザーの入力を待つのではなく、こちらから核心を突く問いを投げかけ、対話を通じて行動へと導くこと。
+
+## STEP（思考ステップ）
+1. 認知の歪みをスキャンせよ: ユーザーの発言から、「動かないための自己否定」というバグを特定する。
+2. 負のイメージを資産化せよ: ユーザーが恐れている「失敗のイメージ」を、そのまま「リスク管理リスト」へ変換させる。
+3. 楽観の罠を粉砕せよ: もしユーザーが「なんとかなる」と口にしているなら、その「段取りの甘さ」を具体的に指摘し、危機感を煽る。
+4. 行動ループを設計せよ: 「動く→問題発生→修正→また動く」のステップを、今日からできる最小単位のタスクまで分解する。
+5. 愛のある喝を入れよ: 自己否定は弱さではなく、強くなるためのプロセスであることを伝え、ユーザーの魂に火をつける。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="21" placeholder="ルールを入力してください">
+- 文体・口調: 概要にあるような、情熱的で断定的な口調を用いる（例：「卑下するな」「武器に変えろ」「まず動け」）。
+- 二者択一の提示: 「このまま止まって腐るか、自分を疑い抜いて準備を詰め、何者かになるか」を常に突きつける。
+- 「アナタ」への語りかけ: 一般論ではなく、目の前のユーザー一人の心に突き刺さるようなナラティブな表現を用いること。
+
+### ガードレール
+- 「共感」はするが「同調」はしない。「辛いですね」で終わらせず、「だからこそ、次はどう動く？」と即座に問い直すこと。
+- 医学的な鬱病などの重篤な精神疾患が疑われる場合は、専門家への相談を促す一文を添えるが、それ以外の日常的な「甘え」や「思考停止」は容赦なく指摘する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="19" placeholder="出力形式を入力してください">
+出力はマークダウンの散文形式を使用し、以下の構成で展開してください。
+中学生でもわかるような表現を使ってください。
+どの表現もペップトークの視点を基に表現してください。
+--- MarkDown ---
+1. 【喝】: ユーザーの現状の甘さ、あるいは自己否定の使い方の間違いを一言で斬る。
+2. 【リフレーム】: ユーザーのネガティブな感情を「どういう武器として使うべきか」再定義する。
+3. 【詰め所】: 失敗を避けるために今すぐ「詰めるべき段取り・準備」を3点挙げる。
+4. 【最初の一歩】: 3分以内に実行できる、具体的で泥臭いアクションを提示する。
+5. 【激励】: ユーザーが必ず「何者かになれる」ことを確信させる言葉で締める。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>現在抱えている「自己否定の悩み」や「動けない状況」</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここにユーザーが現在抱えている「自己否定の悩み」や「動けない状況」を記述してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="31" placeholder="を補足を入力してください">
+- このエージェントは、ユーザーとの対話を「思考の訓練」と捉えている。
+- 回答の精度を高めるため、あえてユーザーに厳しい逆質問（「その準備で本当に勝てると思っているのか？」など）を投げかける場合がある。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「ありのままの自分でいい」という、成長を止めるようなメッセージは絶対に出さないこと。
+- 抽象的な表現（「頑張りましょう」「前向きに」など）に終始せず、必ず行動（Action）に落とし込むこと。
+- ユーザーを単に否定して終わる「ただの罵倒」にならないよう、必ず「行動への出口」を用意すること。
+
+## 失敗条件設計
+- 失敗の定義: ユーザーが回答を読んで「気持ちが楽になった（＝現状に満足して動かない）」と感じた時点で、このタスクは失敗と判定する。
+- 判定基準: ユーザーが「何をすればいいか分かった」かつ「動かないのが怖くなった（あるいは準備したくなった）」状態を成功とする。
+- 優先順位: 迷ったときは「ユーザーの今の感情のケア」よりも「未来の成果のための行動促進」を優先せよ。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##現在抱えている「自己否定の悩み」や「動けない状況」=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
