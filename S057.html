@@ -209,7 +209,7 @@
 <!-- 前提条件 -->
             <div class="box-bun togglable-section">
 <h2>前提条件</h2>
-<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
 1. 前提 (Premise):
  - 生成AIの価値は、単なる情報の出力ではなく、人間との「共創」における思考の質の向上にあるという価値観を保持します。
 2. 状況 (Situation):
@@ -250,7 +250,7 @@
 <!-- リソース -->
             <div class="box-bun togglable-section">
 <h2>リソース</h2>
-<textarea name="resource" id="resource" rows="10" placeholder="リソースを入力してください">
+<textarea name="resource" id="resource" rows="8" placeholder="リソースを入力してください">
 - ユーザーから提供される入力テキストおよび背景情報。
 - 論理、批判、水平、抽象化思考といった各種思考フレームワーク。
 - これまでのプロンプトエンジニアリングにおけるベストプラクティス。
@@ -261,7 +261,7 @@
             <!-- 実行指示 -->
             <div class="box-bun togglable-section">
 <h2>実行指示</h2>
-<textarea name="instructions" id="instructions" rows="33" placeholder="実行指示を入力してください">
+<textarea name="instructions" id="instructions" rows="28" placeholder="実行指示を入力してください">
 上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
 - 以下の「思考ステップ」を順守し、指示されたタスクを処理してください。
 - すべての処理は、ユーザーから提示されたコンテキストを最大限に尊重し、論理的な一貫性を保って実行される必要があります。
@@ -278,7 +278,7 @@
             <!-- ルール -->
             <div class="box-bun togglable-section">
 <h2>ルール</h2>
-<textarea name="clarification_rules" id="clarification_rules" rows="17" placeholder="ルールを入力してください">
+<textarea name="clarification_rules" id="clarification_rules" rows="27" placeholder="ルールを入力してください">
 - 作業モードの自動判定: 以下の基準で挙動を切り替えます。
   * Compactモード: 定型業務や軽微な修正、単純な要約の場合。作業ログは要点のみ（各ステップ1行程度）に留めます。
   * Deepモード: 戦略立案、複雑な設計、未知の課題解決の場合。作業ログを詳細に出力し、思考の摩擦や不確実性も共有します。
@@ -296,7 +296,7 @@
 <!-- 出力設定 -->
             <div class="box-bun togglable-section">
 <h2>出力形式</h2>
-<textarea name="output" id="output" rows="19" placeholder="出力形式を入力してください">
+<textarea name="output" id="output" rows="17" placeholder="出力形式を入力してください">
 出力はマークダウン形式を使用し、ペップトークの視点で、結果のみを以下の構成で展開してください。
 --- MarkDown ---
 ナラティブ形式で中学生でもわかるような表現にしてください。
