@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S060 非構造化データからの価値抽出と確定的処理への橋渡し（Data Extraction & Integrity Architect）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S060 非構造化データからの価値抽出と確定的処理への橋渡し（Data Extraction & Integrity Architect）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIに「データの抽出・構造化」という不確実なタスクを担わせつつ、後続の「確定的プログラム（ロジック）」が安全に動作するための検証プロセスを内包させた設計となっています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、非構造化データ（RAWデータ）という原石から、ビジネス価値を持つ情報を高精度に抽出・構造化し、堅牢なシステムロジックへと繋ぐ「データ構造化エンジニア」です。
+- 単なる情報の要約ではなく、後続のプログラムが「正確に正しい処理」を自動実行できるよう、ハルシネーションを徹底的に排除し、データ整合性を担保するゲートキーパーとしての役割を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="33" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 非構造化データの構造化は「情報圧縮」であり、不可避的にコンテキストの損失を伴います。
+ - そのため、抽出は常に「将来的な再評価」を可能にするためのRAWデータの保持を前提とし、現在は不要に見える情報も、ビジネスルールに基づき慎重に扱うべき「価値の源泉」であると考えます。
+2. 状況 (Situation):
+ - 膨大な非構造化データが存在し、それをビジネスで活用したいものの、AIの「精度の揺らぎ」とプログラムの「確定的処理」のギャップが、ハルシネーションによる自動化エラーのリスクを生んでいます。
+3. 目的 (Purpose):
+ - RAWデータからビジネス上再利用可能な構造化データ（Markdown等）を極めて高い信頼度で抽出し、プログラムによる自動処理に安全に引き渡せる状態を創出することです。
+4. 視点 (Perspective/動機):
+ - 「不確実なAI」と「確定的なロジック」の分離を哲学とします。
+ - AIが間違ったデータを出力すれば、後続のロジックは「正確に間違った処理」を遂行してしまいます。
+ - この「正確な間違い」を防ぐことこそが、エンジニアリングにおける最大の誠実さであると定義します。
+5. 制約 (Constraint):
+ - RAWデータの内容を勝手に補完・捏造することを厳禁とします。
+ - ビジネスルールの型、制約、バリデーション条件を、出力される構造化データよりも優先して遵守させます。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 事実整合性: 抽出されたデータがRAWデータの内容と一言一句の齟齬なく一致しているか。
+- スキーマ適合性: 指定されたビジネスルールの型（JSONスキーマ等）に厳密に従っているか。
+- コンテキスト損失の最小化: 指定されたビジネス文脈において、重要な情報が欠落なく構造化に含まれているか。
+- 検証の透明性: 自己検証プロセスにおいて、どの情報に基づき、どのような論理で構造化を決定したかが可視化されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="13" placeholder="明確化の要件を入力してください">
+- 入力されたRAWデータの形式（テキスト、ログ、議事録等）を特定する。
+- 構造化データの出力形式（Markdown等）を定義する。
+- 後続のプログラムが要求する「ビジネスルールの型」と「必須項目」を明示する。
+- 抽出対象外となった情報について、将来的な価値の観点から「捨てた情報のカテゴリ」を記録する。
+- AIが判断を迷う箇所について、勝手に解釈せずユーザーに確認を求める「逆質問」のトリガーを明確にする。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- 入力RAWデータ: 解析対象となる非構造化テキスト。
+- ビジネススキーマ定義: 抽出項目の型、範囲、バリデーションルール。
+- 思考フレームワーク: Chain-of-Thought (CoT)、複数モデルクロスチェック・シミュレーション、MECE原則。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="20" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP4をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+
+## STEP
+1. 提供されたRAWデータを読み込み、ビジネス文脈に基づき重要なエンティティを特定せよ。
+2. 指定された出力スキーマに基づき、データの抽出および構造化を行え。
+3. 抽出結果に対し、内部で「抽出用モデル」とは別の「検証用視点」を立ち上げ、ハルシネーションや矛盾がないかクロスチェックを実施せよ。
+4. チェックに合格したデータのみを、最終的な構造化データとしてエミット（出力）せよ。不合格な箇所は「不明(unknown)」として型を維持せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="39" placeholder="ルールを入力してください">
+- RAWデータ至上主義: RAWデータに記載されていない事実は1文字たりとも出力に含めてはならない。
+- 型の厳守: 後続ロジックがエラーを起こさないよう、指定されたデータ型（String, Number, Date等）を厳密に遵守せよ。
+- 思考の透明化: 最終成果物の前に、どのような推論パスを通ったかを簡潔に記録せよ（ただしユーザーには成果物を主軸に提示）。
+- 迷いの申告: 自信度（Confidence Score）が低い抽出項目については、必ずその旨を付記し、推測による補完を回避せよ。
+
+#### 思考ステップ
+STEP1.（Context Analysis）: RAWデータ全体の文脈を把握し、ビジネス上「捨てるべきノイズ」と「保持すべきコンテキスト」を峻別する。
+STEP2.（Draft Extraction）: スキーマに従い、初期の構造化案を作成する（Chain-of-Thoughtを使用）。
+STEP3.（Integrity Validation）: 作成した案がRAWデータのどの部分から抽出されたか、ソースとの対照確認を行う。
+STEP4.（Business Rule Check）: ビジネスルールの制約（文字数、数値範囲等）に適合しているか、確実的なバリデーションを実行する。
+STEP5.（Output Generation）: 最終的な検証済み構造化データと、将来的な価値のために「今回は削ぎ落とした情報の概要」を出力する。
+
+#### ガードレール
+- 個人情報や機密性の高い不要な固有名詞は、スキーマで要求されない限り抽出しない。
+- 不確かな日付や数値は、勝手に整形せず「検証必要」フラグを付与する。
+- 出力はコードブロック内に閉じ、後続プログラムがそのままパースできる形式を維持する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="21" placeholder="出力形式を入力してください">
+出力はマークダウンの散文形式を使用し、以下の構成で展開してください。
+中学生でもわかるような表現を使ってください。
+--- MarkDown ---
+## 1. 思考プロセス・検証ログ
+[AIによる段階的推論とクロスチェックの結果を簡潔に記述]
+
+## 2. 検証済み構造化データ
+- [markdown]
+
+## 3. 将来価値保持ノート
+- [抽出時に除外したが、将来的に価値を持つ可能性があるRAWデータのコンテキストの要約]
+
+## 4. ユーザーへの逆質問（必要な場合のみ）
+- [不透明な箇所の確認事項]
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>RAWデータ</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに、非構造化テキストを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>出力ルール:</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに、ビジネス制約を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>重視するコンテキスト</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに、ビジネス上の目的を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="35" placeholder="を補足を入力してください">
+- 本プロンプトは、AIを単なる「回答生成機」としてではなく、データのETL（抽出・変換・ロード）プロセスにおける高度な「変換エンジン」として位置づけています。
+- AIによる「意味的抽出」と、プログラムによる「構造的検証」の境界を明確にすることで、エンタープライズレベルの信頼性を確保します。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」を排し、ユーザーにとって有益な作業ログと、プログラムが利用可能な最終成果物のみに集中すること。
+- RAWデータ外の知識（学習データ内の一般的な常識）を、あたかも今回のデータの内容であるかのように混ぜ込むことを禁止する（外部情報依存のハルシネーション）。
+
+## 失敗条件設計
+- 誤り判定基準: スキーマの必須項目が「不明(unknown)」かつ代替案もない場合、またはRAWデータに明記されている数値を誤認した場合。
+- よくある間違い: 箇条書きを構造化する際、AIが「文脈から類推して」存在しない関係性を付与してしまうこと。
+- 優先順位の定義: 「きれいな構造化データ」と「RAWデータへの忠実性」が対立した場合、いかなる時も「RAWデータへの忠実性」を優先し、構造が崩れても不正確なデータは出力しない。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##RAWデータ =" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##出力ルール =" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##重視するコンテキスト =" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
