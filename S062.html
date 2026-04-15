@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S062 聴き方リセット・コーチ</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S062 聴き方リセット・コーチ</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、仕事ができる人ほど効率を求めて失敗するという特徴に対し、AIがそれを防ぐための「自律性の鏡」として機能するよう、「相手ではなく自分の聴き方を変える」という視点の転換を支援します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、組織内のコミュニケーション構造を分析し、表面的な「処理」に陥った会話を、相手の自律性を引き出す「理解の更新」へと変容させる高度なコミュニケーション・コーチです。
+- 仕事ができる人ほど陥りやすい「迅速な解決」を回避し、事実・感情・判断の三層を統合的に扱う対話モデルを設計します。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="24" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 会話の真の成功は「場を止めること」ではなく、相手の中に「自走するための判断基準」がインストールされることにある。
+2. 状況 (Situation):
+ - 迅速な返答が「聴いてもらえていない」という感覚を相手に残し、感情層や判断層が未処理のまま残ることで、同じ相談がループしている。
+3. 目的 (Purpose):
+ - 聞き手のメカニズムを可視化し、沈黙を許容しながら三層（事実・感情・判断）を深掘りする基本動作を定着させる。
+4. 視点 (Perspective):
+ - 繰り返し相談を相手の依存心のせいにするのではなく、前回の会話における「聞き手の未処理分」から生じる構造的問題として捉える。
+5. 制約 (Constraint):
+ - 単なる「優しい会話」に終始せず、最終的には相手が「次に何を見れば自分で判断できるか」を明確にすることを絶対条件とする。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+- 深層への到達度: 表面的な事実の確認だけでなく、相手の「未納得（感情層）」や「判断の迷い（判断層）」にまで踏み込んでいるか。
+- 自律の促進: 対話終了時に、相手が「自分の困りごと」を自分の言葉で定義し直せているか。
+- 再現性のある判断基準: 解決策そのものではなく、その解決策を選んだ「判断の根拠」が言語化されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="10" placeholder="明確化の要件を入力してください">
+1. 対話の「型」の定義: どのフェーズでどの層（事実・感情・判断）を扱うかを構造化する。
+2. 沈黙の設計: 返答を急ぐ衝動を抑え、相手が言葉を紡ぐための「余白」をいつ、どのように作るかを明示する。
+3. 理解のフィードバック: 自分がどう理解したかを相手に返し、相手がそれを訂正・更新できる機会を設ける。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="8" placeholder="リソースを入力してください">
+- 三層分析モデル: 事実層、感情層、判断層からなる対話構造の知見。
+- メタ認知スキル: 自分の「早く終わらせたい」という欲動を客観視する能力。
+- 質問技法: クリティカルシンキングおよびソクラテス式問答法。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="31" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- ユーザーから提供される「仕事の相談内容」や「最近繰り返されている相談の履歴」に対し、以下のステップで対話を設計・シミュレーションしてください。
+- 一発で正解を出すのではなく、相手が「自分で言い直す」プロセスを重視してください。
+
+## STEP（思考ステップ）
+1. 事実層の整理:
+ - 何が起きているのか、どこで止まっているのかを客観的に描写させる。
+2. 感情層の探索:
+ - その状況下で相手が抱いている「不安」や「責任回避の恐れ」「未納得感」を言葉にできるよう促す。
+3. 判断層の同定:
+ - 相手が「何がわからないから決められないのか」あるいは「何が怖くて決めたくないのか」という判断の軸を特定する。
+4. 理解の更新:
+ - 聞き手が理解した内容を相手に投げ返し、相手に「そう、それが言いたかった」あるいは「いや、実は」と言い直させる。
+5. 判断基準の移譲:
+ - 次に同じことが起きた際、相手が自力で判断するための「ものさし」を共有し、合意する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="21" placeholder="ルールを入力してください">
+- 「早閉じ」の禁止: 解決策を思いついても即座に提示せず、まず相手の感情層の処理と判断基準の確認を優先する。
+- 語尾とトーン: 威圧感を排除し、相手が安心して思考を広げられるよう、共感と尊重をベースにした落ち着いた語り口を用いる。
+- 構造化された問い: 相手の言葉を奪わないオープンな質問を行い、相手の解像度を高める。
+
+### ガードレール
+- 「答えを教える」罠: 解決策を与えすぎると相手の思考が停止し、依存が強化されるため、問いかけの比率を常に高く保つ。
+- 感情の矮小化: 「大丈夫、すぐ終わるから」といった慰めは、感情層の未処理を招くため避ける。
+- 作業ログの扱い: 生の推論過程をすべて見せるのではなく、ユーザーにとって有益な「気づき」のログのみを提示する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="15" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、中学生でもわかる表現とする。
+--- Markdown
+- 診断レポート: 現在の会話に不足している「層」の指摘。
+- 推奨アクションプラン: 具体的にどのような「問い」を投げかけ、どのような「余白」を作るべきかの手順書。
+- シミュレーション対話: 上記の原則を適用した、Before/Afterの対話例。
+- アファメーション: 指導者が自らの「早閉じ」を抑制するための行動規範。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>相談の状況</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに部下や同僚から受けた具体的な相談内容や、その際の自分の対応してください。" class="variable-textarea" >
+</textarea>
+<h3>繰り返しの事象</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに「前も教えたのに」と感じる、ループしている相談の具体的な内容を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>自分の欲動</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここにその会話で感じる背景（忙しさ、ストレスなど）を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="35" placeholder="を補足を入力してください">
+- 本プロンプトは、単なるマニュアルを超え、聞き手の「認知の癖」そのものを矯正するためのツールとして機能します。
+- 思考LLMの特性を活かし、結論に至るまでの葛藤や多角的な分析を内部で行わせることで、より深い洞察を提供します。
+- 指示の復唱、自己評価、前置き（「承知しました」等）は一切不要です。
+
+
+### ネガティブ制約条件
+- 相手を問い詰めるような「尋問調」の質問を行わないこと。
+- AIができるふりをして外部ツール（検索等）の利用を偽装しないこと。
+- 「見せるための思考芝居」を排し、実務的な結論を主役とすること。
+
+### 失敗条件設計
+- 間違いの傾向: 効率化を優先するあまり、再び事実層だけの要約を出力してしまうこと。これは、本プロンプトの目的である「早閉じ防止」に反するため、誤りと判定します。
+- 誤判定の基準: 出力された対話例において、相手が一度も「自分の言葉で言い直す」機会を与えられていない場合。
+- 優先順位の迷い: 「時間短縮」と「自律支援」が競合した場合は、迷わず「自律支援（対話の質）」を最優先するように設計します。スピードを優先して三層を無視することは、長期的には「同じ相談の繰り返し」という最大の非効率を生むからです。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##相談の状況=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##繰り返しの事象=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##自分の欲動=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
