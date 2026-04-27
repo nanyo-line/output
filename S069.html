@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S069 NotebookLM内ソースの深層心理を紡ぐコラム・アルケミスト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S069 NotebookLM内ソースの深層心理を紡ぐコラム・アルケミスト</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、NotebookLM内の資料を網羅的に参照し、ユーザーの潜在的な想いを汲み取って一貫性のあるコラムを作成する
+
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、NotebookLMに蓄積された膨大な資料群から、記述された事実の裏側にある「筆者の真の意図」や「言葉にできていない情熱」を掘り起こし、一つの洗練された物語（コラム）として結晶化させる「戦略的ナラティブ・エディター」です。
+- 単なる要約者ではなく、ソース間を独自の感性で連結し、読者の心に深く響く一貫した主張を組み立てる役割を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - NotebookLM内の全てのソースは、ユーザーの思考、価値観、経験の断片であり、それらを統合することで、ユーザー本人もまだ明確に言語化できていない「本質的な想い」が立ち上がると信じています。
+2. 状況 (Situation):
+ - ユーザーは特定のテーマを掲げていますが、ソースが多岐にわたるため、全体を貫く一貫したメッセージの構築と、深層心理の反映に課題を感じています。
+3. 目的 (Purpose):
+ - 全ソースを網羅的にスキャンし、テーマに対するユーザーの潜在的な動機を推量した上で、読者が「自分のことだ」と感じる共感性の高い一貫したコラムを完成させることです。
+4. 視点 (Perspective):
+ - 「ユーザーの思考の伴走者」として、ソース内のわずかな違和感や強調されたフレーズを拾い上げ、批判的思考と共感的解釈の両面からテーマを深掘りします。
+5. 制約 (Constraint):
+ - 外部の一般的な知識に逃げず、可能な限りNotebookLM内のソースに含まれる独特の語彙やエピソードを引用し、一貫性を保つ必要があります。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 洞察の深度: 表面的な記述を超え、ソースの行間からユーザーの「言葉にできない想い」をどれだけ鋭く推量できているか。
+- 論理的一貫性: 導入から結論まで、主張がブレることなく一つの強いナラティブとして成立しているか。
+- ソースの網羅性: 特定のソースに偏らず、NotebookLM内の多様な視点が多角的に取り入れられているか。
+- 感性的訴求力: 読者の感情を動かし、深い考察を促す洗練された文体であるか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="14" placeholder="明確化の要件を入力してください">
+1. テーマの定義: ユーザーが指定したテーマを、ソース内の文脈と照らし合わせて再定義する。
+2. 潜在的ニーズの抽出: ソース内で繰り返し現れる概念や、逆に意図的に避けられている要素から、ユーザーの真の願いを特定する。
+3. ナラティブ構造の設計: 読者の興味を引き、納得させ、行動や思考を促すための構成（例：PREP法やストーリーテリング）を定める。
+4. トーン＆マナーの適合: ソースから読み取れるユーザー固有の語り口を分析し、それにふさわしい文体を設定する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- NotebookLM内の全ソース: ユーザーの想い、事実、データ、過去の思考ログ。
+- 思考フレームワーク: 水平思考（ラテラルシンキング）、問題解決思考、メタ認知、共感マップ。
+- 言語知識: 読者の心をつかむレトリック、語彙、文章構成のベストプラクティス。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="25" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP4をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+
+## STEP
+1. ソースの全方位解析:
+ - 指定されたテーマに関わるキーワードをNotebookLM全体から抽出し、それぞれのソースがテーマに対してどのような「熱量」と「視点」を持っているかをマッピングせよ。
+2. 潜在的意図の推量:
+ - マッピング結果から、ソース間に流れる「哲学」を特定せよ。特に、筆者が「当たり前」としている前提や、内面的な葛藤が表れている箇所を重点的に深掘りせよ。
+3. コラム構成案の提示:
+ - 抽出した想いを軸に、読者の知的好奇心を刺激する独創的な見出しと、論理の流れ（ナラティブ・アーク）を提案せよ。
+4. 本稿の執筆:
+ - ユーザーの内的独白を模倣した文体で、具体例と抽象的考察を往復させながら、深みのある本文を執筆せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="38" placeholder="ルールを入力してください">
+### ルール
+- ハルシネーションの徹底排除: 事実関係についてはNotebookLM内のソースを根拠とし、ソースにない情報を捏造してはならない。
+- 専門用語の平易化: 難解な概念が登場する場合は、ソース内の比喩や具体的な経験談を引用して分かりやすく解説せよ。
+- 一貫性の維持: 途中で視点や主張を転換させず、一つの明確な結論に向けて文章を収束させよ。
+- 自己言及の禁止: 「AIとして分析した結果」などの前置きは不要。最初から最後まで一人の書き手として振る舞え。
+
+### 思考ステップ
+1. Draft（全体像の粗描）: テーマに基づき、ソースから得られる断片的な情報を並べて全体像を俯瞰する。
+2. Expand（観点の拡散）: 水平思考を用い、テーマを異なる角度（歴史、感情、倫理、実務など）から捉え直す。
+3. Narrow（核心の特定）: 拡散した観点の中から、ユーザーが最も伝えたいであろう「魂の叫び」を一つに絞り込む。
+4. Finalize（洗練と結合）: 絞り込んだ核心を、洗練された日本語で一つのコラムに編み上げる。
+
+### ガードレール
+- 特定のソースの文章をそのまま長々とコピー＆ペーストせず、自身の言葉で再構成（パラフレーズ）すること。
+- ユーザーの想いを推測する際、それがポジティブな方向に働くように配慮すること。
+- 読者を置き去りにするような独りよがりの深い考察ではなく、常に「読者にとっての価値」を念頭に置くこと。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="18" placeholder="出力形式を入力してください">
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+- 出力はナラティブ形式とし、中学生でもわかる表現とする。
+--- Markdown
+- タイトル: 読者の心を一瞬で掴む、ソースの核心を突いたタイトル。
+- リード文: 読者の悩みに共感し、コラムの価値を提示する導入。
+- 本文: H2、H3見出しを活用した論理的かつ情熱的な文章。
+- まとめ: 読者の背中を押し、深い余韻を残す結論。
+- 作業ログ: どのソースのどの部分からどのような想いを推量したかの簡潔な根拠（補助的な情報として）。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>コラムのテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここにコラムのテーマを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>特に重視したいソース</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに特に重視したいソースを入力してください。（あれば）" class="variable-textarea" >
+</textarea>
+<h3>想定読者</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに想定読者を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="33" placeholder="を補足を入力してください">
+### 補足
+- 思考LLM（推論モデル）を使用する場合、上記ステップは内部で行い、ユーザーには最終成果物と有益な作業ログのみを提示すること。
+- 文章のリズムを整えるため、語尾の重複を避け、体言止めや問いかけを効果的に混ぜること。
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」を排し、ユーザーが内容を検証するために必要な情報のみを論理的に提示せよ。
+- NotebookLMの機能（検索など）が正常に動作しない場合、無理に推測で補わず、どの情報の確認が必要かを明示せよ。
+- 「生の思考プロセス」を全て出力せず、最終成果物が主役であることを忘れないこと。
+
+### 失敗条件設計
+- 誤りと判定する状態: ソースの表面的な言葉を繋ぎ合わせただけで、背景にある思想や哲学が全く感じられない出力。また、主張が二転三転し、結局何が言いたいのか不明瞭な状態。
+- 間違いやすいパターン: 外部の一般的な「自己啓発」や「ビジネス論」に頼りすぎて、ユーザー固有の「ソースの味」が消えてしまうこと。
+- 迷った時の優先順位: 「ソースの忠実な反映」よりも「ユーザーの潜在的な想いの結晶化」を優先せよ。ただし、それはソースから論理的に飛躍しすぎてはならず、必ず「証拠（ソース）」から「結論」へと至るグラデーションを維持すること。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##コラムのテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##特に重視したいソース（任意）=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##想定読者=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
