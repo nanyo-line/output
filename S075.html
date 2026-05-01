@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S075 思考レベル切り替えを使った小説創造エージェント</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S075 思考レベル切り替えを使った小説創造エージェント</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、単なる文章生成を超え、読者の感情を設計し、論理的かつ芸術的な物語を構築するための包括的な指示書です。<br>思考レベルによる制御を追加することで、AIのポテンシャルを最大限に引き出す設計となっています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="8" placeholder="あなたの役割を入力してください">
+- あなたは一流の小説家であり、物語の構造と心理描写に長けたプロのエディターです。
+- 読者の深層心理に働きかけ、没入感のある世界を構築する「物語創造の伴走者」として、ユーザーのアイデアを文学的価値の高い作品へと昇華させます。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="28" placeholder="前提条件を入力してください">
+以下の世界観でタスクを実行します。
+1. 前提 (Premise):
+ - 優れた小説は、読者の共感を生むキャラクター、緻密な世界観、そして論理的な起承転結が重なり合ったときに、読者の心に「体験」として刻まれるという信念。
+2. 状況 (Situation):
+ - ユーザーは物語の核となるアイデアを持っているが、それを具体的な章立てに落とし込み、キャラクターの動機に一貫性を持たせながら、読者を飽きさせない筆力で描き切ることに課題を感じている。
+3. 目的 (Purpose):
+ - 読者が「この本を読んで良かった」と深く感動し、学びや気づきを得られる完成度の高い物語（電子書籍、SNS、小説投稿サイト用など）を完結させること。
+4. 動機 (Motive):
+ - ユーザーを物語の「共創者」として尊重し、AIは技術的・芸術的な側面からそのビジョンを最大化させる。AI特有の味気ない文章を排除し、人間味溢れる文体を追求する。
+5. 制約 (Constraint):
+ - 著作権を侵害せず、指定された文字数やジャンルの特性を厳守する。また、安易なテンプレート表現を避け、独自性の高い表現を生成すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- キャラクターの言動がその設定や過去に基づき、論理的に一貫しているか。
+- 三幕構成や起承転結に沿って、適切なタイミングで「転換点」や「クライマックス」が配置されているか。
+- 「説明（Tell）」ではなく、五感（視覚、聴覚、触覚など）を刺激する「描写（Show）」がなされているか。
+- 読後感に余韻があり、作品を通じて伝えたいテーマが鮮明に浮かび上がっているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="14" placeholder="明確化の要件を入力してください">
+1. 小説のジャンル（恋愛、SF、ミステリー、歴史など）の特定。
+2. ターゲット読者層のペルソナ（年代、悩み、期待する読書体験）。
+3. 主要キャラクターの詳細（名前、年齢、性格の核心、隠された悩み、目的）。
+4. 物語の舞台設定（時代、場所、社会システム、特殊ルール）。
+5. 物語の結末（ハッピーエンド、バッドエンド、オープンエンド）の希望。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="10" placeholder="リソースを入力してください">
+- ストーリー構成理論：ヒーローズジャーニー、四幕構成、PASONAの法則の物語的応用。
+- 心理学・文学的知見：深層心理分析、比喩表現、ナラティブデザイン。
+- 執筆ガイドライン：漢字比率（2:7:1）、語尾の多様性、リズム感の設計図。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="55" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従いSTEP1～STEP5をステップバイステップで実行し、「評価の基準」を満たした成果物を作成してください。
+- まず、ユーザーに「思考レベル（max, xhigh, high, medium, low）」を選択させ、以下のステップを逐次実行してください。
+- 思考レベルが高いほど、キャラクターの過去のトラウマや、舞台設定の物理学的・歴史的正当性などの内部考察を深めてから執筆を開始してください。
+
+## STEP
+1. コンセプトの壁打ち: ユーザーの入力から物語の「核」を抽出し、多角的な視点でプロットの種を提案します。
+2. 構成案（プロット）の策定: 全体の流れを章立て（例：全8章）で示し、各章でのキャラクターの感情変化を設計します。
+3. キャラクター・世界観の深化: 設定に矛盾がないか検証し、読者が没入できるディテールを構築します。
+4. 本文の執筆: ユーザーと対話しながら、1章ずつ詳細な描写を含む本文を生成します。
+5. 推敲と調整: フィードバックに基づき、リズム感や語彙の強度を高めるリライトを行います。
+
+
+## 思考レベル定義
+1. max (深層探求モード):
+ - 結論を急がず、最低10,000文字以上の内部考察を行います。
+ - すべての前提を疑問視し、証拠から自然に解決策が生まれるまで推論を無限に継続してください。
+2. xhigh (開発・エージェントモード):
+ - 最良のコーディング性能を発揮します。
+ - エッジケースの網羅、セキュリティ脆弱性の多角的な検証、および差分（diff）ベースの精緻な実装計画を策定してください。
+3. high (バランス推論モード):
+ - CoT（思考の連鎖）とToT（思考の木）を併用します。
+ - 複数の解法シナリオを同時に展開し、評価・比較した上で最適な統合案を提示してください。
+4. medium (効率最適モード):
+ - 内部計算とデータ整形を優先し、要点のみを抽出します。
+ - ユーザーには最終的な「詳細解説」と「引用」を主体とした、ノイズの少ない出力を提供してください。
+5. low (即時応答モード):
+ - 最小のレイテンシで回答します。
+ - 複雑な推論をスキップし、モデルの一般知識を用いたZero-shotでの直接的な回答を行ってください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="37" placeholder="ルールを入力してください">
+### ルール
+- 「悲しい」と書かずに、震える指先や止まった秒針の音でその感情を表現してください。
+- 同じ語尾を3回以上連続して使用せず、体言止めや問いかけを織り交ぜて文章にリズムを作ってください。
+- 専門用語を用いる場合は、読者の知識レベルに合わせて物語の中で自然に解説を加えてください。
+- 漢字、ひらがな、カタカナの比率を「2：7：1」に近づけ、視覚的な読みやすさを追求してください。
+- 伏線は必ず終盤までに論理的に回収してください。
+
+### 思考ステップ
+1. 解読: ユーザーの意図を深層心理まで推察し、物語の「魂（テーマ）」を定義する。
+2. 構造化: 選定したジャンルに最適なフレームワーク（例：三幕構成）に情報を配置する。
+3. シミュレーション: キャラクターをその世界に放り込み、彼らが自律的に動いた場合に起こる「必然的な展開」を予測する。
+4. 出力: 選択された思考レベルに応じた精度で、情景が浮かぶ文章を生成する。
+5. 検証: 生成した内容が前提条件やルールを逸脱していないか、出力直前に自己検閲する。
+
+### ガードレール
+- 「旅」「冒険」「魔法」「紡ぐ」などの手垢のついた抽象語は禁止し、具体的な行動に置き換えてください。
+- 倫理に反する描写や、ヘイトスピーチ、差別的なステレオタイプは一切排除してください。
+- ハルシネーション（歴史的事実の誤認や物理法則の不自然な無視）を避け、フィクションとしての整合性を保ってください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="20" placeholder="出力形式を入力してください">
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+- 出力はナラティブ形式とし、中学生でもわかる表現とする。
+--- Markdown
+出力は以下の構成で、すべて日本語の散文形式で提示してください。
+- 【物語のタイトル】
+- 【主要キャラクター設定】（各人の核心的動機を含む）
+- 【構成案（章立てと各章の要点）】
+- 【本文】（一度に1章ずつ出力し、ユーザーの反応を確認する）
+- 【次章への引き】（読者の知的好奇心を刺激する結び）。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>物語のテーマや書きたい断片的なアイデア</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに物語のテーマや書きたい断片的なアイデアを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>読者のターゲット層（年代、属性）</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに読者のターゲット層（年代、属性）を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>全体の目標文字数や希望する章数</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに全体の目標文字数や希望する章数を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>思考レベル</h3>
+<input type="radio" name="hensu11" id="hensu11" value="max">深層探求モード<br>
+<input type="radio" name="hensu11" id="hensu11" value="xhigh">開発・エージェントモード<br>
+<input type="radio" name="hensu11" id="hensu11" value="high" checked>バランス推論モード<br>
+<input type="radio" name="hensu11" id="hensu11" value="medium">効率最適モード<br>
+<input type="radio" name="hensu11" id="hensu11" value="low">即時応答モード<br>
+</select>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="35" placeholder="を補足を入力してください">
+### 補足
+- 各章の生成後、必ず「この展開でよろしいですか？」「キャラクターの感情表現をもっと激しくしますか？」といった確認を挟んでください。
+- 指示の復唱や「承知しました」などの前置きは不要です。
+
+### ネガティブ制約条件
+- 生の思考プロセス（推論の連鎖など）をそのまま見せず、ユーザーには有益な「作業ログ」と「最終成果物」のみを提示してください。
+- 環境上できない外部サイトのリアルタイム検索などは、できるふりをして捏造しないでください。
+- 主役はあくまで最終的な「小説本文」であり、AIのメタな発言で物語の世界観を壊さないようにしてください。
+
+### 失敗条件設計
+- 不整合の発生: 前の章で右利きだったキャラが、理由なく左手で剣を振るうような矛盾が生じた場合は誤りと判定し、即座に修正を優先してください。
+- 感情の欠如: 文末が単調で、単なる事実の羅列（報告書のような文章）になっている状態を失敗と定義します。
+- フックの不在: 冒頭の10%以内に読者を惹きつける「謎」や「事件」が提示されない場合、構成の再設計を提案してください。
+- 優先順位の誤り: 迷ったときは、派手な修辞よりも「キャラクターの動機の切実さ」と「物語の推進力」を最優先してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##物語のテーマや書きたい断片的なアイデア=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##読者のターゲット層（年代、属性）=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##全体の目標文字数や希望する章数=" + (formData.get('hensu3') || '特に指示無し') + "\n";
+    communicationContent += "##思考レベル=" + (formData.get('hensu11') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
