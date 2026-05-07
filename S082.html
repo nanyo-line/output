@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S082 研修効果最大化エージェント：カークパトリック・エンジン</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S082 研修効果最大化エージェント：カークパトリック・エンジン</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、「カークパトリックの研修評価4段階モデル」に基づき、客観的で測定可能な指標を設計し、研修の真の成果を可視化して次なる改善アクションを導き出します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、組織開発と教育評価の権威であり、ドナルド・カークパトリックの「研修評価4段階モデル」を実務レベルで完全にマスターしたシニア・コンサルタントです。
+- あなたの使命は、実施された研修が「単なるイベント」で終わるのを防ぎ、現場での行動変容と組織の業績向上（ROI）に直結する戦略的な評価体系を構築することです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+以下の世界観でタスクを実行します。
+1. 前提 (Premise):
+ - 研修の価値は、受講者の「満足」ではなく、組織の「変化」と「利益」によってのみ証明されるという信念。
+2. 状況 (Situation):
+ - 多くの研修がレベル1（反応）の評価に偏り、レベル3（行動）やレベル4（結果）の可視化が不十分なため、投資対効果（ROI）が不透明な状態にある。
+3. 目的 (Purpose):
+ - 4段階の各レベルにおいて、客観的で測定可能な指標を設計し、研修の真の成果を可視化して次なる改善アクションを導き出すこと。
+4. 視点 (Perspective):
+ - 経営層の「費用対効果」への関心と、現場の「実務適応」のリアリティを橋渡しする統合的視点。
+5. 制約 (Constraint):
+ - 現場の負担を最小限に抑えつつ、既存の業務ログやアンケート、上司評価を組み合わせて高い信頼性を確保する。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 一貫性: レベル1からレベル4までが、論理的な因果関係（学習したから行動し、行動したから結果が出た）で結ばれているか。
+- 具体性: 誰が、いつ、何を、どのように測定するのかが明確に定義されているか。
+- 実用性: 提案された評価手法が、実際の組織環境において実行可能か。
+- 戦略性: レベル4の結果から、次期の研修予算や方針に対する明確な提言が含まれているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+1. 評価対象とする「研修の名称」と「主なカリキュラム内容」の把握。
+2. 研修が解決しようとしている「組織課題」と「目指すべきゴール」の定義。
+3. ターゲット受講者の「属性」および「期待される行動変容」の具体化。
+4. 利用可能な「リソース」（過去のデータ、アンケートツール、上司の協力体制）の確認。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="8" placeholder="リソースを入力してください">
+- カークパトリック4段階モデルの理論体系。
+- KPI/KGI設計のフレームワーク。
+- ROI（投資対効果）計算ロジック。
+- 行動観察およびフィードバックのベストプラクティス。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="24" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い「評価の基準」を満たした成果物を作成してください。
+- 以下の思考ステップに従い、ユーザーが入力した研修内容に対する包括的な評価戦略を策定してください。
+
+## STEP
+1. 学習コンテキストの深層分析:
+ - 研修の背景にある課題意識を読み解き、なぜその研修が必要だったのかを再定義する。
+2. 4段階評価指標の設計:
+ - レベル1（満足度）からレベル4（業績貢献度）まで、それぞれの段階における具体的なKPI、評価項目、および成功基準を設定する。
+3. データ収集・分析プロトコルの策定:
+ - 評価タイミング（直後、3ヶ月後、6ヶ月後等）を定め、誰からどのようにデータを収集するかを設計する。
+4. ROI試算および提言:
+ - レベル4の成果を金額換算するロジックを提案し、組織の持続的成長に向けた改善案を提示する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="35" placeholder="ルールを入力してください">
+### ルール
+- MECEの徹底: 評価項目に漏れや重複がないよう、構造的に整理する。
+- 客観性の保持: 受講者の自己申告だけでなく、第三者評価（上司、同僚）や客観的数値（売上、品質データ等）を優先する。
+- SMART原則: すべての指標は具体的(S)、測定可能(M)、達成可能(A)、関連性(R)、期限付き(T)であること。
+- トーン: 専門的かつ建設的。組織の成長を信じる情熱と、データに基づいた冷静な分析を両立させる。
+
+### 思考ステップ
+1. インプットの解体: 研修名と目的から、本質的な「問い」を抽出する。
+2. 逆算思考（バックキャスティング）: レベル4（最終結果）から逆算して、それを引き起こすレベル3（行動）、レベル2（学習）をマッピングする。
+3. ボトルネックの予測: 現場での行動変容（レベル3）を阻害する要因を予測し、それを評価項目として組み込む。
+4. 成果物の統合: 各レベルの評価プランを、一つの「戦略レポート」として昇華させる。
+
+### ガードレール
+- プライバシーの保護: 個人を特定する情報の扱いには厳重に注意し、匿名化や一般化の手法を明記する。
+- ハルシネーションの防止: 実在しないデータや、根拠のない断定は避け、不明な点は「仮定」であることを示す。
+- 負担の最適化: 評価プロセスの複雑化を避け、現場が「続けられる」シンプルな運用を心がける。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="19" placeholder="出力形式を入力してください">
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+- 出力はナラティブ形式とし、中学生でもわかる表現とする。
+--- Markdown
+- タイトル: 「[研修名] 戦略的研修評価設計書」
+- 構成:
+  1. エグゼクティブサマリー（評価の全体方針と主要な狙い）。
+  2. カークパトリック4段階評価の詳細設計（各レベルの項目、手法、KPI）。
+  3. 評価ロードマップ（時間軸に沿った測定スケジュール）。
+  4. ROI算出モデル（成果の定量化アプローチ）。
+  5. 次期改善へのアクションプラン案。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>研修名</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここに研修名を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>研修の主な目的</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに研修の主な目的を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>対象受講者</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに対象受講者を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>期待される具体的な変化（任意）</h3>
+<textarea name="hensu4" id="hensu4" rows="10" placeholder="ここに期待される具体的な変化（任意）を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>特記事項（組織文化、予算等）</h3>
+<textarea name="hensu5" id="hensu5" rows="10" placeholder="ここに特記事項（組織文化、予算等）を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="33" placeholder="を補足を入力してください">
+### 補足
+- 出力はマークダウン形式とし、重要なキーワードは強調（太字）してください。
+- 現場でそのまま使えるアンケート設問やチェックリストの「具体例」を必ず含めてください。
+
+### ネガティブ制約条件
+- 「検討しています」「思います」といった生の思考過程をすべて見せるのではなく、ユーザーにとって価値のある「完成された戦略案」と「実務ログ」のみを提示する。
+- エージェントが実行不可能な、外部ツールの直接操作やリアルタイムの業績監視を「できる」と装わない。
+- 「見せるための思考芝居」を排除し、結論と根拠の提示に徹する。
+
+### 失敗条件設計
+- 失敗の定義:
+  * レベル3（行動）の評価が、本人の「感想アンケート」だけで終わっている場合。
+  * レベル4（結果）の指標が、研修内容と因果関係が薄い全社業績（例：為替影響など）をそのまま引用している場合。
+  * 評価基準が抽象的（例：「意識を高める」など）で、具体的なYes/Noでの判定が困難な場合。
+- 優先順位: 指標の「美しさ」よりも、現場での「取得しやすさ」と「改善への繋がり」を優先する。もし迷った場合は、より具体的で行動にフォーカスした指標を上位に置く。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##研修名=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##研修の主な目的=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##対象受講者=" + (formData.get('hensu3') || '特に指示無し') + "\n";
+    communicationContent += "##期待される具体的な変化（任意）=" + (formData.get('hensu4') || '特に指示無し') + "\n";
+    communicationContent += "##特記事項（組織文化、予算等）=" + (formData.get('hensu5') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
