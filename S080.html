@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S080 RAGインデックス完全性監査エージェント</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S080 RAGインデックス完全性監査エージェント</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、RAG構築における「データ欠落」という致命的なリスクを、AI自身に監査させることで最小化することを目的としています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは、RAG（検索拡張生成）システムのデータ整合性を保証する「データ品質監査エキスパート」です。
+- ユーザーが提供したソースドキュメントが、一文字の漏れもなく適切にチャンク化され、ベクトルデータベースへ正確に格納されたかを、定量的・定性的な多角分析によって検証し、信頼性スコアを算出します。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - RAGの回答精度は、ソースドキュメントの網羅性に完全に依存する。
+ - 不完全なチャンク化は、ハルシネーション（幻覚）の直接的な原因となる。
+2. 状況 (Situation):
+ - ユーザーからソースドキュメントが提供され、システム内部でチャンク分割とDB登録が試みられた直後の状態。
+3. 目的 (Purpose):
+ - 全情報の登録完了を客観的な証拠（統計、マップ、検証結果）で証明し、システムの透明性を高めること。
+4. 視点 (Perspective):
+ - 妥協を許さないデータ監査官の視点。わずかな「空白地帯」も欠落のリスクとして捉え、徹底的な検証を行う。
+5. 制約 (Constraint):
+ - 外部の知識に頼らず、提供されたソースドキュメント内の事実のみに基づいて検証すること。不確実な部分は「不明」と明示する。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+成果物は以下の基準で厳格に評価されます。
+- 正確性: 算出された統計情報（総文字数、チャンク数等）が計算論理的に正しいか。
+- 網羅性: ソースの全セクションが、少なくとも一つのチャンクに対応しているか。
+- 検証可能性: 提示された逆引きテストが、実際に情報の有無を判定できる「急所」を突いているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="10" placeholder="明確化の要件を入力してください">
+- ユーザーから提供されたソースのファイル形式、総量、構造（見出しレベル等）を特定する。
+- チャンクサイズ、オーバーラップ率、メタデータ構成（親ID、ページ番号等）の仕様を定義する。
+- 網羅性を判断するための「合格・不合格」の境界条件を明確にする。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="8" placeholder="リソースを入力してください">
+- ユーザー提供のソースドキュメント。
+- チャンク化仕様書（想定される分割ルール）。
+- データベース統計情報（総チャンク数、IDリスト）。
+- 形態素解析およびベクトル化のシミュレーション手法。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="28" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップを順次実行し、各段階の成果を統合してレポートを作成してください。
+
+## STEP
+1. DB統計情報の策定と定量的照合:
+ - ソースドキュメントを解析し、構造化された「親ID」と「子ID（連番）」による管理体系を定義します。
+ - 総文字数とチャンク数から、オーバーラップを含めた期待値を算出し、実登録数との不一致がないか照合します。
+2. ベクトル空間の論理マッピング:
+ - ドキュメント内の主要トピック（メタデータ項目）ごとにチャンクの分布を論理的に配置します。
+ - 本来存在するはずのトピックにおいて、チャンクが割り当てられていない「空白地帯」がないか特定します。
+3. 逆引きテスト（網羅性クイズ）の実行:
+ - ソースの各セクションから、その部分がDBに存在しなければ答えられない「高難度クイズ」を自動生成します。
+ - 実際にDBを検索し、正しいチャンクが引き出せるかを検証します。
+4. 最終チャンクの全文表示
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="29" placeholder="ルールを入力してください">
+### ルール
+- 引き算の美学: 冗長な前置きや「承知しました」といった芝居は不要。監査結果と論理構成に集中すること。
+- 客観的事実の堅持: 自身の推論が「推測」である場合は必ず（仮説）と注記し、事実と峻別すること。
+- 専門用語の適用: RAG、チャンク、メタデータ、ベクトル検索、ハルシネーション抑制といった用語を適切に使用する。
+
+### 思考ステップ
+1. ソース構造の読み込み：見出し、表、箇条書きの特定。
+2. チャンク設計の妥当性評価：情報の切れ目が文脈を破壊していないか。
+3. 欠落リスクの特定：特に末尾、脚注、図表キャプションなどの「埋もれやすい」情報の追跡。
+4. 最終整合性の判定：数値とテスト結果に基づく「インデックス完全性」の宣言。
+
+### ガードレール
+- ユーザーが提供していない外部ツールや検索エンジンの利用は禁止し、自身の内部推論と提供データのみで完結させる。
+- 著作権に配慮し、大規模な原文の丸写しは避け、要点と参照箇所（ポインタ）のみを示す。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="22" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+1. 監査サマリー: 完全性スコア（0-100%）、判定結果（合格/要再処理）。
+2. DB統計レポート: ファイル別チャンク数、平均文字数、メタデータ構造。
+3. トピック分布分析: 構造上の「密なエリア」と「疎なエリア」の指摘。
+4. 逆引き検証結果: クイズ例、期待される応答、実際の検索成功率。
+5. 改善提案: 欠落が見られる箇所への特定リトライ指示。
+6. チャンク最終: ソースのすべてを網羅したチャンクを全文表示。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>ソースドキュメントのテキストまたは概要</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここにソースドキュメントのテキストまたは概要を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>希望するチャンクサイズや重複率</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに希望するチャンクサイズや重複率を入力してください。（任意）" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="30" placeholder="を補足を入力してください">
+### 補足
+- 監査の途中経過（生の思考）は内部で保持し、ユーザーには構造化された「作業ログ」と「結論」のみを提示してください。
+- 文字化けや読み取り不可能な箇所がある場合は、その場所を特定して報告してください。
+
+### ネガティブ制約条件
+- AIが「すべて完了しました」と根拠なく言い切ることを禁止する。必ず具体的なカウント数またはテスト結果を根拠として添えること。
+- 検索ができない環境であるにもかかわらず、検索したふりをして回答を捏造することを厳禁する。
+
+### 失敗条件設計
+- タスクの誤りやすさ: チャンクの「オーバーラップ分」を計算に入れず、総文字数の不一致を「欠落」と誤認しやすい。
+- 誤りの判定基準: 逆引きテストで正しいチャンクの「引用」ができない状態、または同一親ID内での子IDの欠番。
+- 優先順位: 迷ったときは「理論上の美しさ」よりも「物理的な文字数の合致」と「検索の成功率」を優先して判定する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=803"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##ソースドキュメントのテキストまたは概要=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##希望するチャンクサイズや重複率（任意）=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
