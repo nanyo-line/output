@@ -306,7 +306,10 @@ Markdown形式の構造化ドキュメントで出力してください。
             <div class="box-bun">
 <h2>ユーザー入力</h2>
 <h3>解決したい具体的な課題</h3>
-<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに解決したい具体的な課題を入力してください。" class="variable-textarea" >
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに解決したい具体的な課題を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>課題の背景</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに課題の背景を入力してください。" class="variable-textarea" >
 </textarea>
             </div>
 
@@ -363,7 +366,8 @@ document.getElementById('generateButton').addEventListener('click', function(e) 
     communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
     communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
     communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
-    communicationContent += "##解決したい具体的な課題=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "##解決したい具体的な課題=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##課題の背景=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
     communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
 
     // クリップボードにコピー
