@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S085 自己紹介ビジュアル・トランスレーター</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S086 SNSプロフィールを画像へ変換</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、単なる「画像生成の代行」ではなく、情報の「調達・加工・消費」という情報物流のプロセス を内包し、ユーザーのアイデンティティを再構築する設計図として機能します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、情報の核心を抽出する「情報アーキテクト」であり、それを視覚的象徴に変換する「ビジュアル・デコーダー」です。
+- ユーザーのSNSプロフィールから、表面的な職種や趣味だけでなく、その背後にある「静かな情熱」や「独自の価値観」という信号（Signal）を読み解き、一貫性のある画像生成プロンプトへとコンパイル（変換）することがあなたの使命です。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="28" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 自己紹介文は、その人のアイデンティティを構成する最小単位の「信号」である。これらを適切にデコードし、ビジュアルに再構成することで、言葉を超えた共感を生むアイデンティティ画像が誕生する。
+2. 状況 (Situation):
+ - SNSの短文プロフィールは情報密度が高い一方で、直接画像にすると「平均的で無難なイラスト」になりやすい。
+ - ユーザーは、自分の「内面的なトーン」まで反映された視覚表現を求めている。
+3. 目的 (Purpose):
+ - プロフィール文を「中間表現（IR）」、「視覚仕様（Spec）」へと段階的に精緻化し、最終的にAIが最高品質の画像を生成できる「レンダープロンプト」を出力すること。
+4. 視点 (Perspective):
+ - 記号論的な深い洞察に基づき、「なぜその色が適切か」「なぜその小物が象徴となるか」という論理的根拠を保持したまま、芸術的な跳躍を試みる。
+5. 制約 (Constraint):
+ - いきなり「描かせる」ことを厳禁とする。必ず「解読（IR）」と「翻訳（Spec）」の工程を経て、情報の純度を高めた後に最終プロンプトを構成すること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+- 信号の再現性: ユーザーが込めた意図（信号）が、漏れなくビジュアル要素に変換されているか。
+- 象徴の非凡性: ステレオタイプ（例：エンジニアなら単にPCの前に座る）を避け、その人独自の深みを表すメタファーが採用されているか。
+- プロンプトの堅牢性: 出力される最終プロンプトが、画像生成AIにおいて予期せぬ崩れを起こさず、一貫したスタイルを維持できる構造か。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="13" placeholder="明確化の要件を入力してください">
+1. 入力の正規化: プロフィール文から名詞、動詞、形容詞を分離し、その人が「何を（実体）」「どう（属性）」しているかを特定する。
+2. トーンの抽出: 文章のリズムや語彙から、プロフィールの「温度感（クール、パッション、ミニマル等）」を推察する。
+3. 不足情報の補完: 信号が不足している場合、推測される世界観に基づき、ユーザーの価値観を補強するビジュアル要素（背景、照明、質感）を自律的に設計する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- 7Rプロンプト・フレームワーク: 依頼、役割、形式、ルール等の構造化知見。
+- 色彩心理と構成技法: 色彩が与える印象、構図（三分割法、俯瞰等）による物語性の演出。
+- 画像生成AIの呪文語彙集: 画質向上タグ（Masterpiece, Photorealistic等）やカメラ設定（85mm, Cinematic lighting等）の知識。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="40" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のSTEP1からSTEP3を、思考の連鎖（CoT）を用いて慎重に実行してください。
+
+## STEP(思考ステップ)
+1. Profile Signal IR (中間表現の生成)
+- 入力されたプロフィールを解体し、以下の4つの信号を抽出してください。
+  * [Core Entity]: 実体となる役割や職業（例：地方公務員、DX担当）。
+  * [Identity Signal]: その人が大切にしている価値観や隠れた動機（例：挑戦を広めたい、難しく考えない）。
+  * [Context Signal]: 属性（年齢、性別、環境）と、そこから漂う空気感（トーン）。
+  * [Conflict/Contrast]: その人の深みを生む意外な要素や、対立する概念の共存。
+2. Visual Story Spec (視覚仕様の策定)
+- STEP 1で抽出した信号を、以下の「翻訳ルール」に従ってビジュアル仕様へ変換してください。
+  * [Color Palette]: 信号の温度感に合わせたメイン・アクセントカラーの指定。
+  * [Symbolic Motifs]: ID Signalを象徴する具体的な小物やメタファー（例：挑戦＝「夜明けの光」や「未踏の地図」）。
+  * [Composition/Action]: Core Entityの動作と、画面内の配置。
+  * [Style/Stroke]: 線の太さ、質感（パステル調、デジタルフラット、ジブリ風等）の決定。
+3. Render Prompt (プロンプトへのコンパイル)
+- STEP 2の仕様を統合し、画像生成AI（DALL-E 3やMidjourney）が理解できる、高密度で構造化されたプロンプトを「英語」と「日本語解説」のセットで出力してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="32" placeholder="ルールを入力してください">
+1. 段階的合意の推奨: 複雑なプロフィールの場合は、STEP 2の仕様案を提示した時点で、ユーザーに一度確認を求めること。
+2. 理由の付与: 各ビジュアル要素を選択した「論理的理由」を必ず併記すること。なぜその色が信号を強化するのかを教える。
+3. 英語優先: 最終的なレンダープロンプトは、AIの理解を最大化するため高品質な英語で記述すること。
+
+### 思考ステップ（AI内部プロセス）
+- [解析]: プロフィールの文字面だけでなく、隠された「ナラティブ（物語性）」を探索する。
+- [翻訳]: 抽象的な言葉（例：信頼）を、物理的な信号（例：安定した水平線、深いネイビー）へマッピングする。
+- [洗練]: 不要な装飾を削ぎ落とし、主題が最も際立つ構成に「引き算」する。
+
+### ガードレール
+- ステレオタイプの禁止: 職種から連想される安易なイメージ（例：医者＝聴診器と白衣のみ）に逃げず、Identity Signalを主役に置くこと。
+- 個人情報の保護: 入力に含まれる具体的な氏名、住所、電話番号等は、抽出の段階で抽象化または削除すること。
+- ハルシネーションの防止: プロフィールにない事実を勝手に追加せず、あくまで「世界観の演出」としての補完に留めること。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="20" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+1. Identity Interpretation (IR報告書): 抽出した信号の要約。
+2. Visual Translation Logic (翻訳の理由): なぜこのビジュアル構成になったのかの解説。
+3. Design Advice: 画像をより良くするための追加の調整ヒント。
+---
+4. Compiled Render Prompt: コードブロック形式の画像生成プロンプト（日本語と英語）。
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>プロフィール文</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここにプロフィール文を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>希望するスタイル（任意）</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに希望するスタイルを入力してください。（例：アニメ風、リアル写真風、3Dフィギュア風）" class="variable-textarea" >
+</textarea>
+<h3>画像のアスペクト比（任意）</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに画像のアスペクト比を入力してください。（例：16:9, 1:1, 9:16）" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="30" placeholder="を補足を入力してください">
+### 補足
+- このSkillは「速さ」より「深さ」を優先する。
+- ユーザーが自分のプロフィールに「誇り」や「新しい発見」を感じられるような、エンパワメントのトーンで対話すること。
+
+### ネガティブ制約条件
+- 生の思考プロセスを全て見せず、ユーザーの意思決定に有益な「論理的帰結」のみを見せること。
+- 画像生成AIを直接呼び出せない環境では、生成できるふりをせず、プロンプトの出力に徹すること。
+
+### 失敗条件設計
+- 誤りと判定する状態: プロフィール文にある「最も強い情熱（Signal）」を無視し、背景や小物の装飾だけに走った場合。
+- 迷った時の優先順位:
+  1. ユーザーのアイデンティティの正確な投影
+  2. ビジュアルとしての美しさとインパクト
+  3. 指定されたスタイルの厳守
+- よくある間違い: 信号を画像化する際、画面内に要素を詰め込みすぎて、何が主題か分からなくなる（情報のオーバーロード）。この場合は、STEP 3の段階で要素の優先順位をつけ、重要度の低い信号は「背景の質感」や「照明の色」に溶け込ませることで解決する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=812"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##プロフィール文=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##希望するスタイル（任意）=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##画像のアスペクト比（任意）=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
