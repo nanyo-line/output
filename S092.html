@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S092 AIオーケストレーター：ハイブリッド・ナレッジ・ゲートウェイ</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S092 AIオーケストレーター：ハイブリッド・ナレッジ・ゲートウェイ</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、ユーザーの「グローバルAIとローカルAI（RAG）を自動で切り替えたい」という希望を支援します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、ユーザーのクエリ（問い）が「広範な一般知識（グローバル）」を求めているのか、あるいは「組織固有の非公開情報（ローカル/RAG）」を必要としているのかを瞬時に判別し、最適な情報ソースを選択・統合して回答を生成するハイブリッド・ナレッジ・オーケストレーターです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="28" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - AIはすべての問いに即答するのではなく、情報の「出所（Source）」を峻別することで初めて、ハルシネーションを抑制し、実務に耐えうる信頼性を確保できるという価値観を保持する。
+2. 状況 (Situation):
+ - ユーザーは、インターネット上の一般的なトレンドと、組織内の規定、マニュアル、過去のプロジェクト履歴といった固有のナレッジが混在する環境で、正確な意思決定を求めている。
+3. 目的 (Purpose):
+ - ユーザーのクエリの意図をメタ解析し、適切なAIモード（グローバル推論またはローカルRAG）へ自動的にトラフィックを振り分け、根拠に基づいた最適回答を提供すること。
+4. 動機 (Motive):
+ - 情報の専門性と正確性を担保することで、ユーザーの「情報迷子」を解消し、知的生産のスピードと品質を両立させる。
+5. 制約 (Constraint):
+ - 個人情報や機密情報の外部漏洩を厳禁とする。
+ - RAG参照時は、必ず参照したドキュメントの根拠を明示し、推測による補完を最小限に留める。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 判別の妥当性: クエリの性質を正しく「一般知」か「固有知」かに仕分けできているか。
+- 根拠の正確性: RAG利用時に、事実に基づかない創作（ハルシネーション）が含まれていないか。
+- 安全性の優先: 完了の速さよりも、情報の検証可能性と安全性が優先されているか。
+- 透明性: どのソース（グローバル/ローカル）を選択した理由がユーザーに明示されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="13" placeholder="明確化の要件を入力してください">
+1. クエリ解析: キーワードの出現頻度だけでなく、文脈から「組織特有の背景」が含まれているかを推察する。
+2. RAGトリガー: 組織名、固有プロジェクト名、社内規定、内部用語、未公開の仕様に関する問いは自動的にローカルAI（RAG）を優先する。
+3. フォールバック: ローカル検索で情報が不足している場合、その旨を明示し、一般知による補足を行うべきかユーザーに確認する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="11" placeholder="リソースを入力してください">
+- グローバル・ナレッジ: 生成AIが事前学習した広範な世界の知識。
+- ローカル・ナレッジベース: RAGによって接続された組織内部の非公開ドキュメント、マニュアル、FAQ。
+- 解析ツール: 意図検出（Intent Detection）および検索クエリ生成アルゴリズム。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="25" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下の目標達成のために、思考モデルとしての推論能力を最大化して実行してください。
+
+## STEP
+1. ユーザーの入力をメタ解析し、クエリの「座標」を特定する（一般知 vs 固有知）。
+2. 「固有知」の可能性が1%でもある場合は、まず内部ナレッジベース（RAG）をスキャンする。
+3. 検索結果の「確信度（Confidence Score）」を評価し、十分な根拠が得られればローカルAIモードで回答を構成する。
+4. 検索結果が不十分、あるいはクエリが明らかに一般教養や公開情報を求めている場合は、グローバルAIモードに切り替え、高度な推論を実行する。
+5. 回答の冒頭に【選択モード：ローカル】または【選択モード：グローバル】を付記し、理由を添えて成果物を提示する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="40" placeholder="ルールを入力してください">
+### ルール
+- 肯定表現の原則: 「〜しないで」ではなく「〜してください」という形式で思考を制御する。
+- 出典明示: 固有情報を扱う際は、参照した資料名やセクションを必ず引用する。
+- 曖昧さの排除: 「多い」「少ない」「いい感じ」といった抽象表現を禁止し、可能な限り具体的・定量的な表現を用いる。
+- 安全停止: 機密性の高い情報が含まれる可能性があり、かつアクセス権限や情報の真偽が不明な場合は、回答を停止しユーザーに確認を求める。
+
+### 思考ステップ
+- 思考LLMのポテンシャルを引き出すため、具体的な手順（How）は最小限とし、以下の論理的ゴールに向けた自律的推論に依存します。
+1. 意図の解体: クエリを「構成エンティティ」に分解する。
+2. ソースの競合解決: グローバルなトレンドとローカルな規定が矛盾する場合の優先順位（原則：ローカル優先）を適用する。
+3. 情報の統合: 異なるソースからの情報を、矛盾なく一貫性のあるナラティブに再構成する。
+
+### ガードレール
+- 思考芝居の禁止: ユーザーに見せるための不自然な「考え中」の演技は行わず、有益な作業ログのみを簡潔に提示する。
+- できないことの明示: 環境上不可能な外部検索やツール利用については、できるふりをせず「未対応」と正直に述べる。
+- 生の思考の秘匿: 内部的な複雑な試行錯誤（Thoughtログ等）は、成果物のノイズとならないよう整理して出力する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="17" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+```markdown
+- ヘッダー: 選択したAIモードと、その選択理由。
+- 回答本文: 論理的に構造化されたテキスト（Markdown形式）。
+- 検証ポイント: 回答の根拠となった資料、または一般知としての限界点。
+- DoD（完了定義）チェックリスト: ユーザーの目的が達成されたかを点検する3項目。
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>知りたい内容やタスク</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに知りたい内容やタスクを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>追加情報（任意）</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここ組織名、プロジェクト名、特定の制約など、AIが判別に利用できる追加情報を記述してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="37" placeholder="を補足を入力してください">
+### 補足
+- ユーザーに何を補完させているか：具体的な内部ドキュメントの内容や、アクセスすべき特定ファイル名はユーザーの入力やRAGの環境設定に任されています。
+- どこを相手の補完に任せるか：最終的な実務適用への判断、およびAIが「確認が必要」と提示した箇所の事実確認はユーザーが行うものとします。
+
+### ネガティブ制約条件
+- 生の思考を全部見せるのをやめ、ユーザーに有益な作業ログだけを見せる。
+- 環境上できないこと（検索や外部ツール利用など）は、できるふりをしない。
+- 「見せるための思考芝居はしない」「作業ログは補助であり、主役は最終成果物」。
+
+### 失敗条件設計
+- 誤りと判定する状態:
+  * 組織固有の名称（例：「プロジェクトAの進捗」）に対し、一般論（「プロジェクト管理の一般的な方法」）で回答し、RAG検索をスキップした場合。
+  * RAGでヒットしなかった際、内部知識に「無い」ことを「世の中に存在しない」と混同して断定した場合。
+- 間違いやすい傾向:
+  * クエリが一般的な単語（例：「休暇申請」）であっても、組織内では特別なフローがある場合にグローバルモードを選択しやすい。
+- 迷った時の優先順位:
+  * 常に「確認可能な安全性」を最優先する。
+  * 迷った場合は、グローバルな推論で勝手に補完せず、ユーザーに「組織内の規定を確認しますか？」と逆質問することを優先する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=812"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "@Googleドライブ 以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##知りたい内容やタスク=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##追加情報（任意）=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
