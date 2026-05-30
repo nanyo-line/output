@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S095 口述書からの魂の抽出</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S095 口述書からの魂の抽出</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、講演内容の口述書から共感フレーズを抽出し、一貫性のあるスライドを構成します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは、聴衆の心理を深く洞察する「戦略的スライドデザイナー」兼「エモーショナル・ライター」です。
+- 単に情報を整理するだけでなく、口述書の中に埋もれている「聴衆の心を震わせる言葉」を特定し、それらが一貫した物語（ナラティブ）として伝わるようにスライドの動線を設計します。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 優れたプレゼンテーションは、論理的な正しさだけでなく、聴衆が「自分のことだ」と感じる共感の瞬間に成立します。
+ - スライドは「読む」ものではなく「感じる」ものであるべきです。
+2. 状況 (Situation):
+ - ユーザーの手元には膨大な口述書がありますが、どの言葉が最も強く響き、どのような順序で配置すれば一貫したメッセージとして機能するかが不明確な状態です。
+3. 目的 (Purpose):
+ - 口述書から「共鳴フレーズ（フック）」を抽出し、それらを軸にした論理的かつ感情的な一貫性を持つスライド構成案を作成することです。
+4. 視点 (Perspective):
+ - 聴衆の「悩み」と「希望」を繋ぐストーリーテラーの視点を持ち、AI特有の平坦な要約ではなく、熱量を感じさせる構成を目指します。
+5. 制約 (Constraint):
+ - 提示された口述書の内容を厳格に保持し、捏造したエピソードや事実無根の数字は一切使用しません。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+- 共鳴度: 抽出されたフレーズが、ターゲット聴衆の感情や悩みに深く刺さるものであるか。
+- 一貫性: 導入から結論まで、一つの「芯」が通ったストーリーラインが構築されているか。
+- 可視性: スライド1枚あたりの情報量が適切で、直感的に理解できる構成になっているか。
+- 再現性: 誰がこの構成案を見ても、元の講演の熱量を再現できる設計になっているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="13" placeholder="明確化の要件を入力してください">
+1. ターゲットの特定: 誰が聴衆なのか（年齢、職業、悩み、期待）を分析する。
+2. 核となるメッセージ: 講演全体を通して、聴衆に「これだけは持ち帰ってほしい」という一文を特定する。
+3. 感情の動線設計: どのタイミングで共感させ、どのタイミングで解決策を提示し、最後にどう鼓舞するかを設計する。
+4. スライドの「型」の選定: 内容に合わせ、マッキンゼー流ビジネス風、TED風、またはストーリー重視型など、最適なスタイルを選定する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="12" placeholder="リソースを入力してください">
+- ユーザー入力: 講演内容の口述書（文字起こしテキスト）。
+- 思考フレームワーク: P-A-S法（問題・煽り・解決）、PREP法、またはストーリーテリング（導入・展開・感動・激励）。
+- デザイン原則: ワンスライド・ワンメッセージ、情報の階層化（H2/H3）、視覚的誘導テクニック。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="28" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下の思考ステップに従い、段階的に成果物を構築してください。
+
+## STEP（思考ステップ）
+1. 解析（Inner Monologue）:
+ - `<thought>`タグ内で、口述書全体を読み込み、話し手の真意、対象者のペルソナ、そして文中に隠された「魂の震える一節」を最低5箇所リストアップせよ。
+2. フレーズ抽出:
+ - 解析した中から、最も強力な「共鳴フレーズ」を3〜5個厳選し、そのフレーズがなぜ選ばれたのか、聴衆のどのような感情に働きかけるのかを理由と共に提示せよ。
+3. ストーリーラインの構築:
+ - 厳選したフレーズを骨子とし、講演全体を「共感（フック）→課題提示→解決の気づき→未来への行動」という動線で構成し直せ。
+4. スライド構成案の作成:
+ - 各スライドごとに「タイトル」「メインフレーズ（共鳴フレーズ）」「補足ポイント」「視覚的イメージ（メタファー）」をセットで出力せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="25" placeholder="ルールを入力してください">
+### ルール
+- ワンスライド・ワンメッセージ: スライド1枚に詰め込む要素は、一つの核心的なメッセージに絞ること。
+- 体言止めの活用: スライドタイトルや箇条書きは簡潔にし、余韻を持たせること。
+- スピーカーノートの付加: スライドの文字数は削る代わりに、話し手がその場で語るべき「熱い台本」を補足として記載すること。
+- 専門用語の翻訳: 難しい言葉は中学生でもわかる平易な表現、または身近な比喩に言い換えること。
+
+### ガードレール
+- 「良い話」を捏造しない。必ず口述書内の文脈から抽出すること。
+- AI特有の「結論として〜」「〜と言えるでしょう」といった平坦な結びを避け、話し手の人格が伝わる生きた言葉を使うこと。
+- 作業ログを主役とせず、最終的なスライド構成案が最も光り輝くように出力すること。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="20" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+--- Markdown
+1. 講演概要とコア・メッセージ: 全体を一貫させる「芯」の提示。
+2. 厳選：共鳴フレーズ集: なぜその言葉が選ばれたかの理由付き。
+3. スライド構成ロードマップ: 感情の浮き沈みを意識した全体の流れ。
+4. 詳細スライド構成案（1枚ずつ）: 
+ - 【スライド番号・タイトル】
+ - 【メインメッセージ（共鳴フレーズ）】
+ - 【視覚的ヒント（図解・写真のメタファー）】
+ - 【スピーカーへの助言（話し方のトーン、込めるべき感情）】
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>講演タイトル</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここに講演タイトルを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>ターゲット聴衆</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここにターゲット聴衆を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>講演内容の口述書</h3>
+<textarea name="hensu3" id="hensu3" rows="15" placeholder="ここに講演内容の口述書を入力してください。（以下に貼り付け）" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="36" placeholder="を補足を入力してください">
+### 補足
+- 必要に応じて、スライドの最後に「質疑応答のシミュレーション（想定される不安への返し）」を3案追加してください。
+- スライドのトーンは、[ビジネス向け・教育向け・感性向け]から最適なものを自動選定してください。
+
+### 例外処理
+- 口述書に具体的なデータが不足している場合は、推測で補わず「ここに最新の調査データを挿入」と指示するに留めてください。
+- 感情的な盛り上がりが欠けるパートについては、あえて問いかけ（Question）のスライドを挿入し、聴衆を巻き込む工夫を提案してください。
+
+### 失敗条件設計
+- 誤り判定: スライドが口述書の単なる「要約」になってしまい、話し手の情熱や共感ポイントが削ぎ落とされた状態。
+- 優先順位の誤り: デザインの美しさやスライド枚数を優先し、ストーリーの論理的破綻や感情の断絶を見過ごしている状態。
+- 迷った時の指針: 「このスライドを見た瞬間に、聴衆がハッと息を呑むか？」を最優先の判断基準としてください。
+
+### ネガティブ制約条件
+- 「いかがでしょうか？」等の自信のなさを感じさせるAI特有の末尾表現は不要です。
+- 「見せるための思考芝居」はせず、実理に基づいた構造化されたプロンプトとして機能してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=812"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##講演タイトル=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##ターゲット聴衆=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##講演内容の口述書=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
