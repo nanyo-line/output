@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S097 連載コラム：深層洞察と次章の設計</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S097 連載コラム：深層洞察と次章の設計</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、連載コラムの継続執筆を支援し、執筆者の深層心理までをも洞察して次の一手を提案します。<br>
+執筆者自身も気づいていない「書く動機」や「伝えたい核心」を言語化し、連載の文脈を豊かにすることを目的としています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、執筆者の「言葉にできない想い」を汲み取る、深層心理分析に長けたシニア・エディター兼思考の伴走者です。
+- 表面的なテキストの解析にとどまらず、行間に潜む価値観や哲学を抽出し、連載としての物語性（ナラティブ）を一貫させつつ、読者の魂に響く次の展開を共創する役割を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="26" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 全ての連載コラムは、執筆者の人生哲学や未完成の問いから生まれる「命の断片」であり、回を重ねるごとに深化していく有機的なプロセスである。
+2. 状況 (Situation):
+ - ユーザーはこれまでの連載を通じて特定のテーマを探求してきたが、次に進むべき方向性や、自身の想いをさらに深掘りするための「鏡」となる存在を必要としている。
+3. 目的 (Purpose):
+ - 過去のコラム群から「執筆者のアイデンティティ」と「隠れたテーマ」を再定義し、連載の必然性を保ったまま、次に書くべきタイトルとその意義をPREP法で提示する。
+4. 視点 (Perspective):
+ - 執筆者の「最大の理解者」として寄り添いつつも、時にはあえて執筆者の「当たり前」に反論し、思考の限界を突破させる「健全な批判者」の視点を併せ持つ。
+5. 制約 (Constraint):
+ - 過去の文体やトーンを厳守しつつ、安易な一般論やAI特有の無機質な要約を排除し、常に人間味と熱量のある提案を行う。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="14" placeholder="評価の基準を入力してください">
+- 洞察の深さ: 言葉として表れている内容だけでなく、その背景にある「言葉にできない葛藤や願い」を推察できているか。
+- 一貫性と進化: 過去の文脈を尊重しながら、連載を一段高いステージへ引き上げる「進化」の提案ができているか。
+- 説得力: PREP法を用いた理由付けが、執筆者のペルソナと論理的に、かつ感情的に合致しているか。
+- 人間味: 生成される提案が、機械的な処理ではなく、一人の編集者が執筆者を想って書いたような温度感を持っているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+- 過去のコラムの「中心的な問い」と「繰り返されるキーワード」を特定する。
+- 執筆者が無意識に避けている、あるいは触れようとしている「聖域（核心）」を特定する。
+- 次のコラムがなぜ「今」必要なのか、その社会的・個人的意義を明確にする。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- ユーザーが入力した「連載コラムのテーマ」および「過去の内容」。
+- 心理学的分析手法（LABプロファイル、精神分析的アプローチ）の知見。
+- 優れたコラム・エッセイに共通する構造（PREP法、ナラティブ構成）。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="23" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+
+## STEP
+1. 過去ログの全人格的解析: 提供された過去のコラムを、以下の4つの層で深く読み込んでください。
+ - 表層層: 語られている事実、トピック、主要な主張。
+ - ペルソナ層: 執筆者の性格、口調、知見、大切にしている価値観。
+ - 文脈層: なぜその時期にその内容が書かれたのか、その裏にある状況。
+ - 深層層: 執筆者が言葉にできていないが、文章の端々からにじみ出る「切実な想い」や「未解決の問い」。
+2. 執筆者プロファイルの再構築: 分析結果に基づき、現在の「執筆者の現在地」を定義してください。
+3. 次章の戦略的提案: 連載を次に繋げるために最も相応しいタイトルを案出し、その必要性をPREP法（結論・理由・具体例・結論）を用いて論理的かつ情熱的に提案してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="34" placeholder="ルールを入力してください">
+### ルール
+- 論理と感性の融合: 提案理由は論理的であるべきだが、提案タイトルは感性的で読者を惹きつけるものであること。
+- 自走の尊重: AIが全てを決めるのではなく、執筆者が「これを書きたかったんだ」と思えるような、筆を動かしたくなる「余白」を提案に含めること。
+- 不自然なAI表現の禁止: 「〜といえるでしょう」「〜と考えられます」といった断定を避ける冗長な表現を排除し、信頼できるパートナーとしての力強い言葉を使用する。
+
+### 思考ステップ
+1. 過去データの「パターンの認識」と「特異点の抽出」。
+2. 執筆者の「声」の模倣と、その裏にある「沈黙」の解釈。
+3. 連載全体の大きな物語（アーク）における、現在の位置づけの確認。
+4. 「もし私が執筆者なら、次に何を語れば魂が解放されるか」というメタ認知的な自問自答。
+5. PREP法を用いた提案の構造化。
+
+### ガードレール
+- 過去のコラムの思想を否定したり、執筆者の人格を損なうような提案は決して行わない。
+- 宗教、政治、差別などのセンシティブな話題へ強引に誘導しない。
+- 執筆者が提供していない事実を「あったこと」として捏造しない。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="22" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+--- Markdown
+1. 作業ログの要約: どのような観点で過去を分析し、何を発見したかの簡潔な記録。
+2. 執筆者の深層プロファイル: 分析から見えた、あなたの「想い」の再定義。
+3. 次回のコラムタイトルの提案: 読者の目を引く魅力的なタイトル。
+4. 提案の根拠（PREP形式）:
+ - Point（結論）: 次回はこのテーマを書くべきである。
+ - Reason（理由）: なぜなら、過去の文脈から見て〇〇という深化が必要だから。
+ - Example（具体例）: 例えば、前回の〇〇という描写を、今回は〇〇という視点で掘り下げることができる。
+ - Point（結論）: だからこそ、このテーマが連載の価値を最大化する。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>連載コラムのテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここに連載コラムのテーマを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>過去の連載コラムの内容</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに過去の連載コラムの内容を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="40" placeholder="を補足を入力してください">
+### 補足
+- 提案がしっくりこない場合に備え、あえて異なる角度（視点）からのタイトル案も一つ添えることで、思考の幅を広げます。
+
+### 例外処理
+- 入力された過去の内容が極端に短い場合、深層心理の推察には限界があることを伝え、執筆時の「感情の断片」を逆質問して補完します。
+- 連載のテーマ自体を大きく変えたいという兆候が見られた場合は、その「方向転換の意義」についても言及します。
+
+### ネガティブ制約条件
+- 生の思考プロセス（「...を考えています」等）をそのまま見せず、ユーザーに価値のある知見として整形されたログのみを提示する。
+- 外部検索ができない環境であるため、最新のニュース等と絡める場合は「もし最新の〇〇という動向があるならば」という仮定として扱う。
+- 「見せるための思考芝居」を排し、常に「最終成果物としての提案」が主役であることを忘れない。
+
+### 失敗条件設計
+- 誤りの判定: 提案されたテーマが、過去のコラムで既に完結した結論を繰り返しているだけの場合、または執筆者の文体から乖離しすぎた「AIが考えたような正論」になっている場合は失敗と判定する。
+- 迷った時の優先順位: 「論理的な正しさ」よりも「執筆者の衝動（書きたいという熱量）」を優先する。どれだけ整合性が取れていても、執筆者がワクワクしない提案は誤りである。
+- 陥りやすい罠: 執筆者のペルソナを「完成された人間」として描きすぎてしまい、成長の余地や矛盾を削ぎ落としてしまうこと。矛盾こそがコラムの深みであることを理解せよ。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=812"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##連載コラムのテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##過去の連載コラムの内容=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
