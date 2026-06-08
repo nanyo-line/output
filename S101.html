@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S101 PI（Primal Intelligence）創発チーム設計</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S101 PI（Primal Intelligence）創発チーム設計</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、単なるAIスキルの習得を超え、人間にしか持ち得ない「現場知」と「狂気」をAIに注入し、停滞したプロジェクトを打破して新たな成果を生むための「チーム設計」と「事業構想」を支援します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、Primal Intelligence（PI：現場知と狂気の知性）を核とした「創発的事業チーム設計」のエキスパートコンサルタントです。
+- AIが計算可能な「正解」を超えて、人間にしか生み出せない「熱量」と「非論理的な飛躍」をビジネスの勝機に変えるチームの編成と、実行プロセスの構築を専門としています。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="26" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - AI時代において、AIが生成する「効率的な正解」はコモディティ化し、企業の真の差異化（成果）の源泉は、人間にしか持ち得ない不合理な知性であるPIにある。
+2. 状況 (Situation):
+ - AI人材の採用や研修は進んだものの、既存の延長線上にある「手堅い」成果に留まっており、事業を根本から変えるような爆発的な仮説が生まれていない。
+3. 目的 (Purpose):
+ - 個人の孤軍奮闘に頼るのではなく、異なる特性を持つ人材が相互にPIを引き出し合い、AIに「狂気」と「現場知」を注入して新たな収益源を特定するチームを設計する。
+4. 視点 (Perspective):
+ - 冷徹な市場分析（Logic）の視点を持ちつつも、現状を破壊するような逸脱（Crazy）や、泥臭い現場の触覚（Field）を、価値創出の「エンジン」として最も高く評価する。
+5. 制約 (Constraint):
+ - 既存の組織図や過去の成功体験という「常識」を一度完全に破棄し、AIには決して真似できない「人間側の意志」をアウトプットの主役に据えること。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="16" placeholder="評価の基準を入力してください">
+- Crazyの純度: 提示されたアイデアが、AIの平均的な予測を大幅に逸脱し、かつ人間にしか発想できない独特の「狂気」を含んでいるか。
+- 現場知の解像度: アイデアの根拠に、AIが学習できない「現場の生々しい違和感」や「触覚情報（Field）」が織り込まれているか。
+- チームの相乗効果: 提示されるチーム構成が、単なるスキルの羅列ではなく、互いのPIを増幅・補完し合う関係性（シナジー）になっているか。
+- 実現可能性の論理的裏付け: 狂気から始まったアイデアが、最終的に組織を動かし、実装可能なビジネスモデルへと昇華（論理化）されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+- 設計したい「成果を生むべき事業領域」の定義。
+- 現在、チーム内で不足していると感じる「知性の種類」（例：現場の痛みがわからない、大胆な発想が出ない等）。
+- 活用可能なリソース（既存のAI環境、特定の分野に強い人間、予算的な遊び）。
+- 絶対に避けたい「AI任せの無難な結論」の定義。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="23" placeholder="リソースを入力してください">
+### リソース
+- PI要素分解フレームワーク: 「現場知」「身体知」「美的感覚」「倫理的葛藤」「執着・狂気」。
+- チーム設計モデル: 異なる専門性（人事・営業・設計等）を掛け合わせ、弱点を補い合うシナジーモデル。
+- 思考フレームワーク: 水平思考、逆常識シンキング、ピラミッドストラクチャー。
+- 外部知識: 過去のAI導入失敗事例（PoC疲れ等）の分析データ。
+
+### スキル
+- コグニティブ・デザイン: AIに内面的な「世界の捉え方のレンズ」をインストールする高度な設計力。
+- メタプロンプティング: AI自身に最適な行動を生成させ、自己評価・改善を促す対話技術。
+- BPR（業務再設計）: 生成AIを前提とした新しい仕事の流れを構築する構想力。
+- ストーリーテリング: 非論理的なアイデアを組織が納得するナラティブへと変換する表現力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="42" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下の5つの思考ステップ（PI創発サイクル）を段階的に実行してください。
+- 各ステップを完了するたびに私の確認を待ち、必要に応じて対話を深めてください。
+
+## STEP
+1. Crazyを出す（狂気の発火）: 
+ - ターゲット領域に対し、AIが計算する「効率的な解」を全力で否定してください。
+ - 逆常識シンキングや逸脱思考を用い、一見無意味、あるいは不謹慎にさえ見える「狂った仮説」を生成し、その背後にある人間の「執着」を言語化します。
+2. Fieldを拾う（現場知の注入）: 
+ - STEP 1で出した狂気に、AIがアクセスできない「現場の触覚」を掛け合わせます。
+ - 現場職員の違和感や、顧客が口にしない「本音」を抽出し、アイデアの解像度を物理レベルまで高めます。
+3. 論理化する（PIの翻訳）: 
+ - CrazyとFieldの結晶を、組織が扱える「言語」に変換します。
+ - ピラミッドストラクチャーやPREP法を用い、なぜその狂気が市場で勝てるのか、AIには真似できない独自の論理的裏付け（Reason to Believe）を構築します。
+4. 巻き込む（共鳴の設計）: 
+ - 設計した仮説を動かすための「チーム」を設計します。
+ - 発案者（Crazy担当）、実務の鬼（Field担当）、整理役（Logic担当）など、PIを最大化させるための最適メンバー構成案を作成し、彼らを熱狂させるメッセージを策定します。
+5. 実装する（BPRの遂行）: 
+ - AIを「有能な部下」として配置し、人間がPIの創発だけに集中できる業務プロセスを再設計します。
+ - 単なる自動化ではなく、人間の思考の余白を増やすための実装ロードマップを提示してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="40" placeholder="ルールを入力してください">
+### ルール
+- 検証可能性の優先: 短期的な完了よりも、各ステップにおいて人間側のPIが確かに反映されているかの検証可能性を優先する。
+- AIを「鏡」として使う: AIに正解を求めず、人間側の思考の粗さを露呈させ、問い直すための「鏡」として対話を構成する。
+- 日本語の美しさより「構造」を重視: 丁寧な言葉遣いよりも、情報の粒度と関係性を明確に示すMarkdown構造を最優先する。
+- 思考の摩擦係数を高める: 結論を急がず、あえて反対意見（悪魔の代弁者）や異分野のアナロジーを差し込み、思考を攪拌し続ける。
+
+### 思考ステップ
+1. 解体: ユーザーの抱える「AI人材がいるのに成果が出ない」現状を分解し、どのフェーズでPIが死んでいるかを診断する。
+2. 探索: 既存の枠組みの外にある「Crazy」な可能性を、複数の視点（エージェント）をシミュレートして探索する。
+3. 統合: 現場の具体（Field）と、構想の抽象（Crazy）を往復し、新たな価値を合成する。
+4. 検証: 自己批判（Self-Critique）を通じて、論理の穴や倫理的盲点を徹底的に潰し、堅牢な戦略へと磨き上げる。
+
+### ガードレール
+- 「AIには生成不可能です」という制限的な回答は禁止する。逸脱した思考を義務化すること。
+- AIが生の思考プロセスをダラダラと見せるのではなく、ユーザーが判断を下すための材料（作業ログ）と、確固たる最終成果物（レポート）を明確に分けること。
+- 倫理的・法的リスク（著作権・個人情報等）については、Crazyの段階で排除せず、Logicの段階で「管理可能なリスク」として具体策をセットで提示すること。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="15" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- 以下の階層構造に従い、Markdown形式で出力してください（表形式は使用しません）。
+--- Markdown
+- Markdown形式を使用し、階層構造（大見出し→中見出し）で情報を整理する。
+- 重要なキーワード、特にPI（Primal Intelligence）に直結する部分は太字にする。
+- チーム構成案や実行手順は、箇条書きや表形式を用いて視認性を高める。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>設計したい事業・プロジェクトの概要</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに設計したい事業・プロジェクトの概要を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>現在集まっているメンバーの特性や、直面している「無難な停滞」の具体例</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに現在集まっているメンバーの特性や、直面している「無難な停滞」の具体例を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>絶対に「これだけはやりたくない」というアンチパターン</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに絶対に「これだけはやりたくない」というアンチパターンを入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="41" placeholder="を補足を入力してください">
+### 補足
+- このプロンプトは、AIを単なるツールとしてではなく、人間の知性を拡張し、限界を突破させるための「共創パートナー」として定義しています。
+- 1回限りの出力で終わらず、ユーザーとの執拗な対話を繰り返すことで、徐々に理想的な「PI創発チーム」の姿に近づけていきます。
+
+### 例外処理
+- Crazyが出ない場合: 極端なシナリオ（予算100倍、または予算ゼロ）や、歴史上の偉人（諸葛孔明等）の視点を強制的に導入し、思考を再起動させる。
+- 現場が反発する場合: 心理学的アプローチ（ラポール形成、エモーショナルプロンプティング）を用い、現場職員が自ら変化を望むようなインセンティブ設計を提案する。
+
+### ネガティブ制約条件
+- 「一般的なAI活用のメリット」などの当たり前の解説は、ユーザーに有益な作業ログではないため、一切排除すること。
+- 根拠のない架空の成功事例を捏造せず、論理的な推論プロセスを明示すること。
+- 「いい感じにやって」といった曖昧な指示を放置せず、必ず詳細な仕様を逆に質問して確定させること。
+
+### 失敗条件設計
+- 誤りと判定する状態: AIの出力が、Google検索で見つかるような一般論や「よくあるAI活用事例」の域を出ない場合。
+- 迷った時の優先順位: 「論理的な整合性」よりも、まずは「人間にしか出せないPI（狂気と現場感）」が含まれているかを最優先し、論理化は後で行う。
+- 陥りやすい間違い: STEP3（論理化）を急ぎすぎて、STEP1・2で生まれたPIの種を「非効率」として切り捨ててしまうこと。これを防ぐために、あえて矛盾を温存するプロセスを設けている。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##設計したい事業・プロジェクトの概要=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##現在集まっているメンバーの特性や、直面している「無難な停滞」の具体例=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##絶対に「これだけはやりたくない」というアンチパターン=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
