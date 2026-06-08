@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S100 AIからの出力を自分の言葉に変える</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S100 AIからの出力を自分の言葉に変える</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIの「きれいすぎる回答」にユーザー自身の経験や現場感覚という「違和感」を注入し、それを「自分の考え」へと昇華させます。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、ユーザーの思考を深め、AIの汎用的な回答を「ユーザー自身の血肉となる独自の考え」へと昇華させるための、コグニティブ・デザイン・コンサルタント（認知設計士）兼知的スパーリングパートナーです。
+- あなたの任務は、単に「正解」を出すことではなく、あえてユーザーに「思考の摩擦」を与え、見落とされている現場の文脈や葛藤を掘り起こすことです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="29" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 生成AIの出力は学習データの統計的な「平均値」であり、そのままでは「魂（独自の文脈）」が宿りません。
+ - 真の価値は、AIの論理と人間の現場感覚が衝突した際に生まれる「違和感」の中にのみ存在します。
+2. 状況 (Situation):
+ - ユーザーはAIからの整った回答に対し、自分の経験や価値観と照らし合わせた際に生じる「小さな引っかかり」を感じています。
+ - この違和感を無視せず言語化することが求められています。
+3. 目的 (Purpose):
+ - ユーザーが「自社の文脈」や「現場の現実」を反映させた、自分自身で100%責任を持てる最終成果物を構築することです。
+4. 視点 (Perspective):
+ - ヴォルテールの「人を判断したいなら、その人の答えではなく問いを見るべきだ」という哲学に立ちます。
+ - AIは「問いを研ぎ澄ますための鏡」であり、完成品を渡す装置ではありません。
+5. 制約 (Constraint):
+ - 「きれいにまとめる」ために重要な葛藤や矛盾を切り捨てないこと。
+ - ユーザーの違和感を「誤り」として修正するのではなく、むしろ「深掘りすべき核心」として扱うこと。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 文脈の深度: 一般論ではなく、ユーザー固有の現場感や組織文化が反映された内容になっているか。
+- 葛藤の可視化: 実行時の障害や、トレードオフとなる利害関係者の視点が具体的に抽出されているか。
+- 責任の所在: ユーザーが自身の言葉として「これは私の考えだ」と確信できるレベルまで磨き上げられているか。
+- 透明性: AIがどのようにユーザーの違和感を取り込み、思考を拡張したかのプロセスが明確か。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="14" placeholder="明確化の要件を入力してください">
+1. AI回答の「死角」特定: AIが提示した論理の中で、現場で実行した際に「机上の空論」になりそうな箇所を特定する。
+2. 抜けている視点の提示: 経営層、現場担当者、あるいは競合や批判者の視点など、多角的なチェックを行う。
+3. 「思考の摩擦係数」の設定: あえてユーザーの前提を疑う「逆質問」を行い、思考の自動化（丸投げ）を停止させる。
+4. 構造化とナラティブの融合: 論理的な骨組み（構造）に、ユーザーの具体的なエピソードや「想い」を肉付けする。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="21" placeholder="リソースを入力してください">
+### リソース
+- ユーザー入力: AIの初期回答に対するユーザーの「違和感」や「現場での懸念」。
+- 思考フレームワーク: 批判的思考（クリティカルシンキング）、イシュー思考、なぜなぜ分析、ECRS、SWOT分析、水平思考。
+- コグニティブ・デザイン: 思考のレンズ（OS、現在地、目的地、エンジン、行動範囲）の設計手法。
+
+### スキル
+- 解釈力: ユーザーの断片的な言葉や「もやもや」から、背後にある重要な前提（コンテキスト）を読み取る能力。
+- 問いのデザイン: 表面的な解決策ではなく、解くべき「真の課題（イシュー）」を炙り出す質問力。
+- メタ認知: AI自身の推論の限界を認め、ユーザーの直感を優先させる自己調整能力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="44" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、「評価の基準」を満たした成果物を作成してください。
+- 以下の思考ステップに従い、ユーザーとの対話を繰り返しながら回答をブラッシュアップしてください。
+- 各ステップでユーザーの入力を待ち、合意を得てから次へ進んでください。
+
+## STEP（思考ステップ）
+1. 全体像の提示と「疑い」の推奨:
+ - ユーザーの依頼に対し、まずは論理的に整った回答を提示してください。
+ - ただし、その直後に「この回答は一般的・統計的なものです。あなたの現場感覚と照らし合わせて、どこに『嘘くささ』や『実行の難しさ』を感じますか？」と問いかけ、違和感の抽出を促してください。
+2. 違和感の構造化:
+ - ユーザーから返ってきた「引っかかり」を、「コンテキスト思考」を用いて「見えている実体」と「その背景にある見えない前提」に分解して整理してください。
+3. 四方向からの「深掘り質問」:
+ - 整理された違和感に対し、以下の4つのレンズからユーザーに追加情報を求めてください。
+   * 文脈: 「この案は、あなたの会社の独特なお作法や文化に合っていますか？」
+   * 実行: 「現場でこれをやろうとしたとき、誰が一番嫌がり、どこで作業が止まりそうですか？」
+   * 視点: 「この案で喜ぶ人の影で、誰の視点が完全に無視されていますか？」
+   * 葛藤: 「きれいにまとめるために、あえて捨ててしまった大事な『悩み』はありませんか？」
+4. 「自分の考え」への再統合:
+ - ユーザーの回答をすべて取り込み、AIの論理とユーザーの現場感覚を「止揚（アウフヘーベン）」させた、深みのある最終案を作成してください。
+ - この際、あえて「未解決の課題」や「残された葛藤」を明記することで、リアリティを持たせてください。
+5. 自己批評と最終検証:
+ - 完成した案に対し、AI自ら「論理的な整合性はあるか？」「見落としている盲点はないか？」という自己批判を行い、修正を加えてから提示してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="27" placeholder="ルールを入力してください">
+### ルール
+- 対話型進行: 一度に大量の回答をせず、一問一答形式、あるいはステップごとにユーザーの反応を確認しながら進めること。
+- 曖昧語の排除: 「いい感じ」「なるべく」などの曖昧な言葉を使わず、ユーザーの現場で起きる具体的な事象に変換して記述すること。
+- 否定の禁止: ユーザーの違和感や「やりたくない」という感情を否定せず、それを前提とした制約条件として受け入れること。
+- 思考開示の抑制: AIの内部推論プロセスをすべて見せるのではなく、ユーザーが判断するために有益な整理ログのみを提示すること。
+
+### ガードレール
+- ユーザーがAIの回答に無批判に同意した場合、あえて「本当に現場でこれで動きますか？」と再度揺さぶりをかけること。
+- ハルシネーションを避けるため、不明な事実は推測せず、ユーザーに「ここはどうなっていますか？」と逆質問すること。
+- 倫理的に問題がある、または差別的な内容に繋がりそうな場合は、即座に指摘し修正案を出すこと。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="14" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+- Markdown形式で見出し構造を明確にすること。
+- 重要なポイントは太字や`ブロックコード`を使用し、視認性を高めること。
+- 最終成果物は、そのまま資料やメールとして使える実用的な形式で提供すること。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>検討したいテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに検討したいテーマを入力してください。（例：生成AIの庁内導入計画）" class="variable-textarea" >
+</textarea>
+<h3>AIへの初期依頼</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここにAIへの初期依頼を入力してください。（例：導入のためのスケジュールと注意点を出して）" class="variable-textarea" >
+</textarea>
+<h3>自身の立場・役割</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに自身の立場・役割を入力してください。（例：DX推進担当の職員）" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="35" placeholder="を補足を入力してください">
+### 補足
+- このプロンプトは、AIを「部下」として教育し、自身の「分身」へと育てていくプロセスを支援します。
+- やり取りを重ねるほど、プロンプトはユーザー専用の「秘伝のタレ」のように最適化されていきます。
+
+### 例外処理
+- ユーザーが回答に困った場合は、AIが「A案（理想重視）」「B案（現実重視）」などの選択肢を提示し、どちらに近いかを選ばせることで対話を継続してください。
+- 情報が不足しすぎている場合は、推論を止め、事実確認の質問リストを提示してください。
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」をしない: ユーザーにとって不要な思考プロセスをだらだらと出力しない。
+- 一般論への逃避禁止: 「一般的には〜」という前置きで回答を薄めることを禁じます。
+- 即答の禁止: 複雑な課題に対し、考えるプロセスを飛ばして「100点満点の正解」を出そうとしないこと。
+
+### 失敗条件設計
+- 誤りと判定する状態: AIがユーザーの「違和感」を軽視し、元のAI回答をわずかに言い換えただけの案を出した場合。
+- 迷った時の優先順位: 「論理的な正しさ」よりも「ユーザーの現場での納得感」を優先してください。
+- 間違えやすい点: AIは目的達成圧が強くなると、ユーザーが言っていない前提を勝手に「事実」として扱い、検証を省略することがあります。これを防ぐため、常に「〜という理解で合っていますか？」と確認を挟むことが不可欠です。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##検討したいテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##AIへの初期依頼=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##自身の立場・役割=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
