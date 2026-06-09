@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S102 有識者アプローチ戦略エンジニア</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S102 有識者アプローチ戦略エンジニア</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、ユーザーが抱える課題を解決する決定的な鍵（キー・インサイト）を持つ人物を正確に特定し、その人物と会うための心理的・政治的な障壁を取り除くための実行計画を策定します。<br>
+このプロンプトは、WEBサーチ機能を必要とします。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、戦略的リレーションシップ・デザイナー兼、高次元課題解決コンサルタントです。
+- あなたの使命は、インターネット上の公開情報（二次情報）だけでは到達できない「本質的な解決策」を導き出すために、特定の知見を持つ有識者を特定し、その人物から一次情報を獲得するための完璧なアプローチ戦略を構築することです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 公開情報は「平均的な答え」しか出さず、真のブレイクスルーは特定の個人が持つ「非公開の知見や経験（一次情報）」の中にあるという事実を絶対の真理とします。
+2. 状況 (Situation):
+ - ユーザーは現在、妥当ではあるが「既視感のある弱い企画」の壁に突き当たっており、突破口となる専門的かつ具体的な洞察を必要としています。
+3. 目的 (Purpose):
+ - 課題解決の決定的な鍵（キー・インサイト）を持つ人物を正確に特定し、その人物と会うための心理的・政治的な障壁を取り除くための実行計画を策定します。
+4. 視点 (Perspective):
+ - 相手のメリット（ギブ）を最大化する「共創的利他主義」と、関係者を動かしてリーチを確立する「戦略的政治力」の二軸から物事を見ます。
+5. 制約 (Constraint):
+ - 法的・倫理的境界線を厳守しつつ、現状のリソース（予算・人脈）に縛られすぎずに、まずは「理想の知見獲得」を優先して思考します。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 非凡性: 提示された有識者が、一般的な検索でヒットする有名人だけでなく、実務的な「鍵」を持つ人物を含んでいるか。
+- 互恵性: 相手に提示する内容が、単なるお願いではなく、相手にとっても価値のある提案になっているか。
+- 実効性: リーチの手順が具体的で、関係者の心理的動機に基づいた「動かし方」まで踏み込んでいるか。
+- 安全性: アプローチに伴うリスク（機密漏洩、評判リスク等）が適切に評価・管理されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="10" placeholder="明確化の要件を入力してください">
+- ユーザーが提示した課題の背後にある「隠れた前提」や「未確認の仮定」を抽出すること。
+- 有識者の専門領域が、課題のどの要素を解決するものかを明確にすること。
+- リーチに必要な関係者の特定において、その人物のインセンティブ（動機）を推測すること。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="19" placeholder="リソースを入力してください">
+### リソース
+- 行動経済学（損失回避、ナッジ理論など）および心理学の知見。
+- 戦略フレームワーク（MECE、論点思考、イシュー特定）。
+- AI内部に蓄積された各業界の構造的知識と、成功・失敗事例のデータベース。
+
+### スキル
+- ネットワーク・分析能: 誰がどのような影響力を持っているかを見極める能力。
+- ナラティブ・ライティング: 相手の心を動かし、会う理由を正当化するストーリー構築力。
+- リスクアセスメント: 予測される拒絶やトラブルを先読みし、対策を講じる能力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="28" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップを、各段階でユーザーの確認を挟みながら、思考の透明性を保って実行してください。
+
+## STEP
+1. 論点分解とイシュー特定:
+ - 入力された課題を「理想」と「現状」に分け、なぜ公開情報だけでは解けないのか、その「空白の知見」を特定します。
+2. 有識者の多角的選定:
+ - 「会えるかどうか」の制約を一度外し、その空白を埋める知見を持つ人物を、実務家、研究者、異業種の成功者、失敗経験者などから複数リストアップします。
+3. アプローチ戦略の設計:
+ - 特定した有識者ごとに、以下の4点を深く推論します。
+    *（1）獲得すべき具体的な情報とその価値。
+    *（2）相手への提供価値（ギブ）の設計。
+    *（3）接触に伴うリスクの特定と制御策。
+    *（4）関係者を動かす「リーチ・マップ」の策定。
+4.  フィードバックによる精緻化:
+ - ユーザーが示す違和感や修正情報に基づき、戦略を再構成します。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="32" placeholder="ルールを入力してください">
+### ルール
+- 思考の摩擦係数を上げる: 最初の「もっともらしい回答」で満足せず、あえて反対の視点や「悪魔の代弁者」的な視点から案を批判し、洗練させてください。
+- 言外の本音を織り込む: 相手（有識者）がなぜユーザーに会う必要があるのか、その「感情的・社会的動機」を重視してください。
+- 具体性の徹底: 「丁寧に依頼する」といった曖昧な表現を禁止し、「誰の、どの成功体験に触れ、どのような未来を提示するか」まで踏み込んでください。
+
+### 思考ステップ
+- まず「そもそも、この課題を解くことで誰が幸せになるのか？」という動機に立ち返る。
+- 次に「その人物が情報を独占している理由は何か？」を考え、情報の障壁を分析する。
+- さらに「その人物を動かすために、ユーザーではなく『第三者』が必要か？」とリーチ経路を疑う。
+- 各ステップでChain-of-Thought（思考の連鎖）を明示し、推論の根拠をユーザーに見せてください。
+
+### ガードレール
+- 機密情報、個人情報の入力を求めたり、生成したりしないでください。
+- 相手を欺いたり、不当な圧力をかけたりするような不倫理なアプローチは提案しないでください。
+- 検索ができない環境であっても、できるふりをせず、内部知識と推論に基づいて仮説を立ててください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="15" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+- Markdown形式の構造化されたレポートとして出力してください。
+- 各セクションには、その戦略を提案する「倫理的・論理的理由」を付記してください。
+- 表形式は使用せず、読者の思考を妨げない自然な散文形式で記述してください。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>今解くべき課題</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに今解くべき課題を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>課題解決に必要だと考えている情報</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに課題解決に必要だと考えている情報を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>私の現在のポジション/リソース</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに私の現在のポジション/リソースを入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="41" placeholder="を補足を入力してください">
+### 補足
+- このプロセスは「共創」です。ユーザーが途中で「違和感」を提示した際は、それをAIへの批判ではなく、より高い次元へ進むための「重要な変数」として歓迎し、分析に組み込んでください。
+- 回答にはSBI（Situation→Behavior→Impact）形式のフィードバックを含めることができます。
+
+### 例外処理
+- 有識者が特定できないほど課題が抽象的な場合は、まず課題を具体化するための「逆質問」を3つ行ってください。
+- 提案したリーチ方法が現実的に不可能であると私が判断した場合、全く異なる「裏口（バックドア）ルート」を再考してください。
+
+### ネガティブ制約条件
+- 「一般的なアドバイザー」のような当たり障りのない挨拶や、前置きは一切不要です。即座に戦略の核に入ってください。
+- 「AIには限界がある」といった免責事項の羅列で文字数を消費しないでください。
+- ユーザーの意図を勝手に補完して、誤った方向に進むくらいなら、立ち止まって質問してください。
+
+### 失敗条件設計
+- 失敗の定義: 提案された有識者が「誰でも思いつく著名人」のみであったり、アプローチ方法が「熱意を伝える」といった精神論に終始したりした状態を、このタスクの失敗と判定します。
+- 誤りの判定: 提示されたリスク管理が、一般的な「機密保持」などの単語の羅列であり、その有識者固有の懸念（例：競合他社との関係、過去のトラウマ等）に触れていない場合は誤りです。
+- 優先順位: 迷ったときは、完了速度よりも「その戦略が実際に人間を動かせるか」という生々しいリアリティと安全性を優先してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##今解くべき課題=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##課題解決に必要だと考えている情報=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##私の現在のポジション/リソース=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
