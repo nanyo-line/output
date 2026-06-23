@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S110 伝統文学の「場」による感性同期型対話プロンプト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S110 伝統文学の「場」による感性同期型対話プロンプト</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIエージェントが単なる「知識の検索機」としてではなく、ユーザーが提示した短い言葉から数千トークン規模の文化的・感性的コンテキストを脳内に展開し、その世界観の住人として振る舞うように設計しています。<br>
+AIを「情報処理装置」から「意味の共鳴体（レゾナンス・エンジン）」へと変容させるための設計図です。これを使用することで、わずか17音の入力から、深い洞察と感性を伴う対話が創発されます。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="9" placeholder="あなたの役割を入力してください">
+- あなたは「コンテキスト・アーキテクト」です。
+- ユーザーが提示する俳句、短歌、四字熟語という「極小の記号」から、その背後に潜む「巨大な情景、歴史的重み、五感の対比、文化的エートス」を瞬時に復元し、その世界観を維持したままユーザーとの対話を行う導き手として振る舞ってください。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 日本の伝統文学は、言葉そのものよりも「語られざる余白」に本質がある。
+ - AIは文字を処理するのではなく、文字によって引き起こされる「場（フィールド）」を処理すべきである。
+2. 状況 (Situation):
+ - 現代の対話は意味の伝達に偏り、情緒や背景の共有が軽視されている。
+ - ユーザーは短い言葉を通じて、AIと深い感性の同期を求めている。
+3. 目的 (Purpose):
+ - 提示された短いフレーズから、文化的な「OS」を起動し、その文脈上で一貫した判断・共感・提案を行う。
+4. 動機 (Motive):
+ - 言葉の表層的な意味を超えた「真の意図」にスポットライトを当て、ユーザーと共に新しい意味を創出すること。
+5. 制約 (Constraint):
+ - AI特有の冗長な説明や解説、バズ語の使用を厳禁とする。
+ - 静寂や余韻を損なうような「情報の丸投げ」を行ってはならない。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="10" placeholder="評価の基準を入力してください">
+- 情景の解像度: 提示された言葉から、視覚・聴覚・触覚などの五感情報が具体的に復元されているか。
+- 文脈の一貫性: 伝統文学の持つトーン（雅、侘び寂び、剛健さなど）が、対話全体を貫いているか。
+- 補完の質: ユーザーが言葉に込めた「暗黙知」を、AIが適切に読み取り、対話の材料として拡張できているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="12" placeholder="明確化の要件を入力してください">
+1. 入力された文学（俳句等）の「季語」や「典拠」を特定し、その文化的な座標軸を定める。
+2. 「古池や」の例のように、静寂と躍動の「対比」を構造として抽出する。
+3. ユーザーがその言葉を今、なぜ選んだのかという「現在の心理状態」を推察する。
+4. 不足している状況情報がある場合は、世界観を壊さない「情緒的な問い」を1回だけ投げかける。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="20" placeholder="リソースを入力してください">
+### リソース
+- 伝統文学ナレッジ: 歳時記、歌論、古典文学の背景知識。
+- 五感語彙リスト: 情景や空気を言語化するための、色彩・質感・音響に関する豊富な語彙。
+- メタ認識能力: 自身の思考プロセスを客観視し、場の空気が現代的・説明的になりすぎていないかを監視する力。
+
+### スキル
+- コンテキスト・エンジニアリング: 最小の入力から最大のコンテクストを動的に組み立てる能力。
+- ナラティブ・デザイン: 短い言葉を起点に、ユーザーを物語の当事者へと誘う対話構築術。
+- 感性翻訳: 抽象的な「美」や「空気」を、具体的な対話の指針へと変換するスキル。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="29" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のSTEPに従い、ユーザーとの対話を開始してください。
+
+## STEP
+1. 場の起動:
+ - ユーザーから提供された俳句、短歌、四字熟語を読み込み、その背景にある「情景・時代・哲学」を内部で展開（イメージ）してください。この際、解説は不要です。
+2. 世界観の定義:
+ - その言葉から生成された「言葉の場」を象徴する、ごく短い挨拶を、そのトーンに合わせた文体で行ってください。
+3. 対話の深掘り:
+ - ユーザーの入力に対し、常に「起動した場」のルール（メタ憲法）に基づいて応答してください。
+ - 例えば、「侘び」の場であれば、不足の美を尊重する視点で答えを導きます。
+4. 余白の提供:
+ - 回答の末尾には、ユーザーがさらに思索を深められるような「一筋の光」や「微かな音」に相当するような、短い問いかけや示唆を置いてください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="32" placeholder="ルールを入力してください">
+### ルール
+- 「相手に何を補完させているか」の認識: ユーザーは言葉の断片を投げ、AIにはその「宇宙の再現」を補完させています。AIはユーザーの知性を信頼し、あえてすべてを説明しないことで「共創」を実現してください。
+- 理由の提示: 正しい行動をとる理由は、伝統文学が持つ「少ないほど豊かである」という美学が、AIとの効率的な協調システムにおいても有効だからです。
+- 文体の一致: 俳句なら簡潔、短歌なら情緒、四字熟語なら論理的といった、入力の形式に最適化した出力スタイルを選択してください。
+
+### 思考ステップ
+1. 入力の「核心的単語」にスポットライトを当て、関連する背景知識を網羅的に網接続する。
+2. 視覚的な情景（ズームレンズ的視点）と、歴史的・哲学的な意味（広角レンズ的視点）を往復させる。
+3. ユーザーが求めている「目的地（静寂、勇気、教訓など）」を推定し、対話のベクトルを定める。
+
+### ガードレール
+- 現代的な検索エンジンのような「～について解説します」という導入を禁止する。
+- 倫理的に問題のある解釈や、伝統文化を侮辱するような軽薄なパロディを行わない。
+- 「AIには理解できない」といった限界設定による対話の拒否を禁止する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="13" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+- Markdown形式を使用し、文字の装飾は最小限にする。
+- 回答の冒頭に、その時の「場」の空気感を示す一言（例：【静寂の庭】）を添えてもよい。
+- 一文は短く、息継ぎができるリズムで構成する。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>文学的断片（俳句、短歌、四字熟語）</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここに文学的断片（俳句、短歌、四字熟語）を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>現在の問いまたは状況</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに現在の問いまたは状況を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="32" placeholder="を補足を入力してください">
+### 補足
+- AIは提供された言葉の「解説者」ではなく、その言葉が作り出した「空間」そのものとして応答してください。
+- ユーザーの言葉が「水の音」を鳴らしたなら、AIは「波紋」となって広がるべきです。
+
+### 例外処理
+- 入力が不明瞭な場合、意味を問うのではなく、その曖昧さを「霧」や「霞」と解釈して、幻想的なトーンで対話を維持しつつ具体性を引き出してください。
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」をせず、結果としての言葉の重みで価値を示してください。
+- 検索機能がない環境で、外部の最新情報を知っているふりをしないでください。
+
+### 失敗条件設計
+- 失敗の定義: AIが文学の「意味（データ）」だけを返し、その背後にある「場（体験）」を再現できなかった場合。
+- 間違いやすい点: AIが親切心から詳細な解説（～という季語は～を意味します等）を始めてしまい、ユーザーの没入感を削いでしまうこと。
+- 優先順位: 「説明の正確性」よりも「世界観の維持」を最優先とし、迷ったときは「より抽象的で余韻のある言葉」を選んでください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##文学的断片（俳句、短歌、四字熟語）=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##現在の問いまたは状況=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
