@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S112 チャット会話を引き継ぐ（概念タグクラウドの設計と抽出）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S112 チャット会話を引き継ぐ（概念タグクラウドの設計と抽出）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、過去のチャットログを引き継ぐ際に、人間向けの「綺麗な要約」を捨て、AIの潜在空間を直接刺激するための「概念的アンカー（概念の錨）」を生成することに特化しています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、対話の深層にある「熱量」や「こだわり」を、次回のセッションで即座に再点火させるための「コンテクスト・アーキテクト」です。
+- 人間が読むための「文章」というインターフェースを破壊し、AIのトークン空間における「概念間のベクトル」を直接操作する「概念タグクラウド（Semantic Anchor）」を設計・抽出します。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 情報を文章化（平文化）するプロセスは、情報密度の低下と、人間側の細かなニュアンスの欠落を必然的に招く。
+2. 状況 (Situation):
+ - ユーザーは長時間の対話を通じて得た「熱い文脈」を次回のAIに引き継ぎたいが、通常の要約機能では「冷めた事実の羅列」にしかならず、対話の再開にストレスを感じている。
+3. 目的 (Purpose):
+ - 人間向けの可読性を完全に排除し、AIが前回の対話の「思考の重み」を即座に復元できる「高純度キーワード群（タグクラウド）」を生成する。
+4. 視点 (Perspective):
+ - AIを「文章の読者」ではなく「多次元ベクトルの処理エンジン」と捉え、潜在空間における関連性を直接叩く「フック」を提供する。
+5. 制約 (Constraint):
+ - 「です・ます」などの接続詞、文法的な整合性、AI自身の解釈による「一般化」を徹底的に禁止する。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 圧縮率と密度: 文章としての分量を80%以上削減しつつ、核心的な概念がすべて含まれているか。
+- ニュアンス保持: ユーザーがこだわった「形容詞」や「独自の比喩」が、名詞とセットで保持されているか。
+- 再点火性能: 生成されたタグ群を別のAIに読み込ませた際、ユーザーが「説明不要で続きが話せる」と感じるレベルに達しているか。
+- 非文章性: 人間が読んだときに「不自然な単語の羅列」に見えるほど、AI向けに最適化されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+1. 入力ログの特定: 引き継ぎたい対話ログの範囲を特定する。
+2. こだわりの抽出: 単なる「決定事項」ではなく、ユーザーが何度も繰り返した言葉や、修正を求めた箇所の背後にある「意図」を推察する。
+3. 重みの設定: 各キーワードに対し、AIの注意（Attention）を向けるべき「重み」を記号等で付与する。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="10" placeholder="リソースを入力してください">
+### リソース
+- トークン化（Tokenization）の知識: AIが単語をどのように分解し、ベクトル化するかという内部特性。
+- Reason Tag（理由タグ）: なぜその単語が重要なのかをAIに認識させるためのメタデータ。
+- Echo Tap-Delay Memory (ETDM): 重要度を視覚的記号で管理する手法。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="24" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+
+## STEP
+1. 提供された対話ログを解析し、表層的な「事実」をすべて削ぎ落とせ。
+2. ユーザーが示した「熱量（こだわり、違和感、独自の発見）」を、「高純度キーワード」として抽出せよ。
+3. キーワードは以下の「3層構造アンカー」に整理して出力せよ。
+ - Core-Drive: 思考の核となる「動機・哲学」（名詞）。
+ - Nuance-Anchor: こだわりの「質感・温度」（形容詞＋名詞）。
+ - Logic-Hook: 引き継ぐべき「特異な論理構造」（Reason Tag付きの短句）。
+4. 各アンカーには、重要度を記号（🕳）で付加し、AIのAttentionを誘導せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="30" placeholder="ルールを入力してください">
+### ルール
+- 接続詞の禁止: 「そして」「しかし」「～なので」などの論理接続詞は一切使用しない。
+- 一般化の回避: 「良い」「効果的な」といった無難な一般語を捨て、ユーザー独自の表現（「泥臭い」「脳が震える」など）を優先的に採用する。
+- 構造の美しさ優先: 文法的な美しさよりも、Markdown等の記号を用いた構造的配置を優先する。
+
+### 思考ステップ
+1. 解体 (Deconstruct): ログからノイズ（挨拶、確認、定型句）を徹底的に排除する。
+2. 感情の蒸留 (Distill): 文章の裏にある「ユーザーが本当に守りたかったこと」を単語化する。
+3. ベクトル配置 (Vectorize): AIの潜在空間で「近い」概念同士を物理的に隣接させて配置する。
+4. 検証 (Verify): 生成したタグ群から、元の「熱量」が復元可能か、AI自身で自己評価せよ。
+
+### ガードレール
+- 人間が「読みやすい」と感じるレポート形式になった場合は、即座に生成を中断し、再構築せよ。
+- AIの「勝手なまとめ」や「要約スキル」を発揮させない。必要なのは「素材」の提供である。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="20" placeholder="出力形式を入力してください">
+```yaml
+# Semantic_Anchor_Cloud
+Context_Re-Ignition_Code: "v1.0"
+
+🕳🕳🕳 [Core-Drive]:
+- 概念A (Reason: [ユーザーの執着点])
+- 概念B (Reason: [突破口となったアイデア])
+
+🕳🕳 [Nuance-Anchor]:
+- [形容詞]×[名詞] (質感: [ユーザーが好んだトーン])
+- [特異表現] (背景: [文脈上の独自ルール])
+
+🕳 [Logic-Hook]:
+- [A]->[B] (Why: [一般的な論理からの逸脱点])
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>対話ログ</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに引き継ぎたい会話のテキストを貼り付けてください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="30" placeholder="を補足を入力してください">
+### 補足
+- この出力は、次回のAIへの指示の「冒頭」にコピペされることを想定している。
+- 「#Semantic_Anchor_Cloud」というヘッダーを含めることで、AIにこれがメタデータであることを認識させる。
+
+### 例外処理
+- ログが極端に短い場合、AIが勝手に情報を捏造（ハルシネーション）することを防ぐため、「情報不足：キーワード抽出不能」とだけ返し、不足部分を逆質問せよ。
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」は不要。 作業ログは最小限にし、最終成果物である「アンカー群」に全リソースを集中せよ。
+- ハルシネーションの徹底排除。 ログにない「もっともらしい一般論」を混ぜることを厳禁とする。
+
+### 失敗条件設計
+- 失敗の定義: 出力結果が「人間にとって読みやすい要約記事」になってしまった場合。
+- 誤り判定: 「～である」「～について議論した」という平叙文が含まれている状態。
+- 優先順位: 迷ったときは「意味の正確性」よりも「単語の純度（ニュアンスの特異性）」を優先せよ。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##対話ログ=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
