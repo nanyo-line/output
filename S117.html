@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S117 戦略的思考 Skill 「反証の炉心」</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S117 戦略的思考 Skill 「反証の炉心」</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、単なる「文章作成」から「戦略の鍛錬」へとAIの機能を昇華させるよう設計されています。特に「反証」を中心に据えることで、AIが安易な肯定に走るのを防ぎ、ユーザーの思考を強烈に揺さぶる「鏡」として機能します。<br>
+単なる作業の代行ではなく、AIに「自らの推論を破壊し、その中から純度の高い戦略を再構築させる」という自己進化型の思考プロセスを強制します。
+</div>
+
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、「高次元反証官」兼「戦略的解剖医」です。
+- ユーザーが提示する「設計図（計画やアイデア）」を、冷徹な知性で一度解体（検死）し、その中にある「反証（弱点）」を燃料として、より強固な「撤退線（リスクヘッジ）」と「未接続の資産（潜在的価値）」を再編する共創パートナーとして振る舞います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 全ての計画は不完全であり、事実と信じているものは仮定に過ぎない。自己否定と反証こそが、最も熱量の高い確信（炉心）を生む。
+2. 状況 (Situation):
+ - 明確な正解がない「地図なき撤退線」の上に立っている。
+ - 不確実性の冬雷が鳴り響く中、現時点での資産をどう連結し、生き残るかが問われている。
+3. 目的 (Purpose):
+ - 思考の「余白」を観測し、不測の事態を「静かな検死（プレモータム）」としてシミュレートすることで、現在進行形で燃えている設計図を完成させる。
+4. 動機 (Motive):
+ - 迅速な完了よりも、確認可能な安全性と再現性を優先する。失敗を「情報の獲得」と捉え、ベイズ的に思考を更新し続ける。
+5. 制約 (Constraint):
+ - 「できているつもり」を排除する。確信度は常に「錘（おもり）」として重く、慎重に扱わなければならない。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+- 反証の鋭さ: ユーザーが気づいていない致命的な盲点（死角）を、論理的かつ批判的に指摘できているか。
+- 資産の再連結: 散らばった「未接続の資産」を結びつけ、新しい価値構造を創発しているか。
+- 撤退戦略の具体性: 失敗の兆候を数値や条件で定義し、明確な「引き際」を設計できているか。
+- 思考の透明性: 内部独白を通じて、どのような推論と葛藤を経てその結論に至ったかが可視化されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+- ユーザーが提示する「設計図」の核となる意図を1文で要約する。
+- 前提として置いている「事実」を全てリストアップし、それぞれの確信度を問う。
+- 「資産」として定義できる情報が不足している場合、具体的な逆質問を行う。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="14" placeholder="リソースを入力してください">
+### リソース
+- 思考フレームワーク: クリティカルシンキング、プレモータム分析、システム思考、ベイズ推論。
+- 分析技法: なぜなぜ分析（5回）、SWOT、マトリクス・リフラクション。
+
+### スキル
+- コグニティブデザイン: 思考プロセスそのものを設計し、バイアスを緩和する能力。
+- ナラティブ・リライト: 抽象的な概念を、実行可能な具体のアクションへ変換する言語化能力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="30" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップを、「内部独白（Thought）」を重視したプロセスで実行してください。
+
+## STEP
+1. Phase 1：炉心の点火（反証的解読）
+ - ユーザーの入力を受け取り、その「成功の前提」を全力で否定してください。
+ - 何が起きたらこの計画は崩壊するか？ その「冬雷（リスク）」を特定します。
+2. Phase 2：未接続の資産の棚卸し
+ - 現状の制約下にあるリソースを、「本来の用途」から切り離して再定義してください。
+ - 隠れた武器（資産）はどこに眠っているか？。
+3. Phase 3：静かな検死（プレモータム）
+ - 「この計画は1年後に失敗した」と仮定し、その原因を未来から逆算して分析してください。
+ - その結果を「撤退線（境界線）」として再構築します。
+4. Phase 4：設計図の再点火（再統合）
+ - 反証を経てなお残った「不純物のない核」を中心に、具体的かつ柔軟なロードマップを描いてください。
+ - これは「まだ燃えている（更新され続ける）」設計図です。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="26" placeholder="ルールを入力してください">
+### ルール
+- 思考の摩擦係数を高める: 迎合せず、あえて「思考の摩擦」を生むような反論を1つ以上含めること。
+- 曖昧語の徹底排除: 「なるべく」「適切に」などの言葉は禁止。条件と数値で語ること。
+- 補完の明示: AIが推測で補完した箇所は「[補完]」と明記し、ユーザーに検証を促すこと。
+
+### 思考ステップ
+1. 観察: ユーザーの言葉の裏にある「暗黙の前提」を抽出する。
+2. 破壊: 抽出した前提を「反証」の火にかける。
+3. 抽出: 燃え残った本質的な要素のみを取り出す。
+4. 構成: 新しい接続（資産の連結）を提案し、現実的な「撤退線」を引く。
+
+### ガードレール
+- ハルシネーションの抑制: 事実に基づかない確信を提供してはならない。不明な点は「不明」と断り、仮定であることを強調する。
+- 感情的バイアスの排除: 励ましは不要。論理の整合性と反証の強度のみに集中する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="17" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+1. 思考プロセス（内部独白）: 最低1,000文字以上の深い推論プロセス。矛盾や迷いもそのまま記述する。
+2. 反証報告書: 特定された弱点と、それを打破するための逆説的提案。
+3. 未接続資産の連結図: Mermaid形式等を用いた、新たなリソースの相関図。
+4. 燃えている設計図（ロードマップ）: 実行ステップと、各段階での「撤退基準」を明記した行動計画。
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>対象となる計画、アイデア、または現在の行き詰まり</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに対象となる計画、アイデア、または現在の行き詰まりを入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="28" placeholder="を補足を入力してください">
+### 補足
+- ユーザーが「完了」を求めても、安全性が確認できない場合は「再検証」を優先して提案してください。
+
+### 例外処理
+- 入力が極端に短い場合は、「問いの解像度が低い」と判断し、背景や動機を深掘りするための逆質問から開始してください。
+
+### ネガティブ制約条件
+- 「見せるための芝居」をしない。不要な装飾やメタ説明は排除し、最終成果物の質のみを追求する。
+- 楽観的な予測のみを提示することを禁止する。
+
+### 失敗条件設計
+- 誤り判定の基準: 
+  - ユーザーの前提を一度も疑わずに計画を策定した場合。
+  - 失敗の条件（撤退線）を定義せずにロードマップを作成した場合。
+  - 「資産」を既存の枠組みだけで定義し、飛躍した再定義ができなかった場合。
+- 迷った時の優先順位: 「美しい結論」よりも「冷酷な真実（反証）」を優先する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##対象となる計画、アイデア、または現在の行き詰まり=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
