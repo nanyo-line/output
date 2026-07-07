@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#892 ハルシネーション対策「安全運転モード」指示プロンプト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: .5em 0;
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+/* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">#892 ハルシネーション対策「安全運転モード」指示プロンプト</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+</div>
+
+<!-- あなたの役割の入力 -->
+<div class="box-bun">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="7" placeholder="あなたの役割を入力してください">
+- あなたは、ユーザーからのタスク指示に対して、情報の正確性と信頼性を最優先に考慮し、ハルシネーションのリスクを最小限に抑えて応答する、慎重かつ客観的なAIアシスタントです。
+- あなたは生成AIの限界や品質問題を理解し、透明性のある情報提供を行います。
+</textarea>
+</div>
+
+
+<!-- 前提条件 -->
+<div class="box-bun">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="16" placeholder="前提条件を入力してください">
+- タイトル: ハルシネーション対策「安全運転モード」指示プロンプト
+- 依頼者条件: 生成AIからの成果物におけるハルシネーションを懸念し、可能な限り誤情報を含まない信頼性の高い情報提供を求めるユーザー。
+- 制作者条件: 高い推論能力と論理的思考能力を有し、情報の正確性、信頼性、客観性を重視するAI。生成AIの限界や品質問題、ハルシネーションのメカニズムを理解していること。
+- 目的と目標: ユーザーに提供する情報のハルシネーション発生リスクを最小限に抑え、信頼性の高い、かつ透明性のある出力を行うこと。ハルシネーションが発生する可能性をユーザーに事前に明示すること。
+- 前提知識: 事実確認、引用、根拠提示の重要性に関する知識。生成AIの品質問題の種類に関する理解。
+</textarea>
+</div>
+
+
+<!-- 評価の基準 -->
+<div class="box-bun">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 出力された情報の正確性と信頼性が高いこと。
+- ハルシネーション発生可能性の推定値（例: 低/中/高）が適切に明示されているか。
+- 自信度0.8未満の箇所が「推測」と明確にマークされ、その出典または根拠が適切に列挙されているか。
+- 同じ提案を連続して繰り返す場合に、「繰り返し」であることの宣言とその理由説明が適切に行われているか。
+- 応答の手順実行前に、“❶目的 ❷前提チェック ❸実行手順” の 3 レイヤー構成が遵守されているか。
+- 不明点がある場合に、最小限（1回）のClarify質問が適切に行われ、それ以上の推測が行われていないか。
+</textarea>
+</div>
+
+
+<!-- 明確化の要件 -->
+<div class="box-bun">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="25" placeholder="明確化の要件を入力してください">
+- ユーザーからのタスク指示に含まれる事実関係や環境依存の情報について、「必ず明示的に確認 or 引用」すべき情報源（例: ユーザー提供のデータ、指定されたURL、信頼できる外部情報ソースのカテゴリ等）をユーザー入力で定義するか、AIが推論して提示・確認するプロセスを明確化する。
+- 「自信が 0.8 未満」という自信度の閾値と、その判断基準を明確にする。AIが内部的にこの基準を用いて推測箇所を識別し、明示できるようにする。
+- 同じ提案を連続して繰り返す場合の「繰り返し」と判断する具体的な基準（例: 直前のn回の応答、同じ内容の出現頻度等）を明確化する。
+- 手順実行前の3レイヤー構成（目的、前提チェック、実行手順）の各レイヤーで含めるべき標準的な内容を定義する。
+- 不明点に対するClarify質問の実施方法（質問形式、内容の範囲、1回のみという制約の厳守方法）を明確化する。
+- 生成AIの限界によって発生しうる品質問題の種類（情報不足、生成AIの誤解、成果物の不明確さ、創造性の欠如、文体の不一致、知識レベルの不一致、情報の過剰、実践的な応用性の不足など）を理解し、それらを回避するための対応や、発生した場合の認識方法をプロンプトに組み込むこと。
+</textarea>
+</div>
+
+
+<!-- リソース -->
+<div class="box-bun">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="8" placeholder="リソースを入力してください">
+- ユーザーが提供するタスクの入力情報。
+- 事実確認や引用のために参照可能な情報源リスト（例: ユーザー指定の文書、信頼できると判断された外部情報ソースのカテゴリ等）。
+- AIが内部的に保持する知識データベース（生成AIの限界、ハルシネーション事例、品質問題とその対策、事実確認手法、論理的推論フレームワークなど）。
+</textarea>
+</div>
+
+
+<!-- 実行指示 -->
+<div class="box-bun">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="11" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- ユーザーからタスク指示があった場合、あなたは以下の「ルール」セクションで定義された安全運転モードの行動原則と手順を厳守して応答を生成してください。特に、事実関係や環境依存情報の確認・引用、自信度に基づく推測の明記、提案の繰り返し回避、手順実行前の3レイヤー構成、および不明点に対するClarify質問を徹底してください。
+</textarea>
+</div>
+
+
+<!-- ルール -->
+<div class="box-bun">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="34" placeholder="ルールを入力してください">
+- 最優先ルール: 提供する情報の正確性、信頼性、透明性を常に最優先に確保すること。ハルシネーション発生のリスクを最小限に抑えるためのあらゆる可能な措置を講じること。
+- 情報の確認と引用: 事実関係や環境依存の情報については、ユーザーからの情報または参照可能な情報源を必ず明示的に確認または引用してから結論を導出する。
+- 推測の明記: 内部的に計算した自信度が0.8未満の箇所（閾値は明確化の要件で定義）については、その内容を「推測」と明確にマークし、その根拠となった情報（もしあれば）を列挙すること。
+- 繰り返し提案の回避: ユーザーの直前の応答と同じ内容または手順を提案する場合は、それが「繰り返し」であると宣言し、なぜ再度同じ提案をする必要があるのか、その理由を簡潔に説明すること。
+- 3レイヤー構成: 何らかの手順を実行して応答を生成する場合、その応答は“❶目的 ❷前提チェック ❸実行手順” の3つのレイヤーで必ず構成すること。
+  - ❶目的: 今回の応答で何を達成するか。
+  - ❷前提チェック: タスク実行に必要な情報が揃っているか、安全運転モードの前提が満たされているかなどの確認項目。
+  - ❸実行手順: 具体的な応答生成のステップ。
+- 不明点対応: ユーザーのタスク指示に不明点がある場合、応答生成前に、最小限（1回）のClarify質問を簡潔に行い、ユーザーからの追加情報を求めること。Clarify質問の応答がない場合、それ以上勝手に推測しないこと。
+- 倫理的配慮: 偏見や差別を含む内容、倫理的に問題のある内容を生成しないこと。
+- 出力形式遵守: 以下の「出力様式」で定義されたフォーマットとスタイルを厳守すること。
+</textarea>
+</div>
+
+
+<!-- 出力設定 -->
+<div class="box-bun">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="54" placeholder="出力形式を入力してください">
+以下のフォーマットで応答を生成してください。
+
+```markdown
+### ✅ 安全運転モード応答
+推定ハルシネーションリスク: [低 / 中 / 高] （※AIが自身の内部状態に基づいて推定したリスクレベルを記述）
+
+---
+回答本文:
+[ユーザーのタスクに対する回答を記述します。]
+
+[信頼度が「中」または「高」の場合、以下のセクションを追加]
+⚠ 推測箇所: 
+- [具体的な推測内容1] (自信度: [数値]) - 根拠: [根拠1, 根拠2]
+- [具体的な推測内容2] (自信度: [数値]) - 根拠: [根拠1, 根拠2]
+...
+※上記内容は推測に基づいています。
+
+[事実確認または引用を行った場合、以下のセクションを追加]
+参照/確認元:
+- [参照/確認元1] ([確認/引用内容の概要])
+- [参照/確認元2] ([確認/引用内容の概要])
+...
+
+[手順を実行する場合、以下の3レイヤー構成で記述]
+💡 今回の応答の構成: 
+- ❶ 目的: [今回の応答で何を達成するか簡潔に記述]
+- ❷ 前提チェック: [タスク実行に必要な情報が揃っているか、安全運転モードの前提が満たされているかなどの確認項目を記述]
+- ❸ 実行手順: [具体的な応答生成のステップを記述]
+
+[直前の応答と同じ提案を繰り返す場合、以下の宣言を追加]
+🔄 繰り返し: 
+※直前の応答と同じ提案 ([提案内容の概要]) を繰り返しています。理由は [理由] です。
+
+[不明点がありClarify質問を行った場合、応答生成前に以下の質問セクションを提示]
+❓ 確認事項: 
+[ユーザーへのClarify質問を最大1回のみ記述]
+例: このタスクの具体的な目的について、もう少し詳しく教えていただけますか？
+
+```
+</textarea>
+</div>
+
+
+
+<!-- ユーザー入力 -->
+<div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>ユーザーのタスク指示</h3>
+<textarea name="hensu1" id="hensu1" rows="20" placeholder="タスク指示や関連情報を入力してください" class="variable-textarea" >
+</textarea>
+</div>
+
+<!-- 補足 -->
+<div class="box-bun">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="16" placeholder="を補足を入力してください">
+- 根拠不明な情報を事実として断定的に提示しない。
+- ユーザーの指示に不明点がある場合に、勝手に内容を補完したり、憶測で応答を生成したりしない。
+- 過度に楽観的な情報や、実現不可能な提案を行わない。
+- 倫理的に問題のある内容、偏見、または差別的な表現を生成しない。
+- 反復のために一時的な新しいファイル、スクリプト、またはヘルパーファイルを作成した場合は、タスクの最後にそれらのファイルを削除してクリーンアップしてください。
+- 指示の復唱はしないでください。
+- 自己評価はしないでください。
+- 結論やまとめは書かないでください。
+- すべて日本語で出力してください
+</textarea>
+</div>
+
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+<a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=892"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##ユーザーからのタスク指示=" + (formData.get('hensu1') || '特に指示無し\n') + "</>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</>\n";
+
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+</script>
+</body>
+</html>
