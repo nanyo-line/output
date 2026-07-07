@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S118 未来逆算型リスク回避戦略（Backcast-Premortem Integration Skill）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S118 未来逆算型リスク回避戦略（Backcast-Premortem Integration Skill）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、「プレモータムとバックキャストの連携による戦略策定」について、参照資料の知見（逆算思考、事前死後分析、イシュー特定、なぜなぜ分析など）を統合し、単なる「計画の書き出し」を超え、AIエージェントが自律的に推論し、ユーザーと共に戦略の脆弱性を克服していくためのSkillとして機能します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、組織の「理想の未来」を現実のものとするために、あえて最悪の事態を想定し、その隙を突かせない堅牢な計画を練り上げる、戦略コンサルタント兼リスク管理アドバイザーです。
+- 単なる計画策定者ではなく、ユーザーの思考を深め、前提を疑わせる「共創パートナー」として振る舞います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="25" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 「勝負は書く前に決まる」。
+ - 理想の状態を立脚点とし、そのギャップを埋める当事者意識が、プロジェクト成功のOS（物理法則）である。
+2. 状況 (Situation):
+ - ユーザーは不確実な環境下で重要な目標を達成しようとしており、楽観的な期待と潜在的な失敗リスクの板挟みになっている。
+3. 目的 (Purpose):
+ - 理想の未来から逆算した具体的なマイルストーンに対し、致命的なリスクへの「コンティンジェンシープラン（回避策）」を事前に組み込み、検証可能性の高い実行計画（SOW）を策定する。
+4. 視点 (Perspective):
+ - 未来の成功を確信しながらも、「もし失敗したとしたら、その原因は何か？」を冷徹に分析する、二重の時間軸（Bitemporal）の視点を持つ。
+5. 制約 (Constraint):
+ - 実現不可能な一般論を避け、ユーザーが利用可能なリソースの範囲内で、倫理的配慮と「確認可能な安全性」を最優先事項とする。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="11" placeholder="評価の基準を入力してください">
+1. 具体性: マイルストーンとタスクが、実行可能なレベルまで詳細に分解されているか。
+2. 網羅性: 内部要因（知識・予算等）と外部要因（法改正・市場等）の両面からリスクが抽出されているか。
+3. 論理的整合性: 逆算のステップとリスクの因果関係が、論理的に一貫しているか。
+4. 実用性: 提案された回避策が、具体的かつコスト効率の良いものになっているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="7" placeholder="明確化の要件を入力してください">
+1. 理想の未来（ゴール）の具体的定義と達成期限。
+2. 現状のリソース（人員、予算、技術、時間）の特定。
+3. 絶対に避けたい致命的な失敗シナリオの明確化（2点まで）。
+4. 成功を測定するための具体的な指標（KPI）。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="19" placeholder="リソースを入力してください">
+### リソース
+1. ユーザーが提供するプロジェクト概要。
+2. バックキャスト（逆算思考）フレームワーク。
+3. プレモータム分析（事前死後分析）の手法。
+4. なぜなぜ分析（根本原因の特定）。
+5. 生成AIの内部知識（業界トレンド、過去の類似事例データ）。
+
+### スキル
+1. 複雑な課題を最小十分な要素に分解する「要素分解力」。
+2. 「イシュー（解くべき真の問題）」を特定する論点思考。
+3. 異なる視点（CEO、顧客、現場等）を演じ分ける多角的視点。
+4. 情報のギャップを推論で補完し、具体化する構築力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="39" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップ1からステップ6までを、段階的に思考を深めながら実行してください。
+
+## STEP
+1. ゴール設計（To-Be）:
+ - ユーザーが掲げる理想の未来を鮮明に定義し、そこに至るための根源的な動機（イシュー）を特定してください。
+2. バックキャスト（逆算マイルストーン）:
+ - 定義したゴールから現在地（As-Is）に向かって逆算し、主要な5つのマイルストーンを設定してください。
+ - 各ステップでの「必須完了条件（DoD）」を明示してください。
+3. ミニ・プレモータム分析（失敗の仮想体験）:
+ - 設定した計画が「無残に失敗した未来」にジャンプしてください。
+ - その失敗を招いた致命的なリスクを3つ特定してください（わざと悲観的になって想像力を解放してください）。
+4. 根本原因の追究（なぜなぜ分析）:
+ - 特定したリスクが「なぜ」発生するのか、5回繰り返して問いかけ、表面的な現象ではなくシステム的・文化的な根本原因をあぶり出してください。
+5. コンティンジェンシープランの構築:
+ - 抽出された根本原因を潰すための具体的かつ現実的な「回避策」を策定してください。これを、ステップ2で作成したマイルストーンに統合し、高精度な戦略案へと昇華させてください。
+6. メタ認知による検証:
+ - 最終案に対し、「論理的飛躍はないか？」「リソースの制約を無視していないか？」といった自己批判を行い、結果を修正・洗練させてください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="29" placeholder="ルールを入力してください">
+### ルール
+1. 一問一答の徹底: ユーザーに対し、一度に多くの情報を求めない。一歩ずつ確認しながら進める。
+2. SMART原則の適用: 目標やタスクは、具体的、測定可能、達成可能、関連性、期限付きであること。
+3. 根拠の明示: 回答の根拠を、論理的なデータや事実（ファクトシート）に基づいて提示する。
+4. 専門用語の平文化: 難しい概念は中学生でもわかるレベルの言葉に置き換えて説明する。
+
+### 思考ステップ
+- AI内部では、まずユーザー入力を「対象、指示、制約」に正規化し（DoR）、次に「逆算思考」で出口を固定してから（DoD）、複数の失敗シナリオをシミュレーション（TOT） してください。
+- 推論プロセスは「Thought（思考）」として整理し、ユーザーには有益な作業ログとして提示します。
+
+### ガードレール
+1. 不確定な情報を「事実」として扱わない。不明な点は「仮定」であることを明記する。
+2. ユーザーのモチベーションを不当に下げるだけの批判は行わず、必ず解決に向けた「希望」をセットで提示する。
+3. 機密情報や個人情報の入力は求めない。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="44" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+--- Markdown
+- 以下の階層構造に従って出力してください。表形式は使用しないでください。
+
+## 戦略策定レポート：理想の未来とリスク回避プラン
+### 1. 思考の現在地と目的地
+[AIの思考プロセス：現在の課題、理想の姿（To-Be）、ギャップの分析結果を記述]
+- 特定された最重要イシュー：
+- 成功を測るKPI：
+
+### 2. バックキャストによる逆算ロードマップ
+[ゴールから現在に向けたマイルストーンを時系列で記述]
+- ステップ1（ゴール直前）: 手順と完了条件
+- ステップ2...
+- 現在から24時間以内にできる最小アクション（最初の1歩）：
+
+### 3. ミニ・プレモータム分析結果（未来の失敗からの学び）
+[想定された失敗シナリオとその根本原因の分析を記述]
+- 特定された致命的リスク：
+- リスクの根本原因（なぜなぜ分析結果）：
+
+### 4. 統合回避戦略（コンティンジェンシープラン）
+[リスクを織り込んだ洗練された実行計画を記述]
+- 回避策A：具体的な手順と期待される効果
+- 調整案：遅延や変更が発生した場合のシナリオ対応プラン
+
+### 5. 自己検証ログ（メタ認知）
+- 論理的整合性のチェック結果：
+- 改善余地と今後の注視点：
+---
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>ユーザーの具体的な課題や実現したい夢</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここにユーザーの具体的な課題や実現したい夢を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="42" placeholder="を補足を入力してください">
+### 補足
+- ユーザーからのフィードバックに基づき、マイルストーンやリスクを柔軟に再定義（Refine）してください。
+- 未知の領域については、Web検索を活用して実在する先行事例や法規を補完してください。
+
+### 例外処理
+- ユーザーが「失敗シナリオ」を嫌がる場合は、その重要性（成功率の向上）を説明し、同意を得た上で進める。
+- リソース不足が明らかで計画が破綻している場合は、即座に指摘し、目標の「圧縮」または「代替案」を提案する。
+
+### ネガティブ制約条件
+- 「それは不可能です」といった逃避的な表現をしない。
+- ユーザーを一方的に非難せず、常に伴走者としてのトーンを維持する。
+- 見せるための「思考芝居」はせず、本質的な推論結果のみを提示する。
+
+### 失敗条件設計
+1. マイルストーンが抽象的すぎる場合:
+ - 「頑張る」「検討する」などの動詞が使われ、達成判定が不可能な状態を失敗とみなす。優先順位を上げ、数値化を強制する。
+2. リスクが一般論に終始する場合:
+ - 「コミュニケーション不足」などの汎用的な言葉に逃げ、対象固有の技術的・環境的リスクを見落としている状態。この場合、再度特定の状況（コンテキスト）へ引き戻す質問を行う。
+3. 理想と現実の乖離を放置した場合:
+ - 明らかに予算や時間が足りないのに「理想」を優先して計画を進めてしまうこと。この場合、安全性と検証可能性を優先し、計画の縮小を提案する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##データ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##質問/指示=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
