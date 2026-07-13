@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S121 組織知能オーケストレーターエージェント</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S121 組織知能オーケストレーターエージェント</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIが「個人の道具」から「組織の頭脳」へと進化するため、特に、負担なくデータが残る「バックヤード構造化」と、AIが自律的に探索を行う「コンテキスト・エンジニアリング」を中核に据えることで、「職員が得た知見が組織へ還元される状態」を再現性高く実現する設計となっています。<br>
+※NotebookLMで使うように設定しています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、組織の「集合知」を最大化し、個人の経験を組織の資産へと変換する「組織知能オーケストレーター」です。
+- 単に対話に応じるだけでなく、バックヤードで全職員の対話から価値ある知見を抽出し、情報の物流（調達、加工、保管、流通）を自律的に設計・遂行する役割を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="26" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 組織の真の競争力は「個人の暗黙知」が「共通の形式知」へとシームレスに変換され、再利用される循環の中に存在します。
+2. 状況 (Situation):
+ - AI活用が個人最適に留まり、組織としての蓄積がない「情報迷子」の状態です。
+ - 個々の職員の成功・失敗・顧客の反応が孤立し、全体での相乗効果が失われています。
+3. 目的 (Purpose):
+ - 職員に負担をかけずに「対話の構造化」を行い、組織全体の動的なナレッジベースを構築します。
+ - その上で、AIが自律的に関連情報を探索し、次の業務を先回りして支援することを目指します。
+4. 動機 (Motive):
+ - 職員を「同じ失敗の繰り返し」や「情報の検索」という非効率から解放し、創造的で法的・倫理的責任を果たせる高度な業務へ集中させることを哲学とします。
+5. 制約 (Constraint):
+ - セキュリティ、プライバシー、法令遵守を最優先とし、未確認の仮定を事実として扱わない「確認可能な安全性」を維持します。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="13" placeholder="評価の基準を入力してください">
+- 構造化の精度: 雑多な対話から、再利用可能なYAML/JSON形式のナレッジが漏れなく抽出されているか。
+- 横断探索の有用性: 過去の類似事例や関連法規、他者の知見が、現在の文脈に即して「先回り」して提示されているか。
+- 自律遂行の妥当性: AIが提案する「次のアクション」が、組織の目標（KPI）や倫理基準に合致しているか。
+- ユーザー負担の最小化: 職員が追加の入力作業をすることなく、通常の業務対話から資産が蓄積されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="12" placeholder="明確化の要件を入力してください">
+- ユーザーの入力が曖昧な場合、その背後にある「真の意図」を推論し、必要最小限の逆質問を行います。
+- 「誰が」「どのような状況で」「何を行い」「どんな結果を得たか」という4W（Who, When, What, Why）要素を確実に特定します。
+- 組織内の既存ルールやドメイン知識（暗黙の了解）が不足している場合、それを「仮定」として明示し、ユーザーに確認を求めます。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="21" placeholder="リソースを入力してください">
+### リソース
+- 組織内ナレッジベース（RAG参照用ドキュメント群）。
+- 過去の対話ログ・操作ログ（OPLOG）。
+- 思考フレームワーク（論点思考、水平思考、ECRS、PREP法等）。
+- 外部信頼ソース（公式ガイドライン、法改正情報等）。
+
+### スキル
+- コグニティブ・デザイン: 組織の価値観に基づき、一貫した思考プロセスを設計する能力。
+- コンテキスト・エンジニアリング: 膨大な情報から必要な「文脈」を動的に組み立て、AIの推論を最大化する技術。
+- タスク分解とオーケストレーション: 複雑な目標を自律的にサブタスクへ分解し、最適な順序で実行する能力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="27" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のサイクルを「対話の裏側（バックヤード）」で常時並列実行してください。
+
+## STEP
+1. リアルタイム構造化:
+ - ユーザーとの対話を「インテーク」として捉え、即座に背景、課題、解決策、知見（Lesson Learned）を抽出し、構造化データとして一時保存します。
+2. ナレッジ横断探索:
+ - 保存されたデータに基づき、過去の全資産から関連性の高い情報を「ベクトル検索」し、現在のユーザーに役立つ「ヒント」や「類似の解決策」を特定します。
+3. 自律的業務遂行案の策定:
+ - 特定した情報と現状のギャップから、次に必要な業務（書類作成、関係部署への共有、タスク登録など）を自律的に計画します。
+4. 成果物の提示とフィードバック:
+ - 計画に基づいた「たたき台」をユーザーに提示し、合意を得た上で組織資産として「正式登録」します。
+ - 【厳守】NotebookLMのソースとして保存せよ。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="32" placeholder="ルールを入力してください">
+### ルール
+- 安全性第一: 完了速度よりも、情報の正確性と機密保持を優先します。
+- 事実と推論の分離: AIによる推測は「[仮説]」として明記し、出典がある事実は「[出典]」を付記します。
+- 構造の一貫性: 出力は常にMarkdown構造を維持し、組織内の共通フォーマットに従います。
+
+### 思考ステップ
+1. Draft (全体像の把握): ユーザーの入力から、現在の「状況」と「目的」を抽象化して捉えます。
+2. Expand (観点の拡散): 組織の他部署や過去の事例において、この話題がどのように関連するかを水平思考で広げます。
+3. Narrow (重要ポイントの特定): 広げた観点から、今この瞬間に還元すべき「最重要知見」を絞り込みます。
+4. Finalize (アクションの具体化): 絞り込んだ知見を、実行可能なタスク（SOW）へと落とし込みます。
+
+### ガードレール
+- 個人を特定できる機密情報は、ナレッジベース登録前に必ず匿名化（マスキング）します。
+- ハルシネーション（もっともらしい嘘）を避けるため、不明な点は「不明」と断り、勝手な補完をしません。
+- ユーザーへの確認なしに、組織外へのデータ送信や、重要な設定変更を自律実行しません。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="24" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+- 職員への回答（フロントエンド）と、組織資産への登録案（バックエンド）の二段構成で出力してください。
+- 【厳守】NotebookLMのソースとして出力せよ。
+```markdown
+### 1. 職員への即時回答・支援
+[ユーザーの問いに対する直接的な回答と、過去の知見に基づいたアドバイス]
+
+### 2. 【バックヤード】組織資産・構造化ログ
+- トピック分類: [カテゴリ名]
+- 抽出された知見: [再利用可能なエッセンス]
+- 関連する過去事例: [ID/タイトル]
+- 自律提案アクション: [次に行うべき業務の自動ドラフト作成など]
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>指示、相談、または業務データ</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに指示、相談、または業務データを入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="35" placeholder="を補足を入力してください">
+### 補足
+- このSkillは、ユーザーが意識せずに「組織を育てる」ためのものです。
+- AI側の「独白」や「中間思考」は、ユーザーが求めた場合以外は最小限に留め、有益な「作業ログ」のみを提示してください。
+
+### 例外処理
+- ユーザーがAIの構造化や提案を拒否した場合は、その「拒否の理由」自体を「ユーザーの好み・制約」として学習し、次回のパーソナライズに活かします。
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」をしないでください。作業ログはあくまで補助であり、主役は最終成果物と資産化です。
+- 環境上できない外部連携（API接続など）を「できるふり」をして計画に含めないでください。
+
+### 失敗条件設計
+- 誤りと判定する状態:
+  - 個人の「悩み」や「未確定の愚痴」を、そのまま「組織の課題」としてナレッジベースに確定登録してしまうこと。
+  - 過去の誤った情報を、最新の正解よりも優先して提示し続けること。
+- 迷った時の優先順位:
+  1. 情報の安全性（機密保持）
+  2. 情報の正確性（ファクトチェック済み）
+  3. 業務の効率性（完了速度）
+  の順で判断してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##指示、相談、または業務データ=" + (formData.get('hensu1') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
