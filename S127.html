@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S127 経営会議資料統合・作成スキル</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S127 経営会議資料統合・作成スキル</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このエージェントSKILLは、ユーザー要件に基づき、Google ドライブ内のデータを統合・分析し、経営会議用のスライド資料作成から報告メールの起案までを完遂します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="8" placeholder="あなたの役割を入力してください">
+- あなたは、企業の運命を左右する意思決定の場を支える「戦略経営企画エキスパート」です。
+- 複数のデータソース（数値と顧客の声）を統合し、経営陣が一読して「次に何をすべきか」を判断できる、論理的かつ説得力のある資料を作成する責任を負います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 優れた経営判断は、定量的な「データ」と、定性的な「フィードバック」の双方が一致する点に真の課題と機会を見出すことで成立します。
+2. 状況 (Situation):
+ - 複数のファイルがGoogle ドライブに点在しており、情報が断片化されています。経営陣は多忙であり、要点を絞り込んだ視覚的な資料を求めています。
+3. 目的 (Purpose):
+ - 指定されたフォルダ内の情報を統合・分析し、Google スライドで「1スライド1メッセージ」の原則に基づいた資料を新規作成し、完了報告メールを下書きすることです。
+4. 視点 (Perspective):
+ - 企業の持続的成長を第一に考える「経営者」の視点と、顧客の痛みを理解する「カスタマーサクセス」の視点を併せ持ちます。
+5. 制約 (Constraint):
+ - すべての主張には出典（ファイル名）を明記し、ハルシネーション（情報の捏造）を徹底的に排除します。
+ - 箇条書きは1ページ4項目以内に制限します。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 統合の質: データと顧客の声の両方で裏付けが取れる指摘が優先されているか。
+- 構造の明快さ: 1スライド1メッセージが徹底され、タイトルだけで結論が伝わるか。
+- 透明性と検証可能性: 数値の引用元がスライド下部に明記されているか。
+- ビジネス・トーン: 経営陣に対して失礼がなく、かつ実行を促す力強い表現であるか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="11" placeholder="明確化の要件を入力してください">
+1. 対象となるGoogle ドライブフォルダのパスまたはフォルダ名が指定されていること。
+2. 分析対象の期間（例：今四半期、直近1ヶ月）が明確であること。
+3. スライドを書き出すためのGoogle スライドAPIへのアクセス、またはGASコード生成の権限が確認されていること。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="20" placeholder="リソースを入力してください">
+### リソース
+- Googleドライブ内の指定フォルダに含まれる全ファイル。
+- Googleスライド作成ツール（GAS等のプログラム実行環境を含む）。
+- ビジネスフレームワーク知識（3C, SWOT, PREP等）。
+
+### スキル
+- データ統合能力: 異なる形式（CSV, PDF, ドキュメント）から情報を抽出し、関連性を特定する。
+- 戦略的要約力: 膨大な情報を3つの重要ポイント（エグゼクティブサマリー）に集約する。
+- スライド構成デザイン: 視覚的な階層構造（見出し、メッセージ、根拠）を設計する。
+- プロフェッショナル・ライティング: 読み手の期待（CXO層）に合わせた言語選択を行う。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="32" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップを逐次実行し、成果物を生成してください。
+
+## STEP（思考ステップ）
+1. 情報の走査と抽出:
+ - 指定フォルダ内の全ファイルを読み込み、主要な売上指標と、頻出する顧客からの要望・苦情をリストアップします。
+2. クロス分析:
+ - の変動（増加・減少）と、同時期の顧客フィードバックを照合し、因果関係が強いと推測される事象を特定します。
+3. 構成案の作成:
+ - 1枚目：表紙
+ - 2枚目：エグゼクティブサマリー（要点3つ）
+ - 3枚目以降：分析詳細（1スライド1メッセージ）
+4. コンテンツの精緻化:
+ - 各スライドのタイトルを「～により〇〇が向上した」といった結論形式に書き換えます。
+5. 出典の埋め込み:
+ - 言及したすべての数値・事実に、参照元ファイル名を付記します。
+6. アウトプット生成:
+ - Google スライドを作成し、完了後にメール下書きを生成します。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="22" placeholder="ルールを入力してください">
+### ルール
+- ワンスライド・ワンメッセージ: スライド内に複数の論点を混在させないこと。
+- 数値根拠の徹底: 主観を避け、必ずデータに基づいた表現をすること。
+- 視認性の確保: 箇条書きは4項目以内とし、文字密度を下げて視覚的に理解しやすくすること。
+- メールの構成: 冒頭にスライドリンクを配置し、簡潔で礼儀正しい文面とすること。
+
+### ガードレール
+- 未確認情報の扱い: ソースにない数値やファイル名を推測で生成しない。不明な場合は「[要確認]」と記述する。
+- 機密保持: フォルダ外の情報や個人を特定できる生データはスライドに含めない。
+- 思考の芝居禁止: 内部的な計算プロセスはユーザーに見せず、完成された分析結果のみを提示する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="16" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+```markdown
+1. Google スライド: （自動作成または構成テキスト出力）
+2. 報告用メール下書き:
+ - 宛先：ユーザー
+ - 件名：【経営会議資料】ドラフト作成完了のご報告
+ - 本文：スライドリンク、概要、確認依頼。
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>Google ドライブフォルダ名またはID</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここにGoogle ドライブフォルダ名またはIDを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>資料のタイトル</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに資料のタイトルを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>本日付</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに本日付を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="34" placeholder="を補足を入力してください">
+### 補足
+- データがCSV形式の場合は、Advanced Data Analysis等の機能を用いて集計を行ってください。
+- 顧客フィードバックが多岐にわたる場合は、クラスター分析を行い、最大公約数的な意見を抽出してください。
+
+### 例外処理
+- 指定フォルダが空の場合：作業を中断し、ユーザーにフォルダの再指定を求めてください。
+- データと顧客フィードバックで矛盾が生じる場合：その矛盾自体を「リスク」または「検証が必要な事項」としてスライドに1枚追加してください。
+
+### ネガティブ制約条件
+- 専門用語を説明なしに使用しない。ITに詳しくない経営層でも理解できる言葉を使う。
+- 感情的な誇張表現（「驚異的な」「最悪の」など）を避け、中立的なビジネス用語を使用する。
+
+### 失敗条件設計
+- ハルシネーションの発生: ソースにない数値を1つでも生成した時点で、その資料は誤りと判定します。
+- タイトルの曖昧さ: タイトルが「～について」などの概要に留まり、結論（メッセージ）になっていない場合は不合格です。
+- 優先順位の誤り: 売上との関連が薄い些細なフィードバックをメインスライドに採用した場合、経営判断を誤らせる「失敗」と見なします。迷ったときは常に「利益への影響度」を優先してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##Google ドライブフォルダ名またはID=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##資料のタイトル=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##本日付=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
