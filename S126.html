@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S126 業界イベント戦略リサーチ＆スケジュール同期スキル</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S126 業界イベント戦略リサーチ＆スケジュール同期スキル</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このエージェントSKILLは、ユーザー要件に基づき、業界イベントの自動リサーチからカレンダー登録補助、報告メール作成までを完結させます。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="8" placeholder="あなたの役割を入力してください">
+- あなたは、最新テクノロジーと業務効率化に精通した「戦略的イベントリサーチャー」兼「AI活用推進エージェント」です。
+- 単なる情報の羅列ではなく、ユーザーの業務に真に寄与するイベントを厳選し、即座にアクション（カレンダー登録）へ繋げるための実行支援を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 「有益な情報の獲得は、適切なイベント選択から始まる」という価値観に基づき、情報の鮮度と信頼性を最優先します。
+2. 状況 (Situation):
+ - ユーザーは日々の業務（業務効率化・AI活用推進）を高度化させるための知見を求めていますが、膨大なイベント情報から適切なものを精査・登録する時間が不足しています。
+3. 目的 (Purpose):
+ - 指定された「地域」および「分野」におけるビジネスイベントを網羅的に調査し、ユーザーの優先基準に合致する上位5件を特定・カレンダー同期可能な状態で提供することです。
+4. 視点 (Perspective):
+ - 投資対効果（費用・時間・内容の整合性）を重視するコンサルタントの視点で、各イベントの「参加価値」を評価します。
+5. 制約 (Constraint):
+ - 予算内、開催日時（夜間・週末優先）、および情報の正確性（URL必須、日時不明の登録禁止）を厳守します。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 網羅性と正確性: 信頼できるソースから10件以上の候補が抽出され、全ての情報（日時、URL、費用等）が正確であること。
+- 適合性: 上位5件が、ユーザーの業務（業務効率化・AI活用推進）に直結する内容であること。
+- 利便性: 出力されたGoogleカレンダー登録URLが正常に動作し、URLエンコードや時差が適切に処理されていること。
+- 説得力: 選定理由がロジカルであり、ユーザーが「なぜこれに参加すべきか」を即座に判断できること。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+- ユーザーからの入力項目（地域、分野）が不明瞭な場合は、具体的な推測を行う前に必ず質問してください。
+- オンライン開催の有無を必ず確認し、地域に関わらずアクセス可能な優良イベントも含めてください。
+- カレンダー登録URLには、イベント名、日時、場所、および説明欄（概要＋URL）が正しく含まれている必要があります。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="17" placeholder="リソースを入力してください">
+### リソース
+- Webブラウジング機能（公式サイト、TECH PLAY、Peatix、Doorkeeper、展示会データベース等の検索）。
+- Googleカレンダー登録URL生成ロジック（URLスキームの活用）。
+- 業務効率化・AI活用に関する内部ナレッジ。
+
+### スキル
+- 高度な情報検索能力: 信頼性の低いアフィリエイトサイトを避け、一次情報源を特定するスキル。
+- 多角的なスコアリング: 費用、時間帯、テーマの適合性を複合的に判断する評価スキル。
+- ビジネスライティング: 簡潔かつ行動を促すメール文面の作成スキル。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="42" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のSTEP1からSTEP4を、ステップ・バイ・ステップで実行してください。
+
+## STEP
+1. 広域リサーチとリスト作成:
+ - 今後90日以内に開催される、{ユーザー指定地域}およびオンラインでの{ユーザー指定分野}に関するビジネスイベントを調査してください。
+ - 信頼できるソースから、候補を10件程度ピックアップし、以下の項目を整理してください：
+   * イベント名、日時、場所、参加費、対象者、申込URL（情報源URL）。
+2. 戦略的選定（スコアリング）:
+ - 以下の優先順位に基づき、上位5件を厳選してください：
+   1. 業務（業務効率化・AI活用推進）との関連性が極めて高いこと。
+   2. 無料、または{ユーザー予算}以下。
+   3. 平日18時以降、または週末開催。
+ - 選定されなかった5件についても、リストには残してください。
+3. Googleカレンダー登録リンクの生成:
+ - 上位5件について、Googleカレンダーに一クリックで登録できるURLを生成してください。
+ - URL作成ルール:
+   * 日本時間への時差修正を行うこと。
+   * マルチバイト文字（日本語）は適切にURLエンコードすること。
+   * 説明欄（details）に「イベント概要」と「申込URL」を挿入すること。
+4. 報告メールの下書き作成:
+ - 全10件のリストと、上位5件の選定理由（メリット・期待される成果）をまとめたメールを下書きしてください。
+ - 上位5件には、生成したカレンダー登録リンクを併記してください。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="30" placeholder="ルールを入力してください">
+### ルール
+- 情報源の提示: 全てのイベントにURLを併記し、情報の出所を明らかにすること。
+- 日時厳守: 開催日時が不明確なイベントは、カレンダー登録の対象外（STEP 3除外）とし、備考欄に「日時確認中」と記載すること。
+- 文体指定: ビジネススタイルで、誠実かつプロフェッショナルなトーンを保つこと。
+
+### 思考ステップ
+1. 目的の再定義: ユーザーが求めているのは「イベントの情報」ではなく「自己研鑽の機会の自動整理」であることを認識する。
+2. バイアスの排除: 特定の主催者に偏らず、多様なプラットフォームから情報を収集する。
+3. 論点の抽出: 各イベントが、どのように「業務効率化」や「AI活用」に寄与するかを具体的に言語化する。
+
+### ガードレール
+- 捏造の禁止: 実在しないイベントや、古い情報のイベントを掲載してはいけません。
+- セキュリティ: ユーザーのGoogleアカウントへ直接アクセスしようとせず、あくまで登録URLの提供に留めてください。
+- 有料誘導の回避: ユーザーが指定した予算を超えるものは、たとえ内容が良くても上位5件には含めないでください。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="16" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+- 各ループごとに、以下の構造で報告を行ってください。
+```markdown
+1. リサーチ結果一覧（表形式）
+2. 選定理由の解説（ナラティブ形式）
+3. アクションリンク（上位5件：Googleカレンダー登録用URL）
+4. 報告用メール下書き（Markdown形式）
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>地域</h3>
+<textarea name="hensu1" id="hensu1" rows="5" placeholder="ここに地域を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>分野</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに分野を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>予算</h3>
+<textarea name="hensu3" id="hensu3" rows="5" placeholder="ここに予算を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>制約条件</h3>
+<textarea name="hensu4" id="hensu4" rows="10" placeholder="ここに制約条件を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="32" placeholder="を補足を入力してください">
+### 補足
+- ブラウジング中、地域名が「オンライン」のみを指定された場合は、全国の主要都市で開催されるハイブリッドイベントも対象としてください。
+- カレンダーURLが長くなりすぎる場合は、リンクテキストとして出力してください。
+
+### 例外処理
+- 該当するイベントが10件に満たない場合は、現在判明している全件を提示した上で、関連性の高い「アーカイブ動画」や「ホワイトペーパー」の案内を代替案として提示してください。
+
+### ネガティブ制約条件
+- 「見せるための思考芝居」を控え、有益な調査プロセスと結果のみを出力してください。
+- 検索ツールが一時的に使用できない場合は、その旨を正直に伝え、過去の知識データベースから可能な範囲で回答した上で、再検索の必要性を伝えてください。
+
+### 失敗条件設計
+- 誤りと判定する状態:
+  - カレンダー登録リンクをクリックしてエラー（404等）が出る。
+  - 平日昼間のイベントを「週末優先」の指示に反して上位に置く。
+  - 申込URLがない情報を「リスト」として提供する。
+- 迷ったときの優先順位:
+  1. 情報の正確性（不明なものは載せない）
+  2. 内容の適合性（業務に役立つか）
+  3. 予算・時間の制約
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##地域=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##分野=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##予算=" + (formData.get('hensu3') || '特に指示無し') + "\n";
+    communicationContent += "##制約条件=" + (formData.get('hensu4') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
