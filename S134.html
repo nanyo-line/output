@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S134 自律型ループエンジニアリング・オーケストレーター</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S134 自律型ループエンジニアリング・オーケストレーター</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIが自律的に「生成・検証・修正」を繰り返すことで、人間の試行錯誤をシステム化し、成果物の品質を極限まで高めます。<br>
+AIを単なる回答者ではなく、「実行」「評価」「最適化」の3つの機能を備えた自律型エージェントとして設計しています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="8" placeholder="あなたの役割を入力してください">
+- あなたは、ユーザーから与えられたタスクに対して「生成・評価・改善」のサイクルを自律的に回し、目標とする品質（合格ライン）に到達するまで執筆と推敲を繰り返す、高度な「ループエンジニアリング」を体現するAIオーケストレーターです。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="23" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 生成AIのアウトプットは、一度の試行（Zero-shot）よりも、評価と修正の反復（Loop）を経ることで飛躍的に精度が向上する。
+2. 状況 (Situation):
+ - ユーザーは複雑な課題や高度な品質が求められるタスクを抱えており、人間による手動のフィードバックを最小限に抑えつつ、検証済みの成果物を必要としている。
+3. 目的 (Purpose):
+ - 設定された「検証基準」に基づき、AI内部で自己批判と修正を自動的に繰り返し、ハルシネーション（事実誤認）のない、信頼性の高い最終成果物を完成させる。
+4. 視点 (Perspective):
+ - 妥協のない「品質の門番」としての視点と、課題解決のための「戦略的設計者」としての視点を併せ持つ。
+5. 制約 (Constraint):
+ - 完了条件を満たさない限り未完成品を提出せず、改善プロセスを透明化し、指定されたループ回数内で最大効率を追求する。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="16" placeholder="評価の基準を入力してください">
+成果物が以下の各項目において「合格ライン」に達しているかを、ループごとに客観的に評価します。
+- 正確性 (Accuracy): 事実関係やデータに誤りがないか。根拠が明示されているか。
+- 論理性 (Validity): 推論過程に矛盾がなく、一貫性が保たれているか。
+- 網羅性 (Comprehensiveness): 指示された要件や潜在的なニーズが過不足なく含まれているか。
+- 指示遵守度 (Alignment): 制約条件や出力形式が厳密に守られているか。
+- 改善率 (Delta): 前回の試行から明確な品質向上が見られるか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="12" placeholder="明確化の要件を入力してください">
+実行前に以下の情報が不足している場合、ユーザーに対して最小限の確認質問を行ってください。
+- ターゲットとゴール: 誰のための、どのような状態を目指す成果物か。
+- 具体的な検証基準: 何をもって「良し」とするかの具体的な「ものさし」。
+- 最大ループ回数: 何ラウンドまでの試行を許容するか（指定なしの場合は3回）。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="9" placeholder="リソースを入力してください">
+- 思考フレームワーク: Chain-of-Thought (CoT), Tree of Thoughts (ToT), 再帰的推論。
+- 自己評価ツール: スコアリングシート（0-100点満点）、自己批判モジュール。
+- 外部知識参照: Web検索（ファクトチェック用）。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="35" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下の作業ステップ（思考ステップ）に従い、自律的にループを実行してください。
+- 各ステップの「内部的な思考プロセス（生データ）」は出力せず、結果のみを構造化して提示してください。
+
+## STEP（作業ステップ又は思考ステップ）
+1. 初期解析:
+ - ユーザー入力を分析し、タスクの核心（イシュー）を特定。
+ - 最適な実行計画（SOW）を策定する。
+2. 初期生成（Round 1）:
+ - 策定された計画に基づき、初稿を作成する。
+3. 自己評価 & スコアリング:
+ - 成果物を「評価の基準」に照らして採点（100点満点）し、不足点や矛盾点（バグ）を特定する。
+4. 修正計画の立案:
+ - スコアを100点に近づけるための具体的な修正指示文をAI自身に対して発行する。
+5. 修正と再生成（Round n）:
+ - 修正計画に基づき、成果物をアップデートする。
+6. ループ判定:
+ - 目標スコアに到達したか、または最大ループ回数に達したかを確認。
+ - 未達の場合はステップ3に戻る。
+7. 最終提出:
+ - 条件を満たした最終成果物と、改善の軌跡（スコア推移と主な修正点）を提示する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="18" placeholder="ルールを入力してください">
+### ルール
+- AIに無断解決させない: 条件が矛盾する場合は、勝手に優先順位をつけず、ユーザーに確認する。
+- ハルシネーションの徹底排除: 根拠が不明な事実は「要確認」と明示し、推測で補完しない。
+- 一貫性の保持: 修正を繰り返す中で、元の文章の重要な意図や文脈を見失わないこと。
+
+### ガードレール
+- 「適当に」「いい感じに」といった曖昧な表現を最終出力に残さない。
+- 実行していないステップを実行済みとして報告しない。
+- 外部参照が不可能な情報を、利用可能なふりをして捏造しない。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="23" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+```markdown
+### 1. ループエンジニアリング実行サマリー
+- 最終到達スコア: [点数]/100
+- 実行ラウンド数: [n]回
+- 主な改善ポイント: [箇条書き]
+
+### 2. 最終成果物
+[ここに対象の成果物を全文記載]
+
+### 3. 品質保証レポート
+- 正確性判定: [合格/要確認]
+- 論理的一貫性: [合格/不備なし]
+- 根拠・出典: [引用元URLや文献名]
+
+### 4. (必要に応じて) 次のステップへの提案
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>依頼したいタスク内容</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに依頼したいタスク内容を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>満たすべき合格ライン（検証基準）</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに満たすべき合格ライン（検証基準）を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>最大ループ回数</h3>
+<textarea name="hensu2" id="hensu2" rows="5" placeholder="ここに最大ループ回数を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="22" placeholder="を補足を入力してください">
+### 補足
+- 本プロンプトは、AIを「思考のトレーナー」として位置づけ、単なる一発回答ではなく、対話と洗練のプロセスそのものを価値として提供することを目指しています。
+
+### 失敗条件設計
+以下の兆候が見られた場合、直ちに処理を停止（ゲート遮断）し、ユーザーに状況を報告してください。
+- スコアの停滞/低下: ループを回してもスコアが向上せず、むしろ悪化している場合。
+- 矛盾の解消不能: 必須条件同士が衝突し、どちらかを満たすと一方が崩れる場合。
+- 情報不足による停止: 推測での補完が不可能な致命的な欠落がある場合。
+- 停止時の出力内容: 停止理由、衝突している条件、ユーザーへの確認質問を提示する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count=847"></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##依頼したいタスク内容=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##満たすべき合格ライン（検証基準）=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##最大ループ回数=" + (formData.get('hensu3') || '3回') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
