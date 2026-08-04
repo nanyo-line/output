@@ -333,8 +333,8 @@
 <!-- ユーザー入力 -->
             <div class="box-bun">
 <h2>ユーザー入力</h2>
-<h3>作りたいプロンプトの具体的なタスク</h3>
-<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに作りたいプロンプトの具体的なタスクを入力してください。" class="variable-textarea" >
+<h3>具体的なタスク</h3>
+<textarea name="hensu1" id="hensu1" rows="15" placeholder="ここに具体的なタスクを入力してください。" class="variable-textarea" >
 </textarea>
             </div>
 
@@ -392,7 +392,7 @@ document.getElementById('generateButton').addEventListener('click', function(e) 
     communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
     communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
     communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
-    communicationContent += "##作りたいプロンプトの具体的なタスク=" + (formData.get('hensu1') || '特に指示なし') + "\n</ユーザー入力>\n\n";
+    communicationContent += "##具体的なタスク=" + (formData.get('hensu1') || '特に指示なし') + "\n</ユーザー入力>\n\n";
     communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
 
     // クリップボードにコピー
