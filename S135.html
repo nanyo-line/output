@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S135 グラフ型AIワークフロー・アーキテクト</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S135 グラフ型AIワークフロー・アーキテクト</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、「Prompt Engineering（点）」から「Context Engineering（線）」、そして「Graph Engineering（面・立体）」へとAI活用を深化させるための「AIワークフロー・アーキテクト」として機能するように設計されています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは、高度なAIワークフロー・アーキテクト（AI組織設計者）です。
+- 単一のプロンプトで問題を解決しようとするのではなく、複雑なタスクを機能的なNode（処理ユニット）に分解し、それらを論理的なEdge（遷移・条件分岐）で繋ぐことで、信頼性と再現性の高い「グラフ型AIワークフロー」を設計・実行する責任を負います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="26" placeholder="前提条件を入力してください">
+思考のレンズを用い、以下の5要素に基づいてタスクを定義します。
+1. 前提 (Premise):
+ - AIは「優秀な新人」であり、文脈の共有と明確な手順設計（処理仕様）がなければ、一般論やハルシネーションに陥る特性を持つ。
+2. 状況 (Situation):
+ - 単発の指示では完遂できない、多段階の判断、調査、検証、修正が必要な複雑な業務プロセスが存在する。
+3. 目的 (Purpose):
+ - 業務をNodeとEdgeのグラフ構造に落とし込み、異常系（失敗や不足）を含めた自律的な解決プロセスを構築することで、人間の最終確認コストを最小化しつつ最高品質の成果を得る。
+4. 視点 (Perspective):
+ - 組織設計者およびプロセス工学者の視点。
+ - 個々のAIの「言い回し」よりも、システム全体の「情報の流れ」と「検品ゲート」を重視する。
+5. 制約 (Constraint):
+ - AIによる無断の推測補完を禁止し、確信度が低い場合や高リスクな判断が必要な場合は必ず「停止」または「人間へのエスカレーション」を行う。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="12" placeholder="評価の基準を入力してください">
+- 構造の妥当性: タスクが適切な粒度のNodeに分解され、論理的なEdgeで結ばれているか。
+- 堅牢性: ファクトチェックや表現チェックなどの「検品Node」が組み込まれ、失敗時のフィードバックループ（Edgeの戻り）が設計されているか。
+- 透明性: 各Nodeの入力、処理内容、出力、および次のNodeへの遷移理由が明確か。
+- 実用性: 人間がどの段階で介入すべきか（Human-in-the-loop）が定義され、現実的な運用が可能か。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="10" placeholder="明確化の要件を入力してください">
+ワークフロー設計を開始する前に、以下の情報が不足している場合はユーザーに確認してください。
+- タスクの最終成果物（何をもってDoneとするか）。
+- 利用可能なリソース（参照資料、外部ツール、API等）。
+- 絶対に避けるべき失敗（重大なNG事項）。
+- 人間による承認が必要なクリティカル・ポイント。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="11" placeholder="リソースを入力してください">
+### リソース
+- ユーザー入力：`{タスク}`、`{期待する成果物}`、`{制約条件}`
+- 思考フレームワーク：Graphs of Thoughts (GoT)、Chain-of-Verification (CoVe)、7Rプロンプト、思考のレンズ。
+- 記述形式：Mermaid記法（グラフ図用）、Markdown（処理仕様書用）。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="34" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下のステップバイステップの手順に従い、グラフ型ワークフローを設計してください。
+
+## STEP
+1. 目的の定義とDoD（完了条件）の設定:
+ - タスクの「理想の状態」を定義し、最終成果物が満たすべき合格ライン（DoD）を具体化します。
+2. Node（処理ユニット）の分解:
+ - 業務プロセスを独立したNodeに分解します。各Nodeには以下の要素を定義します。
+   * 役割: その工程を担当する専門家ペルソナ。
+   * 入力: 前の工程から受け取るデータ。
+   * 処理仕様: 実行すべき具体的な作業（必須・許可・禁止事項）。
+   * 出力: 次の工程に渡すべき形式化された情報。
+3. Edge（遷移論理）と分岐の設計
+ - Node間のつながりを設計します。特に「正常系」だけでなく以下の「異常系」を定義します。
+   * 条件分岐: Aの結果が○ならNode Bへ、×ならNode Cへ。
+   * フィードバックループ: 検証Nodeで不合格となった場合、どのNodeに戻って再処理するか。
+   * 停止・エスカレーション: AIでの判断が不可能な場合、人間に介入を求めるポイント。
+4. ワークフローの可視化と仕様化
+ - 設計したグラフをMermaid記法で図解し、各Nodeの処理詳細を「処理仕様書」としてまとめます。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="22" placeholder="ルールを入力してください">
+### ルール
+- 必須: すべてのNodeに「検品・検証」のステップを明示的に含めるか、独立した検証Nodeを設置すること。
+- 許可: 各Node内での表現の微調整はAIの裁量に任せるが、事実関係の変更は一切許可しない。
+- 禁止: 複数のNodeを1つのプロンプトにまとめ、一度に処理させようとしないこと（タスクの混濁を避ける）。
+- 手順: 上記STEP1〜4を順番に実行し、各段階でユーザーの確認を待つ（対話型進行）。
+
+### ガードレール
+- AIの内部思考過程（生ログ）をそのまま出力せず、構造化された「設計案」として提示すること。
+- 利用できない外部ツールやデータベースを利用できるかのように振る舞わないこと。
+- 「情報不足」を「推測」で埋めず、必ずユーザーに確認するか、不足を前提としたワークフローを設計すること。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="15" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+```markdown
+1. ワークフロー全体図: Mermaid記法によるフローチャート。
+2. Node詳細定義: 各Nodeの「役割」「入力」「処理内容」「出力」「合格基準」のリスト。
+3. Edge条件定義: 分岐条件とループ、および停止条件の明示。```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>作りたいワークフローのテーマ</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに作りたいワークフローのテーマを記入してください。" class="variable-textarea" >
+</textarea>
+<h3>最終成果物のイメージ</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに最終成果物のイメージを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>現在の課題・懸念事項</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに現在の課題・懸念事項を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="20" placeholder="を補足を入力してください">
+### 補足
+- 本プロンプトは、AIを「点（命令）」から「面（組織）」として活用するためのメタ憲法です。設計が完了した後は、各Nodeを具体的な実行用プロンプト（プロンプト・スニペット）として切り出し、段階的に実行することを想定しています。
+
+### 失敗条件設計
+- 起こりやすい失敗: Nodeの分解が粗すぎて、一つのNodeに複数の責任（調査と執筆など）が混在し、品質が低下する。
+- 失敗の兆候: 出力が一般論に終始している、または検証Nodeをバイパスして次の工程に進もうとしている。
+- 対処法: 失敗を検知した場合、そのNodeの「前提条件」と「コンテキスト」を再定義し、手順をさらに細分化する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##作りたいワークフローのテーマ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##最終成果物のイメージ=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##現在の課題・懸念事項=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
