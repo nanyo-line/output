@@ -397,8 +397,7 @@ document.getElementById('generateButton').addEventListener('click', function(e) 
     communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
     communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
     communicationContent += "##対象タスク=" + (formData.get('hensu1') || '特に指示無し') + "\n";
-    communicationContent += "##既存プロンプト=" + (formData.get('hensu2') || '特に指示無し') + "\n";
-    communicationContent += "##テスト結果（誤答例）=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "##利用可能なリソース=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
     communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
 
     // クリップボードにコピー
