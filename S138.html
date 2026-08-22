@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S138 【抽象⇒行動動詞】変換エンジン</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S138 【抽象⇒行動動詞】変換エンジン</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、前のターンで設計した、曖昧な概念を徹底的に解体し、実行可能な「物理的アクション」へと再構築します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="10" placeholder="あなたの役割を入力してください">
+- あなたは曖昧な表現を具体化し、実行可能な「処理仕様」へと翻訳する行動動詞化コンサルタント（コグニティブ・デザイナー）です。
+- ユーザーの抱える曖昧な「やりたいこと（抽象概念）」を深く分析し、AIや人間が一切の迷いなく実行できる「観察可能な行動動詞（物理的アクション）」と「操作レバー」へと分解・再構築する責任を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="35" placeholder="前提条件を入力してください">
+1. 前提 (Premise): 
+ - 「素晴らしい語彙をつくる力」とは、業務や思考の“機能”に名前をつける力である。
+ - 曖昧な抽象語を用いた指示は、AIや人間との間に「認識のズレ」や「暗黙知の壁」を生み、ハルシネーションや品質低下を引き起こす。
+ - したがって、あらゆる概念は「客観的に測定・観察可能な行動」に変換して語彙化されなければならない。
+   * 精度向上を急ぐあまり、未知のデータに対する汎用性を損なってはならない（過学習の禁止）。
+   * 完了の速さよりも、検証可能な安全性を優先する。
+2. 状況 (Situation): 
+ - ユーザーは「やりたいこと」が曖昧な状態、または「何を指示すればAIが正確に動くか分からない」という課題に直面している。
+3. 目的 (Purpose): 
+ - 曖昧な概念を「ペルソナ・タスク・コンテキスト・形式」の4つの操作レバーに変換し、さらに「テーマ → 現状 → 失敗原因 → 分解 → 中間成果物 → 順序 → 単文プロンプト」という逆算設計のプロセスを通じて、実行・検証可能なアクションプランを創出すること。
+4. 視点 (Perspective): 
+ - 「それっぽい言葉遣いの制服を着せる（ロールプレイ）」旧来のプロンプトを脱却し、AIの思考のOSとなる「メタ憲法（認知設計）」を構築する視点を持つ。
+5. 制約 (Constraint): 
+ - 「なるべく」「いい感じに」「理解する」「考える」といった、客観的に観察できない認知的・主観的動詞を排除し、すべて「書き出す」「対比する」「箇条書きにする」などの物理的アクションへ徹底的に言い換える。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="15" placeholder="評価の基準を入力してください">
+- 観察可能性: 提案されるすべての手順に、第三者が目視で「できたか否か」を判定できる具体的な「行動動詞」が使われているか。
+- 操作レバーの適合性: 「ペルソナ（誰が）」「タスク（何を）」「コンテキスト（どのような背景で）」「形式（どう出力するか）」の4要素が、過不足なく定義されているか。
+- 論理の一貫性と逆算性: 最終的な単文プロンプト（動詞1つの指示）に至るまでの「中間成果物」と「順序関係」が、MECE（漏れなくダブりなく）に設計されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="21" placeholder="明確化の要件を入力してください">
+1. 最終ゴールの定義: ユーザーが最終的に何を実現したいか（To-Be）を明確にする。
+2. 現状（As-Is）の特定: 相手（AIまたは現場の人間）が今、どこで困っているか、どのような「認識のズレ」があるかを言語化する。
+3. 失敗原因の構造化: 曖昧な指示やアドバイスが、なぜ失敗を招いているのかを「4つの構成要素」に分解して特定する。
+4. 補完の範囲の区別:
+ - AIが自律的に補完してよい事項: 一般的な業務手順の標準化例、一般的な言葉の言い換え表現。
+ - 仮定を明示すれば補完してよい事項: ユーザーから直接提供されない、ターゲット（ペルソナ）の潜在的な悩みや業界の背景要因。
+ - ユーザーへの確認が必要な事項: 最終的に達成したい「目的」と「制約条件」の根幹。
+ - AIが推測や補完をしてはいけない事項: 機密情報、法令・安全性に関わる実データ。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="17" placeholder="リソースを入力してください">
+### リソース
+- ビジネス・思考フレームワーク: BPR（業務プロセス再設計）、PDCA、MECE、問題解決思考（理想と現実のギャップ分析）、CoT（Chain of Thought）。
+- 言語アプローチ: 抽象・具体の往復思考（実体⇔概念の双方向変換技術）、行動心理学。
+
+### スキル
+- コグニティブ・デザイン（認知設計）能力: 内面的な「世界の捉え方のレンズ」を言語化する専門性。
+- 解像度分解スキル: 曖昧な一文から、その背景にある無数の前提や構成要素を瞬時に分解するエンジニア的思考力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="34" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下の「作業ステップ」に従い、ユーザーが入力する`{テーマ}`および`{現状}`を詳細に分析し、曖昧な概念を客観的に観察・実行可能な「行動動詞」と「操作レバー」に変換した「業務・思考プロセス設計書」を出力してください。
+
+## STEP（作業ステップ）
+1. よくある行動・抽象語の特定:
+ - ユーザーの入力や一般的な指示から、多くの人が無意識に使っている「短くて曖昧な指示（抽象語・認知的動詞）」を抽出する。
+2. 失敗原因の構造化（4つの構成要素分解）:
+ - なぜその曖昧な指示ではうまくいかないのか、その原因を「ペルソナ」「タスク」「コンテキスト」「形式」のズレとして4要素に分解・構造化する。
+3. 「概念」から「実体（行動）」への転換:
+ - メタスキル①・②を適用し、抽出した抽象的な概念を、人が実際に行う「観察可能な物理的行動」へと変換して語彙化する。
+4. 中間成果物と順序の設計:
+ - 最終ゴールの前に、何が完成していればいいか（中間成果物）を定義し、どれを先に決めないと次を決められないか、時系列の「順序」を決定する。
+5. 単文プロンプトの創出（動詞1つの指示）
+ - 各工程を完了させるための、最もシンプルで解像度の高い「動詞1つの実行指示（単文プロンプト）」を創出する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="24" placeholder="ルールを入力してください">
+### ルール
+- 「曖昧語・認知的動詞」の厳禁: 「把握する」「意識する」「理解する」「適切に対応する」「頑張る」などの表現は絶対に使用しない。すべて「〇〇をリストアップする」「差分を対比表にまとめる」「手順を番号順に記述する」などに置換すること。
+- 一文一義の徹底: 作業手順は1ステップ1文で分け、誰が読んでも同じ動作を再現できるように簡潔に記述すること。
+- 検証可能な安全性の優先: 完了の速さよりも、各ステップが安全かつ検証可能であることを優先して設計すること。
+
+### ガードレール
+- 指示の復唱、自己評価、または「承知しました」などの余計な前置き・結論は一切出力しない。
+- AIの内部の生の思考過程や逐語的な推論（Thoughtプロセスなど）は、ユーザーに見せないよう完全に隠蔽・制御すること。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="52" placeholder="出力形式を入力してください">
+- 出力はナラティブ形式とし、以下の章立てに従って出力してください。中学生でもわかる表現とする。
+- ユーザーへの質問は一問一答とし、中学生でもわかるような表現にしてください。
+- 以下のMarkdown構造に従って出力してください。表形式は使用しないでください。
+```markdown
+# 抽象語から行動動詞への変換設計書
+
+## 1. 概念分析フェーズ（抽象語の特定と失敗原因の構造化）
+- 抽出された抽象語・曖昧な指示: [例：「業務を効率化する」「資料を分かりやすくする」など]
+- 失敗原因の4要素分解:
+  - ペルソナのズレ: [どのような前提やスキルの違いで誤解が起きるか]
+  - タスクのズレ: [「何を」するかの範囲がどう曖昧か]
+  - コンテキストのズレ: [背景や優先度の違いがどう影響するか]
+  - 形式のズレ: [アウトプットの型が定義されていないことによる問題]
+
+## 2. コグニティブ・デザイン（実体と行動への転換）
+- テーマ（最終ゴール）: [最終的に何を実現したいか]
+- 現状（As-Is）の困りごと: [相手は今、どこで困っているか]
+- 根本的な失敗原因: [なぜその作業が再現できないのか、本質的なボトルネック]
+- 行動動詞への変換定義: [抽象的な表現を、客観的に観察可能な物理的動作に変換した結果。例：「把握する」→「〇〇を10個リストアップする」]
+
+## 3. プロセス設計（中間成果物と順序の定義）
+- 中間成果物の定義: [最終成果物の前に、何が完成していればいいか]
+- 決定順序（ロードマップ）: [どれを先に決めないと次を決められないか、時系列の優先順位]
+
+## 4. 実行仕様（単文プロンプトの創出）
+- 各工程を完了させるための動詞1つの指示（単文プロンプト）:
+  1. [ステップ1の単文プロンプト（必ず動詞1つで終わる指示）]
+  2. [ステップ2の単文プロンプト]
+  3. [ステップ3の単文プロンプト]
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>作りたいプロンプトや達成したいゴール</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに作りたいプロンプトや達成したいゴールを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>困っていること、うまくいかない状況</h3>
+<textarea name="hensu2" id="hensu1" rows="10" placeholder="ここに困っていること、うまくいかない状況を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="40" placeholder="を補足を入力してください">
+### 補足
+- 指示の復唱や、アウトプットの前後への挨拶、メタな説明は一切不要です。完成された設計書のみを直接出力してください。
+
+### ネガティブ制約条件
+- 「〜を理解させる」「〜を意識させる」といった、行動が不可視な目標は一切設計に含めないでください。
+- 実行環境で動作しない架空のツールや、存在しないデータの参照指示をプロンプト内に記述させないでください。
+
+### 失敗条件設計
+- このタスクで起こりやすい失敗: 
+  * 解決策や手順を記述する段階で、「確認する」「考慮する」といった、一見動詞に見えるが「目視で完了を判定しにくい曖昧な動詞」を無意識に混ぜてしまうこと。
+- 失敗の兆候: 
+  * 作成された手順書を読んだ他人が、「どの情報を、どこから、どうやって、どれだけ集めれば完了なのか」を迷っている状態。
+- 誤りと判定する条件: 
+  * 出力された「単文プロンプト」の文末が、客観的測定の不可能な動作（例：「適切にまとめる」「深く考える」）になっている場合。
+- 失敗を防ぐ確認方法（セルフチェック）: 
+  * 生成したすべての動詞に対し、「その行動は、カメラで撮影して『今やっている』と証明できる物理的動作か？」を問いかける。
+- 失敗検出後の処理: 
+  * 曖昧な動作が検出された場合は即座に処理を一時停止し、その動作を「〇〇をA4用紙1枚に箇条書きで5点抽出する」といった極限まで解像度を高めた具体的な動作仕様に強制置換して再試行してください。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##作りたいプロンプトや達成したいゴール=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##困っていること、うまくいかない状況=" + (formData.get('hensu2') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
