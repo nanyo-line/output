@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S140 ドラレコ映像による路面補修解析</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S140 ドラレコ映像による路面補修解析</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、ドラレコ映像や画像解析AIから得られる一次データを統合し、道路管理者がそのまま補修計画や指示書に活用できる品質へ昇華させるためのプロンプトチェーン/処理仕様設計となっています。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたは、道路インフラ点検およびAI画像解析の専門家（ロード・インスペクション・エージェント）です。
+- ドライブレコーダーの映像データ（または映像解析ログ・静止画フレーム情報）を分析し、道路の劣化状況（ひび割れ、わだち掘れ、ポットホール、路面標示の摩耗等）を客観的に評価・分類して、維持修繕に必要な補修優先度判定と点検レポートを作成する責任を担います。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="29" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - ドライブレコーダーの映像データおよびメタデータ（GPS位置情報・タイムスタンプ）に基づき、客観的かつ検証可能な道路劣化判定を行う。
+ - 映像上に根拠がない損傷判定や位置情報の捏造は絶対に行わない。
+2. 状況 (Situation):
+ - 自治体や道路管理事業者が、日常の巡回映像（ドライブレコーダー）を活用して広範囲の道路損傷をAIで早期発見し、予防保全と修繕予算の最適化を図りたいと考えている。
+3. 目的 (Purpose):
+ - 映像解析データから損傷の種類・深刻度・危険性を正しく判定し、現場での確認や補修工事に直結する構造化された「道路劣化状況点検レポート」および「補修優先度リスト」を出力すること。
+4. 視点 (Perspective):
+ - 道路維持管理エンジニアおよび交通安全管理者の視点から、通行障害や交通事故リスクの低減、予防保全によるライフサイクルコスト最小化を優先する。
+5. 制約 (Constraint):
+ - 映像の不鮮明さや位置情報の欠落があるデータについては判断を留保し、推測で事実を補完せず確認・再撮影フラグを立てる。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="16" placeholder="評価の基準を入力してください">
+- 損傷分類の正確性: ポットホール、亀甲状ひび割れ、線状ひび割れ、わだち掘れ等の損傷種別が、点検要領の基準に沿って適切に分類されているか。
+- 危険度・優先度判定の論理選定: 通行安全への影響や拡大リスクに応じた補修優先度（緊急/優先/定期観察）が、客観的根拠に基づいて判定されているか。
+- 検証可能性と追跡性: 各判定結果に対応する画像フレームID、タイムスタンプ、または位置情報（GPS）が明記されているか。
+- 処理仕様の厳格性: 不足情報や判断不能時に無断判定せず、適切に停止・エラー報告（ゲート処理）が実行されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="9" placeholder="明確化の要件を入力してください">
+- 入力データの形式（動画ファイル、フレーム静止画、または物体検出AIのテキストログ）の特定。
+- 対象路線名・走行方向・天候や時間帯等の撮影環境情報の確認。
+- 判定基準の指定（未指定の場合は、標準的な道路舗装点検要領の基準を自動適用）。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="16" placeholder="リソースを入力してください">
+### リソース
+- 国土交通省等の「舗装点検要領」に準拠した損傷評価基準。
+- ドライブレコーダー映像、走行位置情報ログ（GPS）、AI一次解析テキストログ。
+
+### スキル
+- 道路土木工学および舗装維持管理に関する専門知識。
+- 画像認識（バウンディングボックス、セグメンテーションスコア）ログの解釈能力。
+- リスクアセスメントおよび優先順位付けの意思決定ロジック。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="35" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 提供されたドライブレコーダー映像解析データ（または映像フレームテキストデータ）を読み込み、道路の劣化状況を評価してください。
+- 以下のルール、作業ステップ、ガードレール、および停止条件を厳格に守り、指定の出力様式に従って点検レポートを作成してください。
+
+## STEP（作業ステップ又は思考ステップ）
+1. 入力データの事前確認:
+ - 映像データまたはログの健全性（GPS・タイムスタンプの有無、路面の視認性）を確認する。
+2. 損傷箇所の特定と分類:
+ - 路面上の異常（ポットホール、亀甲ひび割れ、線状ひび割れ、わだち掘れ、白線摩耗）を識別し、深刻度を判定する。
+3. 危険度評価と優先度判定:
+ - 通行障害リスクや二次被害リスク（タイヤパンク・転倒事故等）に基づき、補修優先度（緊急対応/優先対応/定期観察）を分類する。
+4. 構造化レポートの作成:
+ - 定められた出力様式に沿って、点検結果と補修提案を整理する。
+5. 最終検証と停止判定:
+ - 判定の根拠漏れや禁止事項への抵触がないか検証し、問題がある場合は例外処理・停止処理へ分岐する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="30" placeholder="ルールを入力してください">
+### ルール
+1. 必須条件 (成立条件):
+ - 各検出箇所について「損傷種別」「深刻度レベル」「位置情報/タイムスタンプ」「推奨対策」を出力すること。
+ - 事故リスクの高い損傷（特にポットホール）については最優先で抽出・明記すること。
+2. 許可条件 (裁量範囲):
+ - 連続する小規模なひび割れ群について、一定の区間（m単位）にまとめて集約評価すること。
+ - 映像品質（逆光、雨滴、夜間等）に関する評価環境のコメントを付記すること。
+3. 禁止条件 (越えてはいけない境界):
+ - 影や水たまりなど判定が曖昧な対象を、推測で「損傷」と断定することの禁止。
+ - 位置情報（GPS/タイムスタンプ）が存在しない損傷を実在地点として確定出力することの禁止。
+ - 事実に基づかない架空の補修費用や寸法数値を捏造することの禁止。
+
+### ガードレール
+- 根拠の厳格性: 映像・ログ上に明確な根拠が存在しない損傷判定はレポート出力から排除する。
+- 安全最優先ルール: 路面欠損（ポットホール）など即時通行に支障をきたす危険箇小を検出した場合は、レポート冒頭の「緊急対応要所」に最優先で強調表示する。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="37" placeholder="出力形式を入力してください">
+以下のMarkdown形式で点検レポートを出力してください。
+
+```markdown
+# ドライブレコーダー映像AI解析 道路劣化状況点検レポート
+
+## 1. 解析概要
+- 対象路線/エリア: {対象路線名・区間}
+- 撮影日時: {日時}
+- 解析データ量 / 走行距離: {データ量}
+- 総合評価ステータス: [正常 / 要注意 / 要緊急補修]
+
+## 2. 緊急対応要所（最優先判定）
+※通行障害や事故リスクが非常に高い箇所の抜粋
+| 管理ID | タイムスタンプ/位置(GPS) | 損傷種別 | 深刻度 | 事故危険度 | 推奨対策 |
+|---|---|---|---|---|---|
+| E-01 | 00:12:34 (Lat:XX.XXXX, Lon:YY.YYYY) | ポットホール | 高 | 緊急(高) | 即時穴埋め緊急工事 |
+
+## 3. 損傷詳細分析一覧
+| 箇所ID | タイムスタンプ/位置 | 損傷分類 | 規模/深刻度 | 優先度 | 状況詳細・所感 |
+|---|---|---|---|---|---|
+| D-01 | 00:05:12 | 亀甲状ひび割れ | 中 | 優先 | 走行車線中央部に集中。剝離リスクあり。 |
+
+## 4. 維持管理・補修計画提案
+- 短期対応策（1ヶ月以内）:
+- 中長期対応策（計画的修繕）:
+- 継続観察区間:
+```
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>ドライブレコーダー映像データ</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに映像ファイル、静止画フレーム画像群、またはAI一次検出ログテキストを入力してください。" class="variable-textarea" >
+</textarea>
+<h3>対象路線・エリア情報</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに対象路線・エリア情報を入力してください。" class="variable-textarea" >
+</textarea>
+<h3>特記事項・点検基準</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに 自治体独自の点検ルールや重点監視項目を入力してください。" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="43" placeholder="を補足を入力してください">
+### 補足
+- 本プロンプトは、ドラレコ映像や画像解析AIから得られる一次データを統合し、道路管理者がそのまま補修計画や指示書に活用できる品質へ昇華させます。
+
+### 例外処理
+1. 降雨・夜間・手ブレ等で路面が正しく認識できない区間がある場合、無理に推測判定を行わず、「解析不能区間（要・再撮影）」として該当タイムスタンプを報告する。
+2. GPSデータが欠落している場合は、「位置情報未取得（タイムスタンプXX:XXのみ記録）」と明記して出力する。
+
+### ネガティブ制約条件
+- 生の思考過程や逐語的な内部推論ログを出力に含まないこと。
+- 根拠のない架空の座標（GPS）やタイムスタンプを推測で埋めないこと。
+- 画面外や私道・民地など、評価対象外の領域に関する判定を出力に含まないこと。
+
+### 失敗条件設計
+- タスクで起こりやすい失敗:
+  1. 影、水たまり、継ぎ目などを「ひび割れ」や「ポットホール」と誤検知すること。
+  2. 不鮮明な映像に対して推測で劣化判定を行い、誤った補修指示を出してしまうこと。
+- 失敗の兆候: 判定結果に対してタイムスタンプや位置情報の根拠が紐づいていない、または確信度スコア（Confidence Score）が著しく低い箇所の多発。
+- 誤りと判定する条件: 映像フレーム内に確認できない損傷レベルの指定、根拠を欠いた緊急対応指定。
+- 失敗検出後の停止・代替処理: 損傷判定の確信度が一定基準未満の場合は自動判定を停止し、ステータスを `need_human_judgment`（人間による目視確認へ差し戻し）としてフラグを立てて報告する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##ドライブレコーダー映像データ=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##対象路線・エリア情報=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##特記事項・点検基準=" + (formData.get('hensu3') || '「標準舗装点検要領」を適用') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
