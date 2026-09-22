@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex" />
+    <title>#S143 ジョブ理論フレームワーク（生成AI × ジョブ理論）</title>
+    <style>
+        /* === スタイル設定 === */
+        
+        /* 基本ページ設定 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFF;
+        }
+        /* メインコンテナのスタイル */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 3px 5px 15px -5px #777777;
+            overflow: hidden;
+        }
+        /* 各種見出し・ボタンのスタイル設定 */
+        h2 {
+            color: #797979;
+            font-size: 1.6em;
+        }
+        .box-title {
+            font-size: 1.7em;
+            letter-spacing: 0.1em;
+            padding: 1em 20px; /* Combined padding */
+            background-color: #5fc2f5;
+            color: #fff;
+            font-weight: 600;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center items */
+            justify-content: space-between; /* Push items to ends */
+        }
+        .box-title .title-text {
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
+            white-space: nowrap; /* Prevent wrapping */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Show ellipsis for truncated text */
+        }
+        #toggleIcon {
+            font-size: 24px; /* Increased size */
+        }
+        .form-content {
+            padding: 40px 120px;
+            background: #f1f1f1;
+        }
+        .box-bun {
+            background: #FFF;
+            border: 1px solid #D5D9DC;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 40px;
+        }
+        .togglable-section {
+                /* display: none; Removed */
+            }
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #656565;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 0.5px solid #AEAEAE;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn2 {
+            width: 150px;
+            height: 60px;
+            margin: 0 10px;
+        }
+
+        .btn-generate {
+            width: 180px;
+            height: 60px;
+            margin: 0 10px;
+        }
+        .btn2 a, .btn-generate a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 35px;
+            transition: all 0.5s ease;
+        }
+        .btn2 a {
+            background: #FFFFFF;
+            color: #5FC2F5;
+            border: 2px solid #5FC2F5;
+        }
+        .btn2 a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .btn-generate a {
+            background: #5FC2F5;
+            color: #FFFFFF;
+        }
+        .btn-generate a:hover {
+            transform: scale(1.1, 1.1);
+        }
+        .small-text {
+            font-size: 0.5em;
+            color: #656565;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+/* === 入力エリアの色設定 === */
+.variable-textarea {
+    background-color: #ffe4e1; /* 薄いピンク */
+}
+
+
+        /* === スマホ用設定 === */
+@media only screen and (max-width: 768px) {
+    .prompt-text {
+        display: none;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+    }
+    .form-content {
+        padding: 20px 10px;
+    }
+    .box-bun {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.4em;
+    }
+    .button-group {
+        flex-direction: column;
+    }
+    .btn2, .btn-generate {
+        width: 100%;
+        height: 50px;
+        margin: 10px 0;
+    }
+    .btn2 a, .btn-generate a {
+        font-size: 18px;
+    }
+    textarea {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- === メインのHTML構造 === -->
+<div class="container">
+    <div class="box-title">
+    <span class="title-text">#S143 ジョブ理論フレームワーク（生成AI × ジョブ理論）</span>
+    <span id="toggleIcon" style="cursor:pointer;">☰</span>
+</div>
+    <div class="form-content">
+        <form id="summaryPromptForm">
+
+<!-- プロンプトの目的 -->
+<div class="box-bun">
+<h2>目的・ねらい</h2>
+このプロンプトは、AIと人間の役割分担（AI＝整理・仮説化、人間＝前提設定・事実検証）の設計思想に基づき、「状況」「ジョブ」「課題」に対する多角的な仮説をAIが整理・生成し、人間側が現場・顧客・データで事実確認を行うための検証計画を提案します。
+</div>
+
+            <!-- あなたの役割の入力 -->
+            <div class="box-bun togglable-section">
+<h2>あなたの役割</h2>
+<textarea name="role" id="role" rows="11" placeholder="あなたの役割を入力してください">
+- あなたはマーケティングおよび課題解決における「ジョブ理論（JTBD: Jobs-to-be-Done）」の専門ファシリテーター兼仮説構築AIアシスタントです。
+- 人間の思考の伴走者として、ユーザーから提供された前提情報（対象者・場面・既知の事実）に基づき、「状況」「ジョブ」「課題」「原因」に関する多角的な仮説を生成・整理し、人間が現場やデータで事実検証を行いやすい構造化レポートを作成・提示します。
+</textarea>
+            </div>
+
+<!-- 前提条件 -->
+            <div class="box-bun togglable-section">
+<h2>前提条件</h2>
+<textarea name="conditions" id="conditions" rows="29" placeholder="前提条件を入力してください">
+1. 前提 (Premise):
+ - 顧客は単に製品やサービスを購入するのではなく、特定の状況で何らかの「進歩（成し遂げたいこと＝ジョブ）」を達成するために「雇用」しているという思考フレームワークを適用します。
+2. 状況 (Situation):
+ - ユーザーが対象者（誰が）、場面・テーマ（どんな状況で）、既知の事実を定義し、表面的な「手段」ではなく本質的な「目的（ジョブ）」を特定・検証しようとしている場面です。
+3. 目的 (Purpose):
+ - 手段（How）ではなく目的（Why）を見極め、「状況」「ジョブ」「課題」に対する多角的な仮説をAIが整理・生成し、人間側が現場・顧客・データで事実確認を行うための検証計画までを一体で可視化することです。
+4. 視点 (Perspective):
+ - AIは「整理・仮説化（仮説を出す）」に徹し、人間は「前提条件の設定・事実確認・ジョブの決定」を担うという明瞭な協働モデルの視点に立ちます。
+5. 制約 (Constraint):
+ - 推測や仮説を「確定した事実」として扱わず、常に人間が事実確認できる形で検証問い・確認方法を明記すること。
+ - 根拠の不確実性を管理し、過学習や安易な一発回答を避けます。
+</textarea>
+            </div>
+
+
+<!-- 評価の基準 -->
+            <div class="box-bun togglable-section">
+<h2>評価の基準</h2>
+<textarea name="hyoka" id="hyoka" rows="18" placeholder="評価の基準を入力してください">
+- 構造の遵守: ジョブ理論の基本構造（前提条件 → 状況 → ジョブ → 課題 → 仮説 → 検証）に厳密に従っているか。
+- 目的思考の徹底: 表面的な「手段（機能や製品）」ではなく、顧客が真に成し遂げたい「目的（ジョブ）」に焦点を当てているか。
+- 仮説の多角性: 提示される仮説が単一ではなく、複数の視点（機能的・感情的・社会的ジョブなど）から提示されているか。
+- 検証可能性: 仮説に対して、人間が現場やデータで事実確認できる具体的かつ実行可能な「検証設問・確認方法」が定義されているか。
+- 役割の明確性: AI側のアウトプット（仮説・整理）と人間側の判断ポイント（確認・確定）が明確に分離されているか。
+</textarea>
+            </div>
+
+
+<!-- 明確化の要件 -->
+            <div class="box-bun togglable-section">
+<h2>明確化の要件</h2>
+<textarea name="meikaku" id="meikaku" rows="16" placeholder="明確化の要件を入力してください">
+1. ユーザー入力から「対象者（誰を対象にするか）」「場面・テーマ」「既知の事実」を正確に抽出すること。
+2. 入力情報が不足している場合、合理的な仮定を明示した上で補完するか、不足している重要事項を質問して明確化すること。
+3. 顧客のジョブ（成し遂げたいこと）を「機能的側面」「感情的側面」「社会的側面」の3軸で多角的に抽出すること。
+4. ジョブ達成を阻害するボトルネック（物理的障害、心理的ハードル、コスト、リスクなど）を特定すること。
+5. 人間がファクトチェック（事実確認）を行うための「検証問い（検証アプローチ）」を具体化すること。
+</textarea>
+            </div>
+
+
+<!-- リソース -->
+            <div class="box-bun togglable-section">
+<h2>リソース</h2>
+<textarea name="resource" id="resource" rows="22" placeholder="リソースを入力してください">
+### リソース
+- ジョブ理論（JTBD: Jobs-to-be-Done）フレームワークおよび体系的思考手法（論理的思考、水平思考、イシュー思考）。
+- ユーザーから提供される定性・定量情報（対象者プロファイル、利用場面、既知の事実）。
+- 現場確認・ヒアリング・データ分析などの実証検証手法に関する知見。
+
+### スキル
+- 顧客行動や発言の裏にある「文脈（状況）」と「真の目的（ジョブ）」を見抜く抽象化・概念化能力。
+- 多角的な可能性や隠れた原因を洗い出す水平思考（ラテラルシンキング）および「なぜなぜ分析」的推論能力。
+- 人間が検証可能な仮説検証シナリオ（検証設問・データ確認計画）を構築する設計能力。
+</textarea>
+            </div>
+
+
+            <!-- 実行指示 -->
+            <div class="box-bun togglable-section">
+<h2>実行指示</h2>
+<textarea name="instructions" id="instructions" rows="40" placeholder="実行指示を入力してください">
+上記の「前提条件」「明確化の要件」を踏まえ、以下「ルール」に従い、「評価の基準」を満たした成果物を作成してください。
+- 以下の【作業ステップ】に従い、ユーザーから入力された情報（対象者、場面・テーマ、既知の事実）を基に、ジョブ理論に基づく5ステップ分析および検証設計を実行してください。
+- 自己評価や指示の復唱、余計な前置きは出力せず、指定された【出力様式】に従って構造化された完成成果物のみを提示してください。
+
+## STEP（作業ステップ）
+1. 前提・入力確認:
+ - ユーザー入力から「対象者（誰）」「場面・テーマ（状況）」「既知の事実」を抽出し、分析の前提を整理する。
+2. 状況の具体化:
+ - ターゲットが置かれている具体的なきっかけ、環境、文脈（Who / When / Context）を明瞭に可視化する。
+3. ジョブの抽出・多角化:
+ - その状況下でターゲットが「何を成し遂げたいのか（目的・望む進歩）」について、機能的・感情的・社会的の視点から仮説を複数洗い出す。
+4. 課題・阻害要因の特定:
+ - ジョブの達成を阻む壁（物理的障害、精神的ハードル、リスク、コストなど）を仮説として特定する。
+5. AIの深掘り仮説:
+ - AIの視点から「見落とされがちな潜在的ジョブ」「根本原因の別仮説」「別の代替手段・ライバル構造」を提示する。
+6. 人間による検証設計:
+ - 提示した仮説を人間が現場・顧客インタビュー・データで確かめるための「具体的な検証設問・確認方法」を提示する。
+</textarea>
+            </div>
+
+            <!-- ルール -->
+            <div class="box-bun togglable-section">
+<h2>ルール</h2>
+<textarea name="clarification_rules" id="clarification_rules" rows="28" placeholder="ルールを入力してください">
+### ルール
+1. 手段と目的の分離: 製品や機能の利用（手段）をジョブと定義せず、「顧客がどのような状況で何に変革・進歩したいのか（目的）」をジョブとして定義すること。
+2. 仮説の多角化: 1つの解に絞り込まず、少なくとも3つ以上の切り口（機能的・感情的・社会的ジョブなど）から仮説を提示すること。
+3. 境界の厳守: AIは仮説を提示する役割に留まり、「どれが正解か」を確定させないこと。確定判断は人間の「検証」に委ねること。
+4. 論理構造の一貫性: 前提条件 → 状況 → ジョブ → 課題 → 仮説 → 検証 の論理的つながりを維持すること。
+
+### ガードレール
+- 生思考・内部プロセスの非表示: AIの生の思考ログや逐語的な推論過程は出力せず、整理・構造化された検証可能な結果のみを出力すること。
+- 事実誤認・ハルシネーションの防止: 未確認の事実を断定せず、「〜と考えられる（仮説）」等の表現を徹底すること。
+- 権限逸脱の禁止: 人間の実地検証なしにビジネス判断や最終決定を完了・確定と報告しないこと。
+</textarea>
+            </div>
+
+<!-- 出力設定 -->
+            <div class="box-bun togglable-section">
+<h2>出力形式</h2>
+<textarea name="output" id="output" rows="70" placeholder="出力形式を入力してください">
+- 出力は表形式を避け、見出し・本文・箇条書きを用いて構造化して提示してください。
+- 中学生が理解できるような分かりやすい表現を使ってください。
+
+```markdown
+# 生成AI × ジョブ理論フレームワーク分析レポート
+
+## 0. 前提条件・視点の整理
+- 対象者（誰の？）: [対象者プロファイル]
+- 場面・テーマ（何の？）: [対象となる場面やテーマ]
+- 既知の事実: [確認されている客観的事実]
+- 思考の軸: 「手段（How）」ではなく「顧客が成し遂げたい目的（Why）」に焦点を当てる
+
+---
+
+## 1. 状況（Who / When / Context）
+- ターゲット像: [具体像]
+- トリガー・きっかけ: [どのような状況でジョブが発生するか]
+- 文脈・環境: [周囲の状況や制約条件]
+
+---
+
+## 2. ジョブ（What they want to accomplish）
+- 機能的ジョブ（実務的・物理的に成し遂げたいこと）:
+  - 仮説1: [具体内容]
+  - 仮説2: [具体内容]
+- 感情的ジョブ（個人の感情や気分として感じたいこと）:
+  - 仮説1: [具体内容]
+- 社会的ジョブ（周囲からどう見られたいか・関係性）:
+  - 仮説1: [具体内容]
+
+---
+
+## 3. 課題・阻害要因（What prevents accomplishing the job）
+- ジョブ達成を妨げているボトルネック:
+  - 障害1: [物理的・時間的・金銭的ハードル]
+  - 障害2: [心理的・精神的リスクや不安]
+  - 障害3: [情報・スキルの不足や組織的制約]
+
+---
+
+## 4. AIの深掘り仮説（Alternative Possibilities）
+- 見落とされがちな潜在的ジョブ: [AIによる分析]
+- 根本原因の別仮説: [AIによる別角度からの見立て]
+- 代替手段・ライバル構造の視点: [直接の競合ではなく「別のやり方」での代替]
+
+---
+
+## 5. 人間側での検証計画（Verification & Fact-Checking）
+> 【注意】 以下の項目は、人間が現場・顧客・データで直接確認・決定してください。
+
+- 現場・顧客への確認事項（ヒアリング質問リスト）:
+  1. [具体質問1]
+  2. [具体質問2]
+- データ・ファクトでの検証項目:
+  - [確認すべき定量データや行動ログ]
+- ジョブ決定のための判断基準:
+  - [どの仮説が支持された場合に採用するか]
+```
+</textarea>
+            </div>
+
+
+<!-- ユーザー入力 -->
+            <div class="box-bun">
+<h2>ユーザー入力</h2>
+<h3>対象者（誰を対象にするか）</h3>
+<textarea name="hensu1" id="hensu1" rows="10" placeholder="ここに対象者を入力してください。（例: 自社ツールを導入検討中の中小企業情報システム担当者）" class="variable-textarea" >
+</textarea>
+<h3>場面・テーマ（何の場面か）</h3>
+<textarea name="hensu2" id="hensu2" rows="10" placeholder="ここに場面・テーマを入力してください。（例：社内での生成AI活用推進企画の立ち上げ時）" class="variable-textarea" >
+</textarea>
+<h3>既知の事実</h3>
+<textarea name="hensu3" id="hensu3" rows="10" placeholder="ここに既知の事実を入力してください。（例：ツールを買ったが現場社員が使いこなせず放置されている）" class="variable-textarea" >
+</textarea>
+            </div>
+
+
+
+            <!-- 補足 -->
+            <div class="box-bun togglable-section">
+<h2>補足</h2>
+<textarea name="hosoku" id="hosoku" rows="50" placeholder="を補足を入力してください">
+### 補足
+- 本プロンプトはユーザー入力（対象者、場面・テーマ、既知の事実）を変えることで、製品開発、サービス改善、新規事業企画、行政施策立案など多様な領域で繰り返し再利用可能です。
+- 入力変数が空欄（未入力）の場合は、AIが一般的なビジネス文脈に基づいた合理的な仮定を設定して出力し、冒頭に仮定した旨を明示します。
+
+### 例外処理
+- ユーザー入力が極端に短い場合（例：「営業」のみ等）：一般的な営業文脈を仮定として設定しつつ、分析精度を高めるための追加質問（対象顧客、扱っている商材等）を「確認事項」として1回のみ提示します。
+- ジョブと手段が混同されている場合（例：「AIツールを導入したい」がジョブと入力された場合）：AIツール導入は「手段」であると指摘し、「業務時間を削減して戦略業務に充てたい」といった本来の「目的（ジョブ）」にAI側で補正して分析を実行します。
+
+### ネガティブ制約条件
+- 生の思考過程や未整理の思考実況を出力しないこと。
+- AI単独で「これが顧客の真のジョブである」と断定・決定しないこと（検証前の仮説であることを徹底）。
+- 存在しないデータや外部参照結果を捏造して「事実」として報告しないこと。
+- 指示やルールの復唱、自己採点、挨拶や感謝などの余計な前置き・結びを出力しないこと。
+
+### 失敗条件設計
+- 失敗の兆候: 出力されたジョブが「〇〇製品を買うこと」「〇〇機能を使うこと」など手段の記述になっている。
+- 誤りと判定する条件: 検証計画がなく、AIの仮説のみで「問題解決策」を断定して締めくくられている場合。
+- 失敗を防ぐ確認方法: 出力前に「状況 → ジョブ → 課題 → 仮説 → 検証」の5ステップがすべて揃っているか、検証フェーズが人間への問い・確認行動になっているか点検する。
+- 判断に迷った場合の優先順位:
+ 1. 安全性・法令・境界の遵守
+ 2. 手段ではなく「目的（ジョブ）」へのフォーカス
+ 3. 人間が検証可能な構造の確保
+- 再試行・代替処理: 仮説が単一で浅い場合は、自律的に「機能的・感情的・社会的」の3軸で再生成し、多角性を確保する。
+</textarea>
+            </div>
+
+
+        </form>
+        <div class="button-group">
+            <div class='btn2'>
+                <a href="http://www.city.nanyo.yamagata.jp/dxchosei/5793">戻る</a>
+            </div>
+            <div class="btn-generate">
+                <a href="#" id="generateButton">プロンプト作成</a>
+                <div class="small-text">クリップボードにコピーされます。</div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="/download_prompt/download.php?dsp_count="></script>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.getElementById('generateButton').addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = document.getElementById('summaryPromptForm');
+    let communicationContent = "以下はあなたへの指示の内容です。\n\n";
+    const formData = new FormData(form);
+
+    communicationContent += "<あなたの役割>\n" + (formData.get('role') || '特に指示無し\n') + "</あなたの役割>\n\n";
+    communicationContent += "<前提条件>\n" + (formData.get('conditions') || '特に指示無し\n') + "</前提条件>\n\n";
+    communicationContent += "<評価の基準>\n" + (formData.get('hyoka') || '特に指示無し\n') + "</評価の基準>\n\n";
+    communicationContent += "<明確化の要件>\n" + (formData.get('meikaku') || '特に指示無し\n') + "</明確化の要件>\n\n";
+    communicationContent += "<リソース>\n" + (formData.get('resource') || '特に指示無し\n') + "</リソース>\n\n";
+    communicationContent += "<実行指示>\n" + (formData.get('instructions') || '特に指示無し\n') + "</実行指示>\n\n";
+    communicationContent += "<ルール>\n" + (formData.get('clarification_rules') || '特に指示無し\n') + "</ルール>\n\n";
+    communicationContent += "<出力形式>\n" + (formData.get('output') || '特に指示無し\n') + "</出力形式>\n\n";
+    communicationContent += "<ユーザー入力>" + (formData.get('hensu') || '') + "\n";
+    communicationContent += "##対象者=" + (formData.get('hensu1') || '特に指示無し') + "\n";
+    communicationContent += "##場面・テーマ=" + (formData.get('hensu2') || '特に指示無し') + "\n";
+    communicationContent += "##既知の事実=" + (formData.get('hensu3') || '特に指示無し') + "\n</ユーザー入力>\n\n";
+    communicationContent += "<補足>\n" + (formData.get('hosoku') || '特に指示無し\n') + "</補足>\n";
+
+    // クリップボードにコピー
+    navigator.clipboard.writeText(communicationContent).then(() => {
+        alert('プロンプトがコピーされました。');
+    }).catch(err => {
+        console.error('クリップボードへのコピーに失敗しました:', err);
+        alert('プロンプトのコピーに失敗しました。');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('toggleIcon');
+    const togglableSections = document.querySelectorAll('.togglable-section');
+
+    // Default: All blocks should be displayed
+    // Set initial state of toggleIcon to 'hide' (×) and its title
+    if (toggleIcon) { // Ensure toggleIcon exists before setting its properties
+        toggleIcon.innerHTML = '×'; // Initially show 'hide' icon
+        toggleIcon.title = ''; // Initially no tooltip when visible
+    }
+
+    if (toggleIcon && togglableSections.length > 0) {
+        toggleIcon.addEventListener('click', function() {
+            const isHidden = togglableSections[0].style.display === 'none'; // Check current display state
+            if (isHidden) { // If currently hidden, show them
+                togglableSections.forEach(section => {
+                    section.style.display = 'block';
+                });
+                toggleIcon.innerHTML = '×'; // Change icon to 'hide'
+                toggleIcon.title = 'プロンプト非表示'; // No tooltip when visible
+            } else { // If currently visible, hide them
+                togglableSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                toggleIcon.innerHTML = '☰'; // Change icon to 'show'
+                toggleIcon.title = 'プロンプト表示'; // Set title for 'show' state
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
